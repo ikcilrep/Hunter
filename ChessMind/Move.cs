@@ -3,22 +3,16 @@ namespace ChessMind
 {
     public class Move
     {
-        private object position;
-        private Board board;
 
         public Piece Piece { get; }
         public Position To { get; }
         public bool IsCapture { get; }
-        public bool IsCheck { get; }
 
-        public Move()
+        public Move(Piece piece, Position to, Board board)
         {
-        }
-
-        public Move(object position, Board board)
-        {
-            this.position = position;
-            this.board = board;
+            Piece = piece;
+            To = to;
+            IsCapture = board.IsTherePieceOfColor(To, !Piece.Color);
         }
     }
 }

@@ -33,7 +33,7 @@ namespace ChessMind
                     }
                     finally
                     {
-                        Move move = new Move(newPosition, board);
+                        Move move = new Move(this,newPosition, board);
                         if (IsMovePossible(move, board))
                         {
                             result.Add(move);
