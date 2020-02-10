@@ -16,8 +16,7 @@ namespace ChessMind
             var columnDistance = Math.Abs(position.Column - move.To.Column);
             var distancesAreRight = rowDistance
                    < 2 && columnDistance < 2;
-            var thereIsAlliedPiece = board.IsTherePiece(position) && board[position].Color == Color;
-            return  distancesAreRight && !thereIsAlliedPiece && move.To != position;     
+            return distancesAreRight && move.To != position && !board.IsTherePieceOfColor(move.To, Color) ;
         }
 
         public override HashSet<Move> PossibleMoves(Board board)

@@ -9,6 +9,7 @@ namespace ChessMind
         private Dictionary<Position, Piece> _pieces;
 
         public bool IsTherePiece(Position position) => _pieces.ContainsKey(position);
+        public bool IsTherePieceOfColor(Position position, bool color) => IsTherePiece(position) && _pieces[position].Color == color;
 
         public Position FindPiece(Piece piece) => _pieces.First(kvp => kvp.Value == piece).Key;
 
