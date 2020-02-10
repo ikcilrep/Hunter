@@ -4,6 +4,9 @@
     {
         public static byte MaxRow {get => 7;} 
         public static byte MaxColumn {get => 7;} 
+        public static byte MinRow {get => 0;} 
+        public static byte MinColumn {get => 0;} 
+
         public byte Row { get; }
         public byte Column { get; }
 
