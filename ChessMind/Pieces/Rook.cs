@@ -20,9 +20,9 @@ namespace ChessMind
             if (rowDistance != 0)
             {
                 var end = Math.Max(position.Row, move.To.Row);
-                for (byte index = Math.Min(position.Row, move.To.Row); index <= end; index++)
+                for (byte row = Math.Min(position.Row, move.To.Row); row <= end; row++)
                 {
-                    var newPosition = new Position((byte)(index + position.Row), position.Column);
+                    var newPosition = new Position(row, position.Column);
                     if (board.IsTherePieceOfColor(newPosition, Color))
                     {
                         return false;
@@ -32,9 +32,9 @@ namespace ChessMind
             else
             {
                 var end = Math.Max(position.Column, move.To.Column);
-                for (byte index = Math.Min(position.Column, move.To.Column); index <= end; index++)
+                for (byte column = Math.Min(position.Column, move.To.Column); column <= end; column++)
                 {
-                    var newPosition = new Position(position.Row, (byte)(index + position.Column));
+                    var newPosition = new Position(position.Row, column);
                     if (board.IsTherePieceOfColor(newPosition, Color))
                     {
                         return false;
