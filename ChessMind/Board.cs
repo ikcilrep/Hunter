@@ -7,13 +7,9 @@ namespace ChessMind
     {
         private Dictionary<Position, Piece> _pieces;
 
-        public bool IsTherePiece(Position position) {
-            return _pieces.ContainsKey(position);
-        }
+        public bool IsTherePiece(Position position) => _pieces.ContainsKey(position);
 
-        public Position FindPiece(Piece piece) {
-            return _pieces.First(kvp => kvp.Value == piece).Key;
-        }
+        public Position FindPiece(Piece piece) => _pieces.First(kvp => kvp.Value == piece).Key;
 
         private Position JustDoMove(Move move)
         {
