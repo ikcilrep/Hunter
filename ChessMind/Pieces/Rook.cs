@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections;
+﻿using System.Linq;
 using System.Collections.Generic;
 
 namespace ChessMind
@@ -21,7 +20,46 @@ namespace ChessMind
 
         public override HashSet<Move> PossibleMoves(Board board)
         {
-            throw new System.NotImplementedException();
+            var position = board.FindPiece(this);
+            var maxPosition1 = new Position(position.Row, Position.MaxColumn);
+            var maxPosition2 = new Position(position.Row, Position.MinColumn);
+            var maxPosition3 = new Position(Position.MaxRow, position.Column);
+            var maxPosition4 = new Position(Position.MinRow, position.Column);
+
+            var notAllowedFields1 = board.PiecesInRanges(position, maxPosition1, Color);
+            var notAllowedFields2 = board.PiecesInRanges(position, maxPosition2, Color);
+            var notAllowedFields3 = board.PiecesInRanges(position, maxPosition3, Color);
+            var notAllowedFields4 = board.PiecesInRanges(position, maxPosition4, Color);
+
+            var minNotAllowedColumn = notAllowedFields1.Min(c => c.Column);
+            var maxNotAllowedColumn = notAllowedFields2.Max(c => c.Column);
+            var minNotAllowedRow = notAllowedFields3.Min(c => c.Row);
+            var maxNotAllowedRow = notAllowedFields4.Max(c => c.Row);
+
+            var result = new HashSet<Move>();
+
+            for (var column = position.Column; column > minNotAllowedColumn; column--) {
+                var newPosition = new Position(position.Row, column);
+                result.Add(new Move(this, position, board));
+            }
+ 
+
+            for (var column = position.Column; column < maxNotAllowedColumn; column++) {
+                var newPosition = new Position(position.Row, column);
+                result.Add(new Move(this, position, board));
+            }
+
+            for (var row = position.Row; row > minNotAllowedRow; row--) {
+                var newPosition = new Position(row, position.Column);
+                result.Add(new Move(this, position, board));
+            }
+ 
+
+            for (var row = position.Row; row < maxNotAllowedRow; row++) {
+                var newPosition = new Position(row, position.Column);
+                result.Add(new Move(this, position, board));
+            }
+            return result;
         }
     }
 }
