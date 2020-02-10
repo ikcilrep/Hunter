@@ -11,6 +11,11 @@ namespace ChessMind
 
         public Position FindPiece(Piece piece) => _pieces.First(kvp => kvp.Value == piece).Key;
 
+        public Piece this[Position position]
+        {
+            get => _pieces[position];
+        }
+
         private Position JustDoMove(Move move)
         {
             _pieces[move.To] = move.Piece;
