@@ -5,6 +5,10 @@ namespace ChessMind
 {
     public class King : Piece
     {
+        public King(bool color) {
+            _color = color;
+            _weight = 40; 
+        }
         public override bool IsMovePossible(Move move, Board board)
         {
             var position = board.FindPiece(this);
