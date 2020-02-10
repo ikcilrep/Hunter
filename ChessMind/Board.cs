@@ -7,7 +7,7 @@ namespace ChessMind
     {
         private Dictionary<Position, Piece> _pieces;
 
-        private Position FindPiece(Piece piece) {
+        public Position FindPiece(Piece piece) {
             return _pieces.First(kvp => kvp.Value == piece).Key;
         }
 
