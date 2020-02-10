@@ -1,4 +1,7 @@
-﻿namespace ChessMind
+﻿using System;
+using System.Collections.Generic;
+
+namespace ChessMind
 {
     public class Position
     {
@@ -35,5 +38,22 @@
 
         public static bool operator ==(Position a, Position b) => a.Row == b.Row && a.Column == a.Column;
         public static bool operator !=(Position a, Position b) => !(a == b);
+
+        private bool InRange(byte value, byte min, byte max) => value >= min && value <= max;
+        public static HashSet<Position> Range(Position position1, Position position2)
+        {
+            byte minRow = Math.Min(position1.Row, position2.Row);
+            byte maxRow = Math.Max(position1.Row, position2.Row);
+            byte minColumn = Math.Min(position1.Column, position2.Column);
+            byte maxColumn = Math.Max(position1.Column, position2.Column);
+            var result = new HashSet<Position>();
+            for (var row = minRow; row <= maxRow; row++) {
+                for (var column = minColumn; column <= maxColumn; column++)
+                {
+                    result.Add(new Position(row, column));
+                }
+            }
+            return result;
+        }
     }
 }

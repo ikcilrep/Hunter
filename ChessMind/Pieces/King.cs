@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Collections.Generic;
 
 namespace ChessMind
@@ -22,27 +23,18 @@ namespace ChessMind
         public override HashSet<Move> PossibleMoves(Board board)
         {
             var position = board.FindPiece(this);
-            var result = new HashSet<Move>();
-            for (byte rowDistance = 0; rowDistance < 2; rowDistance++) { 
-                for (byte columnDistance = 0; columnDistance < 2; columnDistance++) {
-                    Position newPosition = null;
-                    try
-                    {
-                        newPosition = new Position((byte)(rowDistance + position.Row),
-                                                       (byte)(columnDistance + position.Column));
-                    }
-                    finally
-                    {
-                        Move move = new Move(this,newPosition, board);
-                        if (IsMovePossible(move, board))
-                        {
-                            result.Add(move);
-                        }
-                    }
-                }
-            }
 
-            return result;
+            var topRightCorner = new Position((byte)Math.Min(Position.MaxRow, position.Row + 1),
+                                              (byte)Math.Min(Position.MaxColumn, position.Column + 1)); 
+
+            var bottomLeftCorner = new Position((byte)Math.Max(Position.MinRow, position.Row - 1),
+                                                (byte)Math.Max(Position.MinColumn, position.Column - 1));
+
+
+            var range = Position.Range(topRightCorner, bottomLeftCorner);
+            range.ExceptWith(board.PiecesInRanges(range, Color));
+            
+            return range.Select(p => new Move(this, p, board)).ToHashSet();
         }
     }
 }

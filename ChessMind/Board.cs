@@ -15,19 +15,11 @@ namespace ChessMind
 
         public Position FindPiece(Piece piece) => _pieces.First(kvp => kvp.Value == piece).Key;
 
-        private bool InRange(byte value, byte min, byte max) => value >= min && value <= max;
 
 
-        public HashSet<Position> PiecesInRanges(Position position1, Position position2, bool color)
+        public HashSet<Position> PiecesInRanges(HashSet<Position> range, bool color)
         {
-            byte minRow = Math.Min(position1.Row, position2.Row);
-            byte maxRow = Math.Max(position1.Row, position2.Row);
-            byte minColumn = Math.Min(position1.Column, position2.Column);
-            byte maxColumn = Math.Max(position1.Column, position2.Column);
-            return _pieces.Where(kvp => InRange(kvp.Key.Row, minRow, maxRow) 
-                                && kvp.Value.Color == color 
-                                && InRange(kvp.Key.Column, minColumn, maxColumn)
-                                ).Select(kvp => kvp.Key).ToHashSet();
+            return range.Where(p => IsTherePieceOfColor(p, color)).ToHashSet();
         }
 
         public Piece this[Position position] => _pieces[position];
