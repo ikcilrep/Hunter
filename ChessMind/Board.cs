@@ -21,6 +21,12 @@ namespace ChessMind
             return range.Where(p => IsTherePieceOfColor(p, color)).ToHashSet();
         }
 
+        public HashSet<Position> PiecesInRanges(Position position1, Position position2, bool color)
+        {
+            return PiecesInRanges(Position.Range(position1, position2), color); 
+        }
+
+
         public Piece this[Position position] => _pieces[position];
 
         private Position JustDoMove(Move move)
