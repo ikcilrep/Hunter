@@ -5,6 +5,10 @@ namespace ChessMind
 {
     public class Knight : Piece
     {
+        public Knight(bool color) {
+            _weight = 3;
+            _color = color;
+        }
         public override bool IsMovePossible(Move move, Board board)
         {
             var position = board.FindPiece(this);
@@ -30,6 +34,7 @@ namespace ChessMind
                                                        (byte)(position.Column + distance2));
 
                         result.Add(new Move(this, newPosition1, board));
+
                         var newPosition2 = new Position((byte)(position.Row + distance2),
                                                        (byte)(position.Column + distance1));
  
@@ -40,7 +45,7 @@ namespace ChessMind
                 }
             }                
 
-                return result;
+           return result;
         }
     }
 }
