@@ -16,33 +16,7 @@ namespace ChessMind
             {
                 return false;
             }
-
-            if (rowDistance != 0)
-            {
-                var end = Math.Max(position.Row, move.To.Row);
-                for (byte row = Math.Min(position.Row, move.To.Row); row <= end; row++)
-                {
-                    var newPosition = new Position(row, position.Column);
-                    if (board.IsTherePieceOfColor(newPosition, Color))
-                    {
-                        return false;
-                    }
-                }
-            }
-            else
-            {
-                var end = Math.Max(position.Column, move.To.Column);
-                for (byte column = Math.Min(position.Column, move.To.Column); column <= end; column++)
-                {
-                    var newPosition = new Position(position.Row, column);
-                    if (board.IsTherePieceOfColor(newPosition, Color))
-                    {
-                        return false;
-                    }
-                }
-
-            }
-            return true;
+           return board.PiecesInRanges(move.To, position, Color).Count > 0;
         }
 
         public override HashSet<Move> PossibleMoves(Board board)

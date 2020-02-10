@@ -8,10 +8,27 @@ namespace ChessMind
     {
         private Dictionary<Position, Piece> _pieces;
 
-        public bool IsTherePiece(Position position) => _pieces.ContainsKey(position);
-        public bool IsTherePieceOfColor(Position position, bool color) => IsTherePiece(position) && _pieces[position].Color == color;
+        public bool IsTherePieceOfColor(Position position, bool color)
+        {
+            return _pieces.ContainsKey(position) && _pieces[position].Color == color;
+        }
 
         public Position FindPiece(Piece piece) => _pieces.First(kvp => kvp.Value == piece).Key;
+
+        private bool InRange(byte value, byte min, byte max) => value >= min && value <= max;
+
+
+        public HashSet<Position> PiecesInRanges(Position position1, Position position2, bool color)
+        {
+            byte minRow = Math.Min(position1.Row, position2.Row);
+            byte maxRow = Math.Max(position1.Row, position2.Row);
+            byte minColumn = Math.Min(position1.Column, position2.Column);
+            byte maxColumn = Math.Max(position1.Column, position2.Column);
+            return _pieces.Where(kvp => InRange(kvp.Key.Row, minRow, maxRow) 
+                                && kvp.Value.Color == color 
+                                && InRange(kvp.Key.Column, minColumn, maxColumn)
+                                ).Select(kvp => kvp.Key).ToHashSet();
+        }
 
         public Piece this[Position position] => _pieces[position];
 
