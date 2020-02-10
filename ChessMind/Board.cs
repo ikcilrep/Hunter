@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace ChessMind
@@ -11,10 +12,7 @@ namespace ChessMind
 
         public Position FindPiece(Piece piece) => _pieces.First(kvp => kvp.Value == piece).Key;
 
-        public Piece this[Position position]
-        {
-            get => _pieces[position];
-        }
+        public Piece this[Position position] => _pieces[position];
 
         private Position JustDoMove(Move move)
         {
@@ -44,9 +42,7 @@ namespace ChessMind
                 throw new System.Exception("Check after move.");
             }
 
-        } 
-
-
+        }
 
         public bool IsChecked(bool color) { 
             foreach (var piece in _pieces.Values) { 
