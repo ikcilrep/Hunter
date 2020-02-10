@@ -5,8 +5,10 @@ namespace ChessMind
 {
     public abstract class Piece
     {
-        public byte Weight { get; }
-        public bool Color { get; }
+        public byte Weight { get => _weight; }
+        public bool Color { get => _color; }
+        internal byte _weight; 
+        internal bool _color; 
 
         public abstract HashSet<Move> PossibleMoves(Board board);
 
