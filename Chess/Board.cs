@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 
-namespace ChessMind
+namespace Chess
 {
     public class Board
     {

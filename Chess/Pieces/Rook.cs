@@ -1,7 +1,8 @@
 ﻿using System.Linq;
 using System.Collections.Generic;
 
-namespace ChessMind
+namespace Chess
+
 {
     public class Rook : Piece
     {

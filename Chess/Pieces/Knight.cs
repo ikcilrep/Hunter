@@ -1,7 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace ChessMind
+namespace Chess
+
 {
     public class Knight : Piece
     {

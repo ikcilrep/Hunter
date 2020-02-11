@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace ChessMind
+namespace Chess
 {
     class Program
     {

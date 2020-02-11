@@ -1,5 +1,4 @@
-﻿using System;
-namespace ChessMind
+﻿namespace Chess
 {
     public class Move
     {
