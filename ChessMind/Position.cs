@@ -33,13 +33,12 @@ namespace ChessMind
 
         public override int GetHashCode()
         {
-            return base.GetHashCode();
+            return (Row << 3) + Column;
         }
 
         public static bool operator ==(Position a, Position b) => a.Row == b.Row && a.Column == a.Column;
         public static bool operator !=(Position a, Position b) => !(a == b);
 
-        private bool InRange(byte value, byte min, byte max) => value >= min && value <= max;
         public static HashSet<Position> Range(Position position1, Position position2)
         {
             byte minRow = Math.Min(position1.Row, position2.Row);
