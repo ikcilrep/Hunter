@@ -49,9 +49,15 @@ namespace Chess
             var lastMove = _moves.Last();
             if (lastMove.IsCapture)
             {
-                var capturedPiece = _moves.SkipLast(1).Where(m => m.To == lastMove.To).Last().Piece;
+
+                var capturedPiecePosition = lastMove.To;
+                if (lastMove.IsEnPassant) {
+                    capturedPiecePosition = capturedPiecePosition.Behind(lastMove.Piece.Color);
+                }
+                var capturedPiece = _moves.SkipLast(1).Where(m => m.To == capturedPiecePosition).Last().Piece;
                 _pieces[lastMove.To] = capturedPiece;
-            } else
+            }
+            else
             {
                 _pieces.Remove(lastMove.To);
             }
@@ -62,6 +68,9 @@ namespace Chess
 
         public void MakeMove(Move move)
         {           
+            if (move.IsEnPassant) {
+                _pieces.Remove(move.To.Behind(move.Piece.Color));
+            }
             _pieces[move.To] = move.Piece;
             _pieces.Remove(FindPiece(move.Piece));
             _moves.Add(move);
