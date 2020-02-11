@@ -5,6 +5,12 @@ namespace Chess
 {
     public class Pawn : Piece
     {
+
+        public Pawn(bool color) {
+            _color = color;
+            _weight = 1;
+        }
+
         private static bool DoesPawnMoveTwoForward(Move move, Board board) {
             var position = board.FindPiece(move.Piece);
             return move.Piece is Pawn && move.To.Row == position.Forward(2, move.Piece.Color);
