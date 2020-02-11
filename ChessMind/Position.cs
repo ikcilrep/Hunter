@@ -13,7 +13,6 @@ namespace ChessMind
         public byte Row { get; }
         public byte Column { get; }
 
-
         public Position(byte row, byte column)
         {
             if (row > MaxRow || column > MaxColumn) {
@@ -36,6 +35,18 @@ namespace ChessMind
             return (Row << 3) + Column;
         }
 
+        public byte Forward(byte distance, bool color) {
+            return Position.Forward(Row, distance, color);
+        }
+
+        public static byte Forward(byte row, byte distance, bool color) { 
+            if (color)
+            {
+                return (byte)(row + distance);
+            }
+            return (byte)(row - distance);
+        }
+
         public static bool operator ==(Position a, Position b) => a.Row == b.Row && a.Column == a.Column;
         public static bool operator !=(Position a, Position b) => !(a == b);
 
@@ -53,6 +64,13 @@ namespace ChessMind
                 }
             }
             return result;
+        }
+        public static byte GetPawnRow(bool color) { 
+            if (color) {
+                return (byte)(MinRow+1);
+            }
+
+            return (byte)(MaxRow-1);
         }
     }
 }

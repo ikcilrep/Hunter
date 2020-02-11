@@ -9,6 +9,8 @@ namespace ChessMind
         private readonly Dictionary<Position, Piece> _pieces = new Dictionary<Position, Piece>();
         private List<Move> _moves = new List<Move>();
 
+        public Move LastMove { get => _moves.Last(); }
+
         public bool IsTherePieceOfColor(Position position, bool color)
         {
             return _pieces.ContainsKey(position) && _pieces[position].Color == color;
