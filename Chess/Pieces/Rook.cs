@@ -43,24 +43,24 @@ namespace Chess
 
             var result = new HashSet<Move>();
 
-            for (var column = position.Column; column > minNotAllowedColumn; column--) {
+            for (var column = (byte)(position.Column-1); column > minNotAllowedColumn; column--) {
                 var newPosition = new Position(position.Row, column);
                 result.Add(new Move(this, position, board));
             }
  
 
-            for (var column = position.Column; column < maxNotAllowedColumn; column++) {
+            for (var column = (byte)(position.Column+1); column < maxNotAllowedColumn; column++) {
                 var newPosition = new Position(position.Row, column);
                 result.Add(new Move(this, position, board));
             }
 
-            for (var row = position.Row; row > minNotAllowedRow; row--) {
+            for (var row = (byte)(position.Row-1); row > minNotAllowedRow; row--) {
                 var newPosition = new Position(row, position.Column);
                 result.Add(new Move(this, position, board));
             }
  
 
-            for (var row = position.Row; row < maxNotAllowedRow; row++) {
+            for (var row = (byte)(position.Row+1); row < maxNotAllowedRow; row++) {
                 var newPosition = new Position(row, position.Column);
                 result.Add(new Move(this, position, board));
             }
