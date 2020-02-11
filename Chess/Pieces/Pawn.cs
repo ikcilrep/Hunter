@@ -63,9 +63,49 @@ namespace Chess
             return movesDiagonally && board.IsTherePieceOfColor(move.To, !Color);
         }
 
+        private bool AddMoveIfNotBlocked(Position position, Board board, HashSet<Move> moves)
+        {
+
+            if (!board.IsTherePiece(position))
+            {
+                moves.Add(new Move(this, position, board));
+                return true;
+            }
+            return false;
+        }
+
         public override HashSet<Move> PossibleMoves(Board board)
         {
-            throw new System.NotImplementedException();
+            var position = board.FindPiece(this);
+            var result = new HashSet<Move>();
+            var before = position.Before(Color);
+            if (AddMoveIfNotBlocked(before, board, result)
+                && !board.HasPieceBeenMoved(this))
+            {
+                AddMoveIfNotBlocked(before.Before(Color), board, result);
+            }
+            try
+            {
+                var capture = new Move(this, new Position(before.Row,
+                                              (byte)(position.Column + 1)), board);
+                if (capture.IsCapture) {
+                    result.Add(capture);
+                }
+
+            }
+            catch { }
+
+            try
+            {
+                var capture = new Move(this, new Position(before.Row,
+                                              (byte)(position.Column - 1)), board);
+                if (capture.IsCapture) {
+                    result.Add(capture);
+                }
+
+            } catch { }
+
+            return result;
         }
     }
 }
