@@ -1,11 +1,13 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace ChessMind
 {
     public class Board
     {
-        private Dictionary<Position, Piece> _pieces;
+        private readonly Dictionary<Position, Piece> _pieces = new Dictionary<Position, Piece>();
+        private List<Move> _moves = new List<Move>();
 
         public bool IsTherePieceOfColor(Position position, bool color)
         {
@@ -21,6 +23,11 @@ namespace ChessMind
             return range.Where(p => IsTherePieceOfColor(p, color)).ToHashSet();
         }
 
+        public bool HasPieceBeenMoved(Piece piece)
+        {
+            return _moves.Where(m => m.Piece == piece).Count() > 0;
+        }
+
         public HashSet<Position> PiecesInRange(Position position1, Position position2, bool color)
         {
             return PiecesInRange(Position.Range(position1, position2), color); 
@@ -29,34 +36,33 @@ namespace ChessMind
 
         public Piece this[Position position] => _pieces[position];
 
-        private Position JustDoMove(Move move)
+        public void UndoLastMove()
         {
-            _pieces[move.To] = move.Piece;
-            var from = FindPiece(move.Piece);
-            _pieces.Remove(from);
-            return from;
+            var lastMove = _moves.Last();
+            if (lastMove.IsCapture)
+            {
+                var capturedPiece = _moves.SkipLast(1).Where(m => m.To == lastMove.To).Last().Piece;
+                _pieces[lastMove.To] = capturedPiece;
+            } else
+            {
+                _pieces.Remove(lastMove.To);
+            }
+            var from = _moves.SkipLast(1).Where(m => m.Piece == lastMove.Piece).Last().To;
+            _pieces[from] = lastMove.Piece;
+            _moves = _moves.SkipLast(1).ToList();
         }
 
         public void MakeMove(Move move)
-        {
-
-            Piece capturedPiece = null;
-            if (move.IsCapture)
-            {
-                capturedPiece = _pieces[move.To];
-            }
-
-            var from = JustDoMove(move);
-
+        {           
+            _pieces[move.To] = move.Piece;
+            _pieces.Remove(FindPiece(move.Piece));
+            _moves.Add(move);
             if (IsChecked(move.Piece.Color))
             {
-                _pieces[from] = move.Piece;
-                if (move.IsCapture) {
-                    _pieces[move.To] = capturedPiece;
-                }
+                UndoLastMove();
                 throw new System.Exception("Check after move.");
             }
-
+            
         }
 
         public bool IsChecked(bool color) { 
