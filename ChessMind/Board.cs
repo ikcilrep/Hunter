@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 
 namespace ChessMind
@@ -15,6 +14,13 @@ namespace ChessMind
         {
             return _pieces.ContainsKey(position) && _pieces[position].Color == color;
         }
+
+        public bool IsTherePiece(Position position)
+        {
+            return _pieces.ContainsKey(position);
+        }
+
+
 
         public Position FindPiece(Piece piece) => _pieces.First(kvp => kvp.Value == piece).Key;
 

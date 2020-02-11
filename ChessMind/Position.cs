@@ -36,7 +36,14 @@ namespace ChessMind
         }
 
         public byte Forward(byte distance, bool color) {
-            return Position.Forward(Row, distance, color);
+            return Forward(Row, distance, color);
+        }
+
+        public Position Behind(bool color) {
+            return Before(!color);
+        }
+        public Position Before(bool color) {
+            return new Position(Forward(1, color), Column);
         }
 
         public static byte Forward(byte row, byte distance, bool color) { 
