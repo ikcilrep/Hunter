@@ -16,14 +16,14 @@ namespace ChessMind
 
 
 
-        public HashSet<Position> PiecesInRanges(HashSet<Position> range, bool color)
+        public HashSet<Position> PiecesInRange(HashSet<Position> range, bool color)
         {
             return range.Where(p => IsTherePieceOfColor(p, color)).ToHashSet();
         }
 
-        public HashSet<Position> PiecesInRanges(Position position1, Position position2, bool color)
+        public HashSet<Position> PiecesInRange(Position position1, Position position2, bool color)
         {
-            return PiecesInRanges(Position.Range(position1, position2), color); 
+            return PiecesInRange(Position.Range(position1, position2), color); 
         }
 
 

@@ -32,7 +32,7 @@ namespace ChessMind
 
 
             var range = Position.Range(topRightCorner, bottomLeftCorner);
-            range.ExceptWith(board.PiecesInRanges(range, Color));
+            range.ExceptWith(board.PiecesInRange(range, Color));
             
             return range.Select(p => new Move(this, p, board)).ToHashSet();
         }

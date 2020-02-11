@@ -19,7 +19,7 @@ namespace ChessMind
             {
                 return false;
             }
-           return board.PiecesInRanges(move.To, position, Color).Count > 0;
+           return board.PiecesInRange(move.To, position, Color).Count > 0;
         }
 
         public override HashSet<Move> PossibleMoves(Board board)
@@ -30,10 +30,10 @@ namespace ChessMind
             var maxPosition3 = new Position(Position.MaxRow, position.Column);
             var maxPosition4 = new Position(Position.MinRow, position.Column);
 
-            var notAllowedFields1 = board.PiecesInRanges(position, maxPosition1, Color);
-            var notAllowedFields2 = board.PiecesInRanges(position, maxPosition2, Color);
-            var notAllowedFields3 = board.PiecesInRanges(position, maxPosition3, Color);
-            var notAllowedFields4 = board.PiecesInRanges(position, maxPosition4, Color);
+            var notAllowedFields1 = board.PiecesInRange(position, maxPosition1, Color);
+            var notAllowedFields2 = board.PiecesInRange(position, maxPosition2, Color);
+            var notAllowedFields3 = board.PiecesInRange(position, maxPosition3, Color);
+            var notAllowedFields4 = board.PiecesInRange(position, maxPosition4, Color);
 
             var minNotAllowedColumn = notAllowedFields1.Min(c => c.Column);
             var maxNotAllowedColumn = notAllowedFields2.Max(c => c.Column);
