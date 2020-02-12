@@ -6,6 +6,13 @@ namespace Chess
 {
     public class Bishop : Piece
     {
+        public Bishop(bool color)
+        {
+            _color = color;
+            _weight = 3;
+        }
+
+
         public override bool IsMovePossible(Move move, Board board)
         {
             return IsMovePossibleStatic(move, board);
