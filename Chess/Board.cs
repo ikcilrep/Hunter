@@ -6,8 +6,61 @@ namespace Chess
 {
     public class Board
     {
+        public static bool White { get => true; }
+        public static bool Black { get => false; }
         private readonly Dictionary<Position, Piece> _pieces = new Dictionary<Position, Piece>();
+        private readonly Dictionary<Position, Piece> _startPieces; 
         private List<Move> _moves = new List<Move>();
+
+        public Board()
+        {
+            
+            var players = new Tuple<bool, byte>[2] {
+                new Tuple<bool, byte>(White, Position.MinRow),
+                new Tuple<bool, byte>(Black, Position.MaxRow) };
+            foreach (var player in players)
+            {
+                var pawnRow = Positions.GetPawnRow(player.Item1);
+                for (byte column = Position.MinColumn; column <= Position.MaxColumn; column++)
+                {
+                    var pawnPosition = new Position(pawnRow, column);
+                    _pieces.Add(pawnPosition, new Pawn(player.Item1));
+                }
+
+                var rookPosition1 = new Position(player.Item2, 0);
+                var rook1 = new Rook(player.Item1);
+                _pieces.Add(rookPosition1, rook1);
+
+                var rookPosition2 = new Position(player.Item2, 7);
+                var rook2 = new Rook(player.Item1);
+                _pieces.Add(rookPosition2, rook2);
+
+                var knightPosition1 = new Position(player.Item2, 1);
+                var knight1 = new Knight(player.Item1);
+                _pieces.Add(knightPosition1, knight1);
+
+                var knightPosition2 = new Position(player.Item2, 6);
+                var knight2 = new Knight(player.Item1);
+                _pieces.Add(knightPosition2, knight2);
+
+                var bishopPosition1 = new Position(player.Item2, 2);
+                var bishop1 = new Bishop(player.Item1);
+                _pieces.Add(bishopPosition1, bishop1);
+
+                var bishopPosition2 = new Position(player.Item2, 5);
+                var bishop2 = new Bishop(player.Item1);
+                _pieces.Add(bishopPosition2, bishop2);
+
+                var queenPosition = new Position(player.Item2, 3);
+                var queen = new Queen(player.Item1);
+                _pieces.Add(queenPosition, queen);
+
+                var kingPosition = new Position(player.Item2, 3);
+                var king = new King(player.Item1);
+                _pieces.Add(kingPosition, king);
+            }
+            _startPieces = new Dictionary<Position, Piece>(_pieces);
+        }
 
         public Move LastMove { get => _moves.Last(); }
 
@@ -67,7 +120,14 @@ namespace Chess
                 if (lastMove.IsEnPassant) {
                     capturedPiecePosition = capturedPiecePosition.Behind(lastMove.Piece.Color);
                 }
-                var capturedPiece = _moves.SkipLast(1).Where(m => m.To == capturedPiecePosition).Last().Piece;
+                Piece capturedPiece = null;
+
+                try
+                {
+                    capturedPiece = _moves.SkipLast(1).Where(m => m.To == capturedPiecePosition).Last().Piece;
+                } catch (InvalidOperationException) {
+                    capturedPiece = _startPieces[capturedPiecePosition];
+                } 
                 _pieces[lastMove.To] = capturedPiece;
             }
             else
