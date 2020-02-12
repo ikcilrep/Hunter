@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace Chess
@@ -36,10 +37,22 @@ namespace Chess
             return _moves.Where(m => m.Piece == piece).Count() > 0;
         }
 
-        public HashSet<Position> PiecesInRange(Position position1, Position position2, bool color)
+        public HashSet<Position> PiecesInRange(HashSet<Position> range)
         {
-            return PiecesInRange(Position.Range(position1, position2), color); 
+
+            return range
+                .Where(p => IsTherePiece(p))
+                .ToHashSet();
         }
+
+        public HashSet<Position> PiecesInRange(Position position1, Position position2)
+        {
+
+            return Position.Range(position1, position1)
+                           .Where(p => IsTherePiece(p))
+                           .ToHashSet();
+        }
+
 
 
         public Piece this[Position position] => _pieces[position];

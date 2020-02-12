@@ -1,5 +1,6 @@
 ﻿using System.Linq;
 using System.Collections.Generic;
+using System;
 
 namespace Chess
 
@@ -20,7 +21,18 @@ namespace Chess
             {
                 return false;
             }
-           return board.PiecesInRange(move.To, position, Color).Count > 0;
+            var capturedPieces = 0;
+            if (board.IsTherePieceOfColor(move.To, !Color)) 
+            {
+                capturedPieces = 1;
+            }
+           return board.PiecesInRange(move.To, position).Count -1 == capturedPieces;
+        }
+
+        private void AddMove(byte row, byte column, HashSet<Move> moves, Board board)
+        {
+                var position = new Position(row, column);
+                moves.Add(new Move(this, position, board));
         }
 
         public override HashSet<Move> PossibleMoves(Board board)
@@ -31,39 +43,69 @@ namespace Chess
             var maxPosition3 = new Position(Position.MaxRow, position.Column);
             var maxPosition4 = new Position(Position.MinRow, position.Column);
 
-            var notAllowedFields1 = board.PiecesInRange(position, maxPosition1, Color);
-            var notAllowedFields2 = board.PiecesInRange(position, maxPosition2, Color);
-            var notAllowedFields3 = board.PiecesInRange(position, maxPosition3, Color);
-            var notAllowedFields4 = board.PiecesInRange(position, maxPosition4, Color);
+            var range1 = Position.Range(position, maxPosition1);
+            range1.Remove(position);
+            var range2 = Position.Range(position, maxPosition2);
+            range2.Remove(position);
+            var range3 = Position.Range(position, maxPosition3);
+            range3.Remove(position);
+            var range4 = Position.Range(position, maxPosition4);
+            range4.Remove(position);
 
-            var minNotAllowedColumn = notAllowedFields1.Min(c => c.Column);
-            var maxNotAllowedColumn = notAllowedFields2.Max(c => c.Column);
-            var minNotAllowedRow = notAllowedFields3.Min(c => c.Row);
-            var maxNotAllowedRow = notAllowedFields4.Max(c => c.Row);
+            var notAllowedFields1 = board.PiecesInRange(range1);
+            var notAllowedFields2 = board.PiecesInRange(range2);
+            var notAllowedFields3 = board.PiecesInRange(range3);
+            var notAllowedFields4 = board.PiecesInRange(range4);
+
+            var minNotAllowedColumn = notAllowedFields1.OrderBy(c => c.Column).First();
+            var maxNotAllowedColumn = notAllowedFields2.OrderBy(c => c.Column).Last();
+            var minNotAllowedRow = notAllowedFields3.OrderBy(c => c.Row).First();
+            var maxNotAllowedRow = notAllowedFields4.OrderBy(c => c.Row).First(); 
 
             var result = new HashSet<Move>();
 
-            for (var column = (byte)(position.Column-1); column > minNotAllowedColumn; column--) {
-                var newPosition = new Position(position.Row, column);
-                result.Add(new Move(this, position, board));
+            foreach (var beforeNotAllowedColumn in range1.Where(p => p.Column < minNotAllowedColumn.Column)) 
+            {
+                result.Add(new Move(this, beforeNotAllowedColumn, board));
             }
- 
+                
+            if (board.IsTherePieceOfColor(minNotAllowedColumn, !Color))
+            {
+                result.Add(new Move(this, minNotAllowedColumn, board));
+            }
 
-            for (var column = (byte)(position.Column+1); column < maxNotAllowedColumn; column++) {
-                var newPosition = new Position(position.Row, column);
-                result.Add(new Move(this, position, board));
+            foreach (var beforeNotAllowedColumn in range2.Where(p => p.Column > maxNotAllowedColumn.Column)) 
+            {
+                result.Add(new Move(this, beforeNotAllowedColumn, board));
+            }
+                
+            if (board.IsTherePieceOfColor(maxNotAllowedColumn, !Color))
+            {
+                result.Add(new Move(this, minNotAllowedColumn, board));
             }
 
-            for (var row = (byte)(position.Row-1); row > minNotAllowedRow; row--) {
-                var newPosition = new Position(row, position.Column);
-                result.Add(new Move(this, position, board));
-            }
- 
 
-            for (var row = (byte)(position.Row+1); row < maxNotAllowedRow; row++) {
-                var newPosition = new Position(row, position.Column);
-                result.Add(new Move(this, position, board));
+            foreach (var beforeNotAllowedRow in range3.Where(p => p.Row < minNotAllowedRow.Row)) 
+            {
+                result.Add(new Move(this, beforeNotAllowedRow, board));
             }
+                
+            if (board.IsTherePieceOfColor(minNotAllowedRow, !Color))
+            {
+                result.Add(new Move(this, minNotAllowedRow, board));
+            }
+
+
+            foreach (var beforeNotAllowedRow in range4.Where(p => p.Row > maxNotAllowedRow.Row)) 
+            {
+                result.Add(new Move(this, beforeNotAllowedRow, board));
+            }
+                
+            if (board.IsTherePieceOfColor(maxNotAllowedRow, !Color))
+            {
+                result.Add(new Move(this, maxNotAllowedRow, board));
+            }
+
             return result;
         }
     }
