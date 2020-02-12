@@ -21,6 +21,7 @@ namespace Chess
             return result;
         }
 
+        // Returns positions on diagonal from position1 to position2, exluding position1.
         public static List<Position> Diagonal(Position position1, Position position2) 
         {
             var rowDistance = Math.Abs(position1.Row - position2.Row);
