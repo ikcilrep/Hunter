@@ -32,7 +32,7 @@ namespace Chess
                                                 (byte)Math.Max(Position.MinColumn, position.Column - 1));
 
 
-            var range = Position.Range(topRightCorner, bottomLeftCorner);
+            var range = Positions.Range(topRightCorner, bottomLeftCorner);
             range.ExceptWith(board.PiecesInRange(range, Color));
             
             return range.Select(p => new Move(this, p, board)).ToHashSet();

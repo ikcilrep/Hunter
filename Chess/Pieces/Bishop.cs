@@ -9,7 +9,7 @@ namespace Chess
             try 
             {
                 var position = board.FindPiece(this);
-                var diagonal = Position.Diagonal(position, move.To);
+                var diagonal = Positions.Diagonal(position, move.To);
 
                 foreach (var diagonalPosition in diagonal) { 
                     if (board.IsTherePiece(diagonalPosition)) 

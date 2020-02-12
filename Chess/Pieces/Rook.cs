@@ -37,13 +37,13 @@ namespace Chess
             var maxPosition3 = new Position(Position.MaxRow, position.Column);
             var maxPosition4 = new Position(Position.MinRow, position.Column);
 
-            var range1 = Position.Range(position, maxPosition1);
+            var range1 = Positions.Range(position, maxPosition1);
             range1.Remove(position);
-            var range2 = Position.Range(position, maxPosition2);
+            var range2 = Positions.Range(position, maxPosition2);
             range2.Remove(position);
-            var range3 = Position.Range(position, maxPosition3);
+            var range3 = Positions.Range(position, maxPosition3);
             range3.Remove(position);
-            var range4 = Position.Range(position, maxPosition4);
+            var range4 = Positions.Range(position, maxPosition4);
             range4.Remove(position);
 
             var notAllowedFields1 = board.PiecesInRange(range1);

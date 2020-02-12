@@ -48,7 +48,7 @@ namespace Chess
         public HashSet<Position> PiecesInRange(Position position1, Position position2)
         {
 
-            return Position.Range(position1, position1)
+            return Positions.Range(position1, position1)
                            .Where(p => IsTherePiece(p))
                            .ToHashSet();
         }
