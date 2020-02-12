@@ -8,9 +8,13 @@ namespace Chess
     {
         public override bool IsMovePossible(Move move, Board board)
         {
+            return IsMovePossibleStatic(move, board);
+        }
+
+        public static bool IsMovePossibleStatic(Move move, Board board) {
             try 
             {
-                var position = board.FindPiece(this);
+                var position = board.FindPiece(move.Piece);
                 var diagonal = Positions.Diagonal(position, move.To);
 
                 foreach (var diagonalPosition in diagonal) { 
@@ -25,7 +29,7 @@ namespace Chess
             {
                 return false;
             }
-        }
+         }
 
         private static void AddDiagonalsEnds(Position position, HashSet<Position> diagonalsEnds) {
             var distance1 = Math.Min(
@@ -55,9 +59,9 @@ namespace Chess
                 (byte)(position.Column + distance4)));
         }
 
-        public override HashSet<Move> PossibleMoves(Board board)
+        public static HashSet<Move> PossibleMovesStatic(Piece piece, Board board)
         {
-            var position = board.FindPiece(this);
+            var position = board.FindPiece(piece);
             var result = new HashSet<Move>();
             var diagonalsEnds = new HashSet<Position>();
             AddDiagonalsEnds(position, diagonalsEnds);
@@ -65,19 +69,24 @@ namespace Chess
             {
                 var diagonal = Positions.Diagonal(position, diagonalEnd);
                 var diagonalFirstEmptyPositions = diagonal.TakeWhile(p => !board.IsTherePiece(p))
-                    .Select(p => new Move(this, p, false));
+                    .Select(p => new Move(piece, p, false));
                 result.UnionWith(diagonalFirstEmptyPositions);
                 if (diagonal.Count > diagonalFirstEmptyPositions.Count())
                 {
                     var capturePosition = diagonal[diagonalFirstEmptyPositions.Count()];
-                    if (board.IsTherePieceOfColor(capturePosition, !Color))
+                    if (board.IsTherePieceOfColor(capturePosition, !piece.Color))
                     {
-                        result.Add(new Move(this, capturePosition, true));
+                        result.Add(new Move(piece, capturePosition, true));
                     }
                 }
             }
 
             return result;
+        }
+
+        public override HashSet<Move> PossibleMoves(Board board)
+        {
+            return PossibleMovesStatic(this,board);
         }
     }
 }

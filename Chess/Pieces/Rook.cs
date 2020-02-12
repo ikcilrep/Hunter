@@ -11,9 +11,10 @@ namespace Chess
             _color = color;
             _weight = 5;
         }
-        public override bool IsMovePossible(Move move, Board board)
+
+        public static bool IsMovePossibleStatic(Move move, Board board)
         {
-            var position = board.FindPiece(this);
+            var position = board.FindPiece(move.Piece);
             var columnDistance = move.To.Column - position.Column;
             var rowDistance = move.To.Row - position.Row;
             var movesStraight = columnDistance == 0 ^ rowDistance == 0;
@@ -22,16 +23,40 @@ namespace Chess
                 return false;
             }
             var capturedPieces = 0;
-            if (board.IsTherePieceOfColor(move.To, !Color)) 
+            if (board.IsTherePieceOfColor(move.To, !move.Piece.Color)) 
             {
                 capturedPieces = 1;
             }
            return board.PiecesInRange(move.To, position).Count -1 == capturedPieces;
+ 
         }
 
-        public override HashSet<Move> PossibleMoves(Board board)
+        public override bool IsMovePossible(Move move, Board board)
         {
-            var position = board.FindPiece(this);
+            return IsMovePossibleStatic(move, board);
+        }
+
+        private static void AddRange(HashSet<Position> range,
+                                     Piece piece,
+                                     Board board,
+                                     Position border, 
+                                     Func<Position, bool> predicate,
+                                     HashSet<Move> moves) 
+        {
+
+            foreach (var beforeNotAllowedColumn in range.Where(predicate)) 
+            {
+                moves.Add(new Move(piece, beforeNotAllowedColumn, false));
+            }
+            if (board.IsTherePieceOfColor(border, !piece.Color))
+            {
+                moves.Add(new Move(piece, border, true));
+            }
+        }
+
+        public static HashSet<Move> PossibleMovesStatic(Piece piece, Board board) 
+        {
+            var position = board.FindPiece(piece);
             var maxPosition1 = new Position(position.Row, Position.MaxColumn);
             var maxPosition2 = new Position(position.Row, Position.MinColumn);
             var maxPosition3 = new Position(Position.MaxRow, position.Column);
@@ -46,61 +71,53 @@ namespace Chess
             var range4 = Positions.Range(position, maxPosition4);
             range4.Remove(position);
 
-            var notAllowedFields1 = board.PiecesInRange(range1);
-            var notAllowedFields2 = board.PiecesInRange(range2);
-            var notAllowedFields3 = board.PiecesInRange(range3);
-            var notAllowedFields4 = board.PiecesInRange(range4);
-
-            var minNotAllowedColumn = notAllowedFields1.OrderBy(c => c.Column).First();
-            var maxNotAllowedColumn = notAllowedFields2.OrderBy(c => c.Column).Last();
-            var minNotAllowedRow = notAllowedFields3.OrderBy(c => c.Row).First();
-            var maxNotAllowedRow = notAllowedFields4.OrderBy(c => c.Row).First(); 
+            var minNotAllowedColumn = board.PiecesInRange(range1)
+                                           .OrderBy(c => c.Column)
+                                           .First();
+            var maxNotAllowedColumn = board.PiecesInRange(range2)
+                                           .OrderBy(c => c.Column)
+                                           .Last();
+            var minNotAllowedRow = board.PiecesInRange(range3)
+                                        .OrderBy(c => c.Row)
+                                        .First();
+            var maxNotAllowedRow = board.PiecesInRange(range4)
+                                        .OrderBy(c => c.Row)
+                                        .First(); 
 
             var result = new HashSet<Move>();
 
-            foreach (var beforeNotAllowedColumn in range1.Where(p => p.Column < minNotAllowedColumn.Column)) 
-            {
-                result.Add(new Move(this, beforeNotAllowedColumn, false));
-            }
-                
-            if (board.IsTherePieceOfColor(minNotAllowedColumn, !Color))
-            {
-                result.Add(new Move(this, minNotAllowedColumn, true));
-            }
-
-            foreach (var beforeNotAllowedColumn in range2.Where(p => p.Column > maxNotAllowedColumn.Column)) 
-            {
-                result.Add(new Move(this, beforeNotAllowedColumn, false));
-            }
-                
-            if (board.IsTherePieceOfColor(maxNotAllowedColumn, !Color))
-            {
-                result.Add(new Move(this, minNotAllowedColumn, true));
-            }
-
-
-            foreach (var beforeNotAllowedRow in range3.Where(p => p.Row < minNotAllowedRow.Row)) 
-            {
-                result.Add(new Move(this, beforeNotAllowedRow, false));
-            }
-                
-            if (board.IsTherePieceOfColor(minNotAllowedRow, !Color))
-            {
-                result.Add(new Move(this, minNotAllowedRow, true));
-            }
-
-
-            foreach (var beforeNotAllowedRow in range4.Where(p => p.Row > maxNotAllowedRow.Row)) 
-            {
-                result.Add(new Move(this, beforeNotAllowedRow, false));
-            }
-                
-            if (board.IsTherePieceOfColor(maxNotAllowedRow, !Color))
-            {
-                result.Add(new Move(this, maxNotAllowedRow, true));
-            }
+            AddRange(range1,
+                     piece,
+                     board,
+                     minNotAllowedColumn,
+                     p => p.Column < minNotAllowedColumn.Column,
+                     result);
+            AddRange(range2,
+                     piece,
+                     board,
+                     maxNotAllowedColumn,
+                     p => p.Column > maxNotAllowedColumn.Column,
+                     result);
+            AddRange(range3,
+                     piece,
+                     board,
+                     minNotAllowedRow,
+                     p => p.Row < minNotAllowedColumn.Row,
+                     result);
+            AddRange(range4,
+                     piece,
+                     board,
+                     maxNotAllowedRow,
+                     p => p.Row > maxNotAllowedColumn.Row,
+                     result);
 
             return result;
+ 
+        }
+
+        public override HashSet<Move> PossibleMoves(Board board)
+        {
+            return PossibleMovesStatic(this, board);
         }
     }
 }
