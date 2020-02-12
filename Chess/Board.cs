@@ -112,31 +112,31 @@ namespace Chess
 
         public void UndoLastMove()
         {
-            var lastMove = _moves.Last();
-            if (lastMove.IsCapture)
+            var movesWithoutLast = _moves.SkipLast(1);
+            if (LastMove.IsCapture)
             {
 
-                var capturedPiecePosition = lastMove.To;
-                if (lastMove.IsEnPassant) {
-                    capturedPiecePosition = capturedPiecePosition.Behind(lastMove.Piece.Color);
+                var capturedPiecePosition = LastMove.To;
+                if (LastMove.IsEnPassant) {
+                    capturedPiecePosition = capturedPiecePosition.Behind(LastMove.Piece.Color);
                 }
                 Piece capturedPiece = null;
 
                 try
                 {
-                    capturedPiece = _moves.SkipLast(1).Where(m => m.To == capturedPiecePosition).Last().Piece;
+                    capturedPiece = movesWithoutLast.Where(m => m.To == capturedPiecePosition).Last().Piece;
                 } catch (InvalidOperationException) {
                     capturedPiece = _startPieces[capturedPiecePosition];
                 } 
-                _pieces[lastMove.To] = capturedPiece;
+                _pieces[LastMove.To] = capturedPiece;
             }
             else
             {
-                _pieces.Remove(lastMove.To);
+                _pieces.Remove(LastMove.To);
             }
-            var from = _moves.SkipLast(1).Where(m => m.Piece == lastMove.Piece).Last().To;
-            _pieces[from] = lastMove.Piece;
-            _moves = _moves.SkipLast(1).ToList();
+            var from = movesWithoutLast.Where(m => m.Piece == LastMove.Piece).Last().To;
+            _pieces[from] = LastMove.Piece;
+            _moves = movesWithoutLast.ToList();
         }
 
         public void MakeMove(Move move)
