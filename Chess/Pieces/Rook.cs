@@ -29,12 +29,6 @@ namespace Chess
            return board.PiecesInRange(move.To, position).Count -1 == capturedPieces;
         }
 
-        private void AddMove(byte row, byte column, HashSet<Move> moves, Board board)
-        {
-                var position = new Position(row, column);
-                moves.Add(new Move(this, position, board));
-        }
-
         public override HashSet<Move> PossibleMoves(Board board)
         {
             var position = board.FindPiece(this);
