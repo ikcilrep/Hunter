@@ -60,44 +60,44 @@ namespace Chess
 
             foreach (var beforeNotAllowedColumn in range1.Where(p => p.Column < minNotAllowedColumn.Column)) 
             {
-                result.Add(new Move(this, beforeNotAllowedColumn, board));
+                result.Add(new Move(this, beforeNotAllowedColumn, false));
             }
                 
             if (board.IsTherePieceOfColor(minNotAllowedColumn, !Color))
             {
-                result.Add(new Move(this, minNotAllowedColumn, board));
+                result.Add(new Move(this, minNotAllowedColumn, true));
             }
 
             foreach (var beforeNotAllowedColumn in range2.Where(p => p.Column > maxNotAllowedColumn.Column)) 
             {
-                result.Add(new Move(this, beforeNotAllowedColumn, board));
+                result.Add(new Move(this, beforeNotAllowedColumn, false));
             }
                 
             if (board.IsTherePieceOfColor(maxNotAllowedColumn, !Color))
             {
-                result.Add(new Move(this, minNotAllowedColumn, board));
+                result.Add(new Move(this, minNotAllowedColumn, true));
             }
 
 
             foreach (var beforeNotAllowedRow in range3.Where(p => p.Row < minNotAllowedRow.Row)) 
             {
-                result.Add(new Move(this, beforeNotAllowedRow, board));
+                result.Add(new Move(this, beforeNotAllowedRow, false));
             }
                 
             if (board.IsTherePieceOfColor(minNotAllowedRow, !Color))
             {
-                result.Add(new Move(this, minNotAllowedRow, board));
+                result.Add(new Move(this, minNotAllowedRow, true));
             }
 
 
             foreach (var beforeNotAllowedRow in range4.Where(p => p.Row > maxNotAllowedRow.Row)) 
             {
-                result.Add(new Move(this, beforeNotAllowedRow, board));
+                result.Add(new Move(this, beforeNotAllowedRow, false));
             }
                 
             if (board.IsTherePieceOfColor(maxNotAllowedRow, !Color))
             {
-                result.Add(new Move(this, maxNotAllowedRow, board));
+                result.Add(new Move(this, maxNotAllowedRow, true));
             }
 
             return result;

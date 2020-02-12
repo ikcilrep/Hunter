@@ -18,5 +18,13 @@
             IsCapture = IsEnPassant || board.IsTherePieceOfColor(To, !Piece.Color);
         } 
         
+        public Move(Piece piece, Position to, bool isCapture)
+        {
+            Piece = piece;
+            To = to;
+            IsEnPassant = false;
+            IsCapture = isCapture;
+        } 
+
     }
 }
