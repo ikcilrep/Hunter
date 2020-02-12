@@ -41,6 +41,7 @@ namespace Chess
                 row -= rowDistanceSign;
                 column -= columnDistanceSign;
             }
+            result.Add(position2);
             return result;
         }
 
