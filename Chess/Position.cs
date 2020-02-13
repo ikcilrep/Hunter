@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-
-namespace Chess
+﻿namespace Chess
 {
     public class Position
     {

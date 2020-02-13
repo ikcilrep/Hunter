@@ -5,7 +5,7 @@ namespace Chess
 {
     public static class Positions
     {
-            public static HashSet<Position> Range(Position position1, Position position2)
+        public static HashSet<Position> Range(Position position1, Position position2)
         {
             byte minRow = Math.Min(position1.Row, position2.Row);
             byte maxRow = Math.Max(position1.Row, position2.Row);
