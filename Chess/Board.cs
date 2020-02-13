@@ -11,6 +11,8 @@ namespace Chess
         private readonly Dictionary<Position, Piece> _pieces = new Dictionary<Position, Piece>();
         private readonly Dictionary<Position, Piece> _startPieces; 
         private List<Move> _moves = new List<Move>();
+        public Move LastMove { get => _moves.Last(); }
+        public Piece this[Position position] => _pieces[position];
 
         public Board()
         {
@@ -62,7 +64,8 @@ namespace Chess
             _startPieces = new Dictionary<Position, Piece>(_pieces);
         }
 
-        public Move LastMove { get => _moves.Last(); }
+
+        public Position FindPiece(Piece piece) => _pieces.First(kvp => kvp.Value == piece).Key;
 
         public bool IsTherePieceOfColor(Position position, bool color)
         {
@@ -73,12 +76,6 @@ namespace Chess
         {
             return _pieces.ContainsKey(position);
         }
-
-
-
-        public Position FindPiece(Piece piece) => _pieces.First(kvp => kvp.Value == piece).Key;
-
-
 
         public HashSet<Position> PiecesInRange(HashSet<Position> range, bool color)
         {
@@ -105,10 +102,6 @@ namespace Chess
                            .Where(p => IsTherePiece(p))
                            .ToHashSet();
         }
-
-
-
-        public Piece this[Position position] => _pieces[position];
 
         public void UndoLastMove()
         {

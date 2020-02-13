@@ -5,7 +5,6 @@ namespace Chess
 {
     public class Pawn : Piece
     {
-
         public Pawn(bool color) {
             _color = color;
             _weight = 1;
