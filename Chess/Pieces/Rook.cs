@@ -31,6 +31,23 @@ namespace Chess
  
         }
 
+        internal static bool IsCastling(Move move, Board board)
+        {
+            var king = board.Pieces.Values.Where(p => p is King && p.Color == move.Piece.Color)
+                                          .First();
+            var kingPosition = board.FindPiece(king);
+            var position = board.FindPiece(move.Piece);
+
+            var range = Positions.Range(kingPosition, position);
+            return !board.HasPieceBeenMoved(king)
+                && !board.HasPieceBeenMoved(move.Piece)
+                && kingPosition.Row == position.Row
+                && position.Row == move.To.Row
+                && board.PiecesInRange(range).Count() == 2
+                && board.PossibleMoves.Count(m => m.To != position && range.Contains(m.To)) == 0;
+
+        }
+
         public override bool IsMovePossible(Move move, Board board)
         {
             return IsMovePossibleStatic(move, board);
