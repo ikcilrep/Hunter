@@ -8,11 +8,23 @@ namespace Chess
     {
         public static bool White { get => true; }
         public static bool Black { get => false; }
-        private readonly Dictionary<Position, Piece> _pieces = new Dictionary<Position, Piece>();
+
+        
         private readonly Dictionary<Position, Piece> _startPieces; 
         private List<Move> _moves = new List<Move>();
+
+        public HashSet<Move> PossibleMoves 
+        {
+             get => Pieces.Values.SelectMany(p => p.PossibleMoves(this)).ToHashSet();
+        }
+
+        public HashSet<Move> PossibleCaptures 
+        {
+             get => Pieces.Values.SelectMany(p => p.PossibleCaptures(this)).ToHashSet();
+        }
+
         public Move LastMove { get => _moves.Last(); }
-        public Piece this[Position position] => _pieces[position];
+        public Dictionary<Position, Piece> Pieces { get; } = new Dictionary<Position, Piece>();
 
         public Board()
         {
@@ -26,55 +38,55 @@ namespace Chess
                 for (byte column = Position.MinColumn; column <= Position.MaxColumn; column++)
                 {
                     var pawnPosition = new Position(pawnRow, column);
-                    _pieces.Add(pawnPosition, new Pawn(player.Item1));
+                    Pieces.Add(pawnPosition, new Pawn(player.Item1));
                 }
 
                 var rookPosition1 = new Position(player.Item2, 0);
                 var rook1 = new Rook(player.Item1);
-                _pieces.Add(rookPosition1, rook1);
+                Pieces.Add(rookPosition1, rook1);
 
                 var rookPosition2 = new Position(player.Item2, 7);
                 var rook2 = new Rook(player.Item1);
-                _pieces.Add(rookPosition2, rook2);
+                Pieces.Add(rookPosition2, rook2);
 
                 var knightPosition1 = new Position(player.Item2, 1);
                 var knight1 = new Knight(player.Item1);
-                _pieces.Add(knightPosition1, knight1);
+                Pieces.Add(knightPosition1, knight1);
 
                 var knightPosition2 = new Position(player.Item2, 6);
                 var knight2 = new Knight(player.Item1);
-                _pieces.Add(knightPosition2, knight2);
+                Pieces.Add(knightPosition2, knight2);
 
                 var bishopPosition1 = new Position(player.Item2, 2);
                 var bishop1 = new Bishop(player.Item1);
-                _pieces.Add(bishopPosition1, bishop1);
+                Pieces.Add(bishopPosition1, bishop1);
 
                 var bishopPosition2 = new Position(player.Item2, 5);
                 var bishop2 = new Bishop(player.Item1);
-                _pieces.Add(bishopPosition2, bishop2);
+                Pieces.Add(bishopPosition2, bishop2);
 
                 var queenPosition = new Position(player.Item2, 3);
                 var queen = new Queen(player.Item1);
-                _pieces.Add(queenPosition, queen);
+                Pieces.Add(queenPosition, queen);
 
                 var kingPosition = new Position(player.Item2, 3);
                 var king = new King(player.Item1);
-                _pieces.Add(kingPosition, king);
+                Pieces.Add(kingPosition, king);
             }
-            _startPieces = new Dictionary<Position, Piece>(_pieces);
+            _startPieces = new Dictionary<Position, Piece>(Pieces);
         }
 
 
-        public Position FindPiece(Piece piece) => _pieces.First(kvp => kvp.Value == piece).Key;
+        public Position FindPiece(Piece piece) => Pieces.First(kvp => kvp.Value == piece).Key;
 
         public bool IsTherePieceOfColor(Position position, bool color)
         {
-            return _pieces.ContainsKey(position) && _pieces[position].Color == color;
+            return Pieces.ContainsKey(position) && Pieces[position].Color == color;
         }
 
         public bool IsTherePiece(Position position)
         {
-            return _pieces.ContainsKey(position);
+            return Pieces.ContainsKey(position);
         }
 
         public HashSet<Position> PiecesInRange(HashSet<Position> range, bool color)
@@ -121,24 +133,24 @@ namespace Chess
                 } catch (InvalidOperationException) {
                     capturedPiece = _startPieces[capturedPiecePosition];
                 } 
-                _pieces[LastMove.To] = capturedPiece;
+                Pieces[LastMove.To] = capturedPiece;
             }
             else
             {
-                _pieces.Remove(LastMove.To);
+                Pieces.Remove(LastMove.To);
             }
             var from = movesWithoutLast.Where(m => m.Piece == LastMove.Piece).Last().To;
-            _pieces[from] = LastMove.Piece;
+            Pieces[from] = LastMove.Piece;
             _moves = movesWithoutLast.ToList();
         }
 
         public void MakeMove(Move move)
         {           
             if (move.IsEnPassant) {
-                _pieces.Remove(move.To.Behind(move.Piece.Color));
+                Pieces.Remove(move.To.Behind(move.Piece.Color));
             }
-            _pieces[move.To] = move.Piece;
-            _pieces.Remove(FindPiece(move.Piece));
+            Pieces[move.To] = move.Piece;
+            Pieces.Remove(FindPiece(move.Piece));
             _moves.Add(move);
             if (IsChecked(move.Piece.Color))
             {
@@ -148,13 +160,13 @@ namespace Chess
             
         }
 
-        public bool IsChecked(bool color) { 
-            foreach (var piece in _pieces.Values) { 
-                foreach (var move in piece.PossibleCaptures(this)) { 
-                    if (move.Piece.Color != color && _pieces[move.To] is King) {
-                        return true;
-                    } 
-                } 
+        public bool IsChecked(bool color) {
+            foreach (var move in PossibleCaptures)
+            {
+                if (move.Piece.Color != color && Pieces[move.To] is King)
+                {
+                    return true;
+                }
             }
             return false;
         }
