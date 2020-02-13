@@ -26,23 +26,27 @@ namespace Chess
             var position = board.FindPiece(this);
 
             var result = new HashSet<Move>();
+
+            void AddMove (int distance1, int distance2) 
+            {
+                try
+                {
+                    var newPosition = new Position((byte)(position.Row + distance1),
+                                                   (byte)(position.Column + distance2));
+
+                    if (!board.IsTherePieceOfColor(newPosition, Color))
+                    {
+                        result.Add(new Move(this, newPosition, board));
+                    }
+                }
+                catch { }
+            } 
+
             foreach (var distance1 in new int[]{ -2, 2}) {
                 foreach (var distance2 in new int[] { -1, 1 })
                 {
-                    try
-                    {
-                        var newPosition1 = new Position((byte)(position.Row + distance1),
-                                                       (byte)(position.Column + distance2));
-
-                        result.Add(new Move(this, newPosition1, board));
-
-                        var newPosition2 = new Position((byte)(position.Row + distance2),
-                                                       (byte)(position.Column + distance1));
- 
-                        result.Add(new Move(this, newPosition2, board));
-
-                        
-                    } catch { }
+                        AddMove(distance1, distance2);
+                        AddMove(distance2, distance1);
                 }
             }                
 
