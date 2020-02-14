@@ -17,7 +17,7 @@
             To = to;
             IsEnPassant = piece is Pawn && Pawn.IsEnPassant(this, board);
             IsCapture = IsEnPassant || board.IsTherePieceOfColor(To, !Piece.Color);
-            IsCastling = !IsCapture && piece is Rook && Rook.IsCastling(this, board); 
+            IsCastling = !IsCapture && piece is King && King.IsCastling(this, board); 
         } 
         
         public Move(Piece piece, Position to, bool isCapture)
