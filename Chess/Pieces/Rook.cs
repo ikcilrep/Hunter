@@ -36,16 +36,16 @@ namespace Chess
             var king = board.Pieces.Values.Where(p => p is King && p.Color == move.Piece.Color)
                                           .First();
             var kingPosition = board.FindPiece(king);
-            var position = board.FindPiece(move.Piece);
+            var rookPosition = board.FindPiece(move.Piece);
+            var range = Positions.Range(kingPosition, rookPosition);
 
-            var range = Positions.Range(kingPosition, position);
             return !board.HasPieceBeenMoved(king)
                 && !board.HasPieceBeenMoved(move.Piece)
-                && kingPosition.Row == position.Row
-                && position.Row == move.To.Row
+                && kingPosition.Row == rookPosition.Row
+                && rookPosition.Row == move.To.Row
+                && move.To == kingPosition.GoInDirectionOf(rookPosition.Column, 1)
                 && board.PiecesInRange(range).Count() == 2
-                && board.PossibleMoves.Count(m => m.To != position && range.Contains(m.To)) == 0;
-
+                && board.PossibleMoves.Count(m => m.To != rookPosition && range.Contains(m.To)) == 0;
         }
 
         public override bool IsMovePossible(Move move, Board board)

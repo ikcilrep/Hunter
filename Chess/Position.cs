@@ -2,10 +2,10 @@
 {
     public class Position
     {
-        public static byte MaxRow {get => 7;} 
-        public static byte MaxColumn {get => 7;} 
-        public static byte MinRow {get => 0;} 
-        public static byte MinColumn {get => 0;} 
+        public static byte MaxRow { get => 7; }
+        public static byte MaxColumn { get => 7; }
+        public static byte MinRow { get => 0; }
+        public static byte MinColumn { get => 0; }
 
         public byte Row { get; }
         public byte Column { get; }
@@ -24,7 +24,7 @@
             if (obj is Position) {
                 return ((Position)obj) == this;
             }
-            return false; 
+            return false;
         }
 
         public override int GetHashCode()
@@ -39,12 +39,22 @@
         public Position Behind(bool color) {
             return Before(!color);
         }
+
         public Position Before(bool color) {
             return new Position(Forward(1, color), Column);
         }
 
         public static bool operator ==(Position a, Position b) => a.Row == b.Row && a.Column == a.Column;
         public static bool operator !=(Position a, Position b) => !(a == b);
+
+        public Position GoInDirectionOf(byte column, byte distance)
+        {
+            if (column < Column)
+            {
+                return new Position(Row, (byte) (column - distance));
+            }
+            return new Position(Row, (byte) (column + distance));
+        }
 
 
     }
