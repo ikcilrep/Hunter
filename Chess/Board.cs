@@ -165,6 +165,10 @@ namespace Chess
             _moves.Add(move);
             if (IsChecked(move.Piece.Color))
             {
+                if (move.IsCastling) 
+                {
+                    UndoLastMove();
+                }
                 UndoLastMove();
                 throw new System.ArgumentException();
             }
