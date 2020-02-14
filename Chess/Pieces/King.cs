@@ -14,6 +14,10 @@ namespace Chess
         }
         public override bool IsMovePossible(Move move, Board board)
         {
+            if (move.IsCastling)
+            {
+                return true;
+            }
             var position = board.FindPiece(this);
             var rowDistance = Math.Abs(position.Row - move.To.Row);
             var columnDistance = Math.Abs(position.Column - move.To.Column);
@@ -22,19 +26,21 @@ namespace Chess
             return distancesAreRight && move.To != position && !board.IsTherePieceOfColor(move.To, Color);
         }
 
-        internal static Rook CastlingRook(Move move, Board board)
+        internal static (Position, Rook) CastlingRook(Move move, Board board)
         {
             var kingPosition = board.FindPiece(move.Piece);
-            return (Rook) board.Pieces.Where(kvp => !board.HasPieceBeenMoved(kvp.Value)
-                                                  && kvp.Key.Row == kingPosition.Row
-                                                  && Math.Abs(move.To.Column - kvp.Key.Column) <= 2).First().Value;
+            var kvp = board.Pieces.Where(kvp => !board.HasPieceBeenMoved(kvp.Value)
+                                                 && kvp.Key.Row == kingPosition.Row
+                                                 && Math.Abs(move.To.Column - kvp.Key.Column) <= 2)
+                                                 .First();
+            return (kvp.Key, (Rook) kvp.Value); 
         }
 
         internal static bool IsCastling(Move move, Board board)
         {
             var kingPosition = board.FindPiece(move.Piece);
             if (board.HasPieceBeenMoved(move.Piece)
-                || move.To.Row != kingPosition.Row 
+                || move.To.Row != kingPosition.Row
                 || Math.Abs(move.To.Column - kingPosition.Column) != 2)
             {
                 return false;
@@ -42,13 +48,17 @@ namespace Chess
 
             try
             {
-                CastlingRook(move, board);
+                var (rookPosition, rook) = CastlingRook(move, board);
+                var range = Positions.Range(kingPosition, rookPosition);
+                var piecesInRange = board.Pieces.Count(kvp => range.Contains(kvp.Key));
+                var possibleMovesToRange = board.PossibleMoves.Count(m => m.To != rookPosition
+                                                         && range.Contains(m.To));
+                return piecesInRange == 2 &&  possibleMovesToRange == 0;
             }
             catch (InvalidOperationException)
             {
                 return false;
             }
-            return true;
         }
 
         public override HashSet<Move> PossibleMoves(Board board)
@@ -65,7 +75,28 @@ namespace Chess
             var range = Positions.Range(topRightCorner, bottomLeftCorner);
             range.ExceptWith(board.PiecesInRange(range, Color));
 
-            return range.Select(p => new Move(this, p, board)).ToHashSet();
+            var result = new HashSet<Move>(range.Select(p => new Move(this, p, board)).ToHashSet());
+            try
+            {
+                var shortCastling = new Move(this, new Position(position.Row, (byte)(position.Column + 2)), board);
+                if (shortCastling.IsCastling)
+                {
+                    result.Add(shortCastling);
+                }
+            }
+            catch { }
+
+            try
+            {
+                var longCastling = new Move(this, new Position(position.Row, (byte)(position.Column - 2)), board);
+                if (longCastling.IsCastling)
+                {
+                    result.Add(longCastling);
+                }
+            }
+            catch { }
+
+            return result;
         }
     }
 }
