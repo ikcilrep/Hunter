@@ -9,18 +9,18 @@ namespace Chess
         public static bool White { get => true; }
         public static bool Black { get => false; }
 
-        
-        private readonly Dictionary<Position, Piece> _startPieces; 
+
+        private readonly Dictionary<Position, Piece> _startPieces;
         private List<Move> _moves = new List<Move>();
 
-        public HashSet<Move> PossibleMoves 
+        public HashSet<Move> PossibleMoves
         {
-             get => Pieces.Values.SelectMany(p => p.PossibleMoves(this)).ToHashSet();
+            get => Pieces.Values.SelectMany(p => p.PossibleMoves(this)).ToHashSet();
         }
 
-        public HashSet<Move> PossibleCaptures 
+        public HashSet<Move> PossibleCaptures
         {
-             get => Pieces.Values.SelectMany(p => p.PossibleCaptures(this)).ToHashSet();
+            get => Pieces.Values.SelectMany(p => p.PossibleCaptures(this)).ToHashSet();
         }
 
         public Move LastMove { get => _moves.Last(); }
@@ -28,7 +28,7 @@ namespace Chess
 
         public Board()
         {
-            
+
             var players = new Tuple<bool, byte>[2] {
                 new Tuple<bool, byte>(White, Position.MinRow),
                 new Tuple<bool, byte>(Black, Position.MaxRow) };
@@ -122,7 +122,8 @@ namespace Chess
             {
 
                 var capturedPiecePosition = LastMove.To;
-                if (LastMove.IsEnPassant) {
+                if (LastMove.IsEnPassant)
+                {
                     capturedPiecePosition = capturedPiecePosition.Behind(LastMove.Piece.Color);
                 }
                 Piece capturedPiece = null;
@@ -130,9 +131,11 @@ namespace Chess
                 try
                 {
                     capturedPiece = movesWithoutLast.Where(m => m.To == capturedPiecePosition).Last().Piece;
-                } catch (InvalidOperationException) {
+                }
+                catch (InvalidOperationException)
+                {
                     capturedPiece = _startPieces[capturedPiecePosition];
-                } 
+                }
                 Pieces[LastMove.To] = capturedPiece;
             }
             else
@@ -145,9 +148,17 @@ namespace Chess
         }
 
         public void MakeMove(Move move)
-        {           
-            if (move.IsEnPassant) {
+        {
+            if (move.IsEnPassant)
+            {
                 Pieces.Remove(move.To.Behind(move.Piece.Color));
+            }
+            else if (move.IsCastling)
+            {
+                var (rookPosition, rook) = King.CastlingRook(move, this);
+                var rookToKingDistance = Math.Abs(move.To.Column - rookPosition.Column);
+                var rookMove = new Move(rook, rookPosition.GoInDirectionOf(move.To.Column, (byte)(rookToKingDistance + 1)), false);
+                MakeMove(rookMove);
             }
             Pieces[move.To] = move.Piece;
             Pieces.Remove(FindPiece(move.Piece));
@@ -155,12 +166,13 @@ namespace Chess
             if (IsChecked(move.Piece.Color))
             {
                 UndoLastMove();
-                throw new System.Exception("Check after move.");
+                throw new System.ArgumentException();
             }
-            
+
         }
 
-        public bool IsChecked(bool color) {
+        public bool IsChecked(bool color)
+        {
             foreach (var move in PossibleCaptures)
             {
                 if (move.Piece.Color != color && Pieces[move.To] is King)
