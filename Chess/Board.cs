@@ -152,29 +152,14 @@ namespace Chess
 
         public void MakeMove(Move move)
         {
-            Pieces[move.To] = move.Piece;
-            Pieces.Remove(FindPiece(move.Piece));
-            _moves.Add(move);
-            if (IsChecked(move.Piece.Color))
-            {
-               UndoLastMove();
-                throw new ArgumentException();
-            }
+            Move(move); 
 
         }
 
-        public void MakeMove(EnPassant move)
+        public void MakeMove(EnPassant enPassant)
         {
-            Pieces.Remove(move.To.Behind(move.Piece.Color));
-            Pieces[move.To] = move.Piece;
-            Pieces.Remove(FindPiece(move.Piece));
-            _moves.Add(move);
-            if (IsChecked(move.Piece.Color))
-            {
-               UndoLastMove();
-                throw new ArgumentException();
-            }
-
+            Pieces.Remove(enPassant.To.Behind(enPassant.Piece.Color));
+            Move(enPassant);
         }
 
         public void MakeMove(Castling castling)
@@ -188,16 +173,25 @@ namespace Chess
                 false);
             MakeMove(rookMove);
 
-            Pieces[castling.To] = castling.King;
-            Pieces.Remove(FindPiece(castling.Piece));
-            _moves.Add(castling);
-            if (IsChecked(castling.Piece.Color))
+            try
             {
+                Move(castling);
+            } catch (ArgumentException e) {
                 UndoLastMove();
-                UndoLastMove();
+                throw e;
+            }
+        }
+
+        private void Move(IMove move) 
+        {
+            Pieces[move.To] = move.Piece;
+            Pieces.Remove(FindPiece(move.Piece));
+            _moves.Add(move);
+            if (IsChecked(move.Piece.Color))
+            {
+               UndoLastMove();
                 throw new ArgumentException();
             }
-
         }
 
         public bool IsChecked(bool color)
