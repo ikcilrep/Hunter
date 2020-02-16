@@ -1,4 +1,6 @@
-﻿namespace Chess.Moves
+﻿using Chess.Pieces;
+
+namespace Chess.Moves
 {
     public class Move : IMove
     {

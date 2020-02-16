@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Linq;
+using Chess.Pieces;
+
 namespace Chess.Moves
 {
     public class Castling : IMove

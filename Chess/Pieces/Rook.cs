@@ -3,8 +3,7 @@ using System.Collections.Generic;
 using System;
 using Chess.Moves;
 
-namespace Chess
-
+namespace Chess.Pieces
 {
     public class Rook : Piece
     {

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Chess.Moves;
 
-namespace Chess
+namespace Chess.Pieces
 {
     public class Bishop : Piece
     {

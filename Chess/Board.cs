@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Chess.Moves;
+using Chess.Pieces;
 
 namespace Chess
 {

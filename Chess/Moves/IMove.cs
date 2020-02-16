@@ -1,4 +1,6 @@
 ﻿using System;
+using Chess.Pieces;
+
 namespace Chess.Moves
 {
     public interface IMove

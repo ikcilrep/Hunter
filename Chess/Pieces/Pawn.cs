@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using Chess.Moves;
 
-namespace Chess
+namespace Chess.Pieces
 {
     public class Pawn : Piece
     {

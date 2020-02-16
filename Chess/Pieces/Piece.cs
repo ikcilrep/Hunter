@@ -2,8 +2,7 @@
 using System.Linq;
 using Chess.Moves;
 
-namespace Chess
-
+namespace Chess.Pieces
 {
     public abstract class Piece
     {
