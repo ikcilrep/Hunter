@@ -8,7 +8,6 @@ namespace Chess.Moves
         public Piece Piece { get; }
         public Position To { get; }
         public bool IsCapture { get; }
-        public bool IsEnPassant { get; }
 
 
 
@@ -16,15 +15,13 @@ namespace Chess.Moves
         {
             Piece = piece;
             To = to;
-            IsEnPassant = piece is Pawn && Pawn.IsEnPassant(this, board);
-            IsCapture = IsEnPassant || board.IsTherePieceOfColor(To, !Piece.Color);
+            IsCapture = board.IsTherePieceOfColor(To, !Piece.Color);
         } 
         
         public Move(Piece piece, Position to, bool isCapture)
         {
             Piece = piece;
             To = to;
-            IsEnPassant = false;
             IsCapture = isCapture;
         } 
 

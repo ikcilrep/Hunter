@@ -11,36 +11,11 @@ namespace Chess.Pieces
             _weight = 1;
         }
 
-        private static bool DoesPawnMoveTwoForward(IMove move, Board board) {
-            var position = board.FindPiece(move.Piece);
-            return move.Piece is Pawn && move.To.Row == position.Forward(2, move.Piece.Color);
-        }
-
-        internal static bool IsEnPassant(IMove move, Board board) {
-            if (move.Piece is Pawn)
-            {
-                var startRow = Positions.GetPawnRow(move.Piece.Color);
-                var position = board.FindPiece(move.Piece);
-                var columnDistance = Math.Abs(move.To.Column - position.Column);
-                var movesOneForward = move.To.Row == position.Forward(1, move.Piece.Color);
-                var movesDiagonally = movesOneForward
-                                  && columnDistance == 1;
-                return movesDiagonally 
-                                  && !board.IsTherePieceOfColor(move.To, move.Piece.Color)
-                                  && DoesPawnMoveTwoForward(board.LastMove, board)
-                                  && position.Row == Positions.Forward(startRow, 3, move.Piece.Color) 
-                                  && board.IsTherePieceOfColor(move.To.Behind(move.Piece.Color),
-                                                               !move.Piece.Color);
-
-
-            }
-            return false;
-        }
 
         public override bool IsMovePossible(IMove move, Board board)
         {
 
-            if (move is Move && ((Move)move).IsEnPassant) 
+            if (move is EnPassant) 
             {
                 return true;
             }
@@ -91,26 +66,26 @@ namespace Chess.Pieces
             {
                 AddMoveIfNotBlocked(before.Before(Color), board, result);
             }
-            try
+            void AddCapture(int columnDistance) 
             {
-                var capture = new Move(this, new Position(before.Row,
-                                              (byte)(position.Column + 1)), board);
-                if (capture.IsCapture) {
-                    result.Add(capture);
+                try
+                {
+                    var to = new Position(before.Row,
+                                              (byte)(position.Column + columnDistance));
+                    if (board.IsTherePieceOfColor(to, !Color))
+                    {
+                        _ = result.Add(new Move(this, to, true));
+                    }
+                    else if (EnPassant.IsEnPassant(this, to, board))
+                    {
+                        result.Add(new EnPassant(this, to));
+                    }
                 }
-
+                catch { }
             }
-            catch { }
 
-            try
-            {
-                var capture = new Move(this, new Position(before.Row,
-                                              (byte)(position.Column - 1)), board);
-                if (capture.IsCapture) {
-                    result.Add(capture);
-                }
-
-            } catch { }
+            AddCapture(+1);
+            AddCapture(-1);
 
             return result;
         }

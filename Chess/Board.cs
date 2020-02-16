@@ -120,11 +120,12 @@ namespace Chess
         public void UndoLastMove()
         {
             var movesWithoutLast = _moves.SkipLast(1);
-            if (LastMove is Move && ((Move)LastMove).IsCapture)
+            if ((LastMove is Move && ((Move)LastMove).IsCapture)
+                || LastMove is EnPassant)
             {
 
                 var capturedPiecePosition = LastMove.To;
-                if (((Move)LastMove).IsEnPassant)
+                if (LastMove is EnPassant)
                 {
                     capturedPiecePosition = capturedPiecePosition.Behind(LastMove.Piece.Color);
                 }
@@ -151,10 +152,6 @@ namespace Chess
 
         public void MakeMove(Move move)
         {
-            if (move.IsEnPassant)
-            {
-                Pieces.Remove(move.To.Behind(move.Piece.Color));
-            }
             Pieces[move.To] = move.Piece;
             Pieces.Remove(FindPiece(move.Piece));
             _moves.Add(move);
@@ -165,6 +162,21 @@ namespace Chess
             }
 
         }
+
+        public void MakeMove(EnPassant move)
+        {
+            Pieces.Remove(move.To.Behind(move.Piece.Color));
+            Pieces[move.To] = move.Piece;
+            Pieces.Remove(FindPiece(move.Piece));
+            _moves.Add(move);
+            if (IsChecked(move.Piece.Color))
+            {
+               UndoLastMove();
+                throw new ArgumentException();
+            }
+
+        }
+
         public void MakeMove(Castling castling)
         {
             var rookToKingDistance = Math.Abs(castling.To.Column - castling.RookPosition.Column);
