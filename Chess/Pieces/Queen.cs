@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Chess.Moves;
 
 namespace Chess
 
@@ -11,12 +12,12 @@ namespace Chess
             _weight = 9;
         }
 
-        public override bool IsMovePossible(Move move, Board board)
+        public override bool IsMovePossible(IMove move, Board board)
         {
             return Bishop.IsMovePossibleStatic(move, board) || Rook.IsMovePossibleStatic(move, board);
         }
 
-        public override HashSet<Move> PossibleMoves(Board board)
+        public override HashSet<IMove> PossibleMoves(Board board)
         {
             var moves = Bishop.PossibleMovesStatic(this, board);
             moves.UnionWith(Rook.PossibleMovesStatic(this, board));

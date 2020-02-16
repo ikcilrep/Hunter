@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Chess.Moves;
 
 namespace Chess
 {
@@ -10,12 +11,12 @@ namespace Chess
             _weight = 1;
         }
 
-        private static bool DoesPawnMoveTwoForward(Move move, Board board) {
+        private static bool DoesPawnMoveTwoForward(IMove move, Board board) {
             var position = board.FindPiece(move.Piece);
             return move.Piece is Pawn && move.To.Row == position.Forward(2, move.Piece.Color);
         }
 
-        internal static bool IsEnPassant(Move move, Board board) {
+        internal static bool IsEnPassant(IMove move, Board board) {
             if (move.Piece is Pawn)
             {
                 var startRow = Positions.GetPawnRow(move.Piece.Color);
@@ -36,9 +37,10 @@ namespace Chess
             return false;
         }
 
-        public override bool IsMovePossible(Move move, Board board)
+        public override bool IsMovePossible(IMove move, Board board)
         {
-            if (move.IsEnPassant) 
+
+            if (move is Move && ((Move)move).IsEnPassant) 
             {
                 return true;
             }
@@ -68,7 +70,7 @@ namespace Chess
             return movesDiagonally && board.IsTherePieceOfColor(move.To, !Color);
         }
 
-        private bool AddMoveIfNotBlocked(Position position, Board board, HashSet<Move> moves)
+        private bool AddMoveIfNotBlocked(Position position, Board board, HashSet<IMove> moves)
         {
 
             if (!board.IsTherePiece(position))
@@ -79,10 +81,10 @@ namespace Chess
             return false;
         }
 
-        public override HashSet<Move> PossibleMoves(Board board)
+        public override HashSet<IMove> PossibleMoves(Board board)
         {
             var position = board.FindPiece(this);
-            var result = new HashSet<Move>();
+            var result = new HashSet<IMove>();
             var before = position.Before(Color);
             if (AddMoveIfNotBlocked(before, board, result)
                 && !board.HasPieceBeenMoved(this))

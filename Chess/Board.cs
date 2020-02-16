@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Chess.Moves;
 
 namespace Chess
 {
@@ -11,19 +12,19 @@ namespace Chess
 
 
         private readonly Dictionary<Position, Piece> _startPieces;
-        private List<Move> _moves = new List<Move>();
+        private List<IMove> _moves = new List<IMove>();
 
-        public HashSet<Move> PossibleMoves
+        public HashSet<IMove> PossibleMoves
         {
             get => Pieces.Values.SelectMany(p => p.PossibleMoves(this)).ToHashSet();
         }
 
-        public HashSet<Move> PossibleCaptures
+        public HashSet<IMove> PossibleCaptures
         {
             get => Pieces.Values.SelectMany(p => p.PossibleCaptures(this)).ToHashSet();
         }
 
-        public Move LastMove { get => _moves.Last(); }
+        public IMove LastMove { get => _moves.Last(); }
         public Dictionary<Position, Piece> Pieces { get; } = new Dictionary<Position, Piece>();
 
         public Board()
@@ -118,11 +119,11 @@ namespace Chess
         public void UndoLastMove()
         {
             var movesWithoutLast = _moves.SkipLast(1);
-            if (LastMove.IsCapture)
+            if (LastMove is Move && ((Move)LastMove).IsCapture)
             {
 
                 var capturedPiecePosition = LastMove.To;
-                if (LastMove.IsEnPassant)
+                if (((Move)LastMove).IsEnPassant)
                 {
                     capturedPiecePosition = capturedPiecePosition.Behind(LastMove.Piece.Color);
                 }
@@ -153,24 +154,35 @@ namespace Chess
             {
                 Pieces.Remove(move.To.Behind(move.Piece.Color));
             }
-            else if (move.IsCastling)
-            {
-                var (rookPosition, rook) = King.CastlingRook(move, this);
-                var rookToKingDistance = Math.Abs(move.To.Column - rookPosition.Column);
-                var rookMove = new Move(rook, rookPosition.GoInDirectionOf(move.To.Column, (byte)(rookToKingDistance + 1)), false);
-                MakeMove(rookMove);
-            }
             Pieces[move.To] = move.Piece;
             Pieces.Remove(FindPiece(move.Piece));
             _moves.Add(move);
             if (IsChecked(move.Piece.Color))
             {
-                if (move.IsCastling) 
-                {
-                    UndoLastMove();
-                }
+               UndoLastMove();
+                throw new ArgumentException();
+            }
+
+        }
+        public void MakeMove(Castling castling)
+        {
+            var rookToKingDistance = Math.Abs(castling.To.Column - castling.RookPosition.Column);
+            var rookMove = new Move(
+                castling.Rook,
+                castling.RookPosition.GoInDirectionOf(
+                    castling.To.Column,
+                    (byte)(rookToKingDistance + 1)),
+                false);
+            MakeMove(rookMove);
+
+            Pieces[castling.To] = castling.King;
+            Pieces.Remove(FindPiece(castling.Piece));
+            _moves.Add(castling);
+            if (IsChecked(castling.Piece.Color))
+            {
                 UndoLastMove();
-                throw new System.ArgumentException();
+                UndoLastMove();
+                throw new ArgumentException();
             }
 
         }

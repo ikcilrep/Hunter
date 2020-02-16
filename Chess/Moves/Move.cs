@@ -1,12 +1,11 @@
-﻿namespace Chess
+﻿namespace Chess.Moves
 {
-    public class Move
+    public class Move : IMove
     {
 
         public Piece Piece { get; }
         public Position To { get; }
         public bool IsCapture { get; }
-        public bool IsCastling { get; }
         public bool IsEnPassant { get; }
 
 
@@ -17,7 +16,6 @@
             To = to;
             IsEnPassant = piece is Pawn && Pawn.IsEnPassant(this, board);
             IsCapture = IsEnPassant || board.IsTherePieceOfColor(To, !Piece.Color);
-            IsCastling = !IsCapture && piece is King && King.IsCastling(this, board); 
         } 
         
         public Move(Piece piece, Position to, bool isCapture)
@@ -25,7 +23,6 @@
             Piece = piece;
             To = to;
             IsEnPassant = false;
-            IsCastling = false;
             IsCapture = isCapture;
         } 
 

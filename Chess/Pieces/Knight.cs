@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Chess.Moves;
 
 namespace Chess
 
@@ -10,7 +11,7 @@ namespace Chess
             _weight = 3;
             _color = color;
         }
-        public override bool IsMovePossible(Move move, Board board)
+        public override bool IsMovePossible(IMove move, Board board)
         {
             var position = board.FindPiece(this);
             var columnDistance = Math.Abs(position.Column - move.To.Column);
@@ -21,11 +22,11 @@ namespace Chess
             return !board.IsTherePieceOfColor(move.To, Color) && distancesAreRight;
         }
 
-        public override HashSet<Move> PossibleMoves(Board board)
+        public override HashSet<IMove> PossibleMoves(Board board)
         {
             var position = board.FindPiece(this);
 
-            var result = new HashSet<Move>();
+            var result = new HashSet<IMove>();
 
             void AddMove (int distance1, int distance2) 
             {

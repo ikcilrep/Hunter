@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Chess.Moves;
 
 namespace Chess
 {
@@ -13,12 +14,12 @@ namespace Chess
         }
 
 
-        public override bool IsMovePossible(Move move, Board board)
+        public override bool IsMovePossible(IMove move, Board board)
         {
             return IsMovePossibleStatic(move, board);
         }
 
-        public static bool IsMovePossibleStatic(Move move, Board board) {
+        public static bool IsMovePossibleStatic(IMove move, Board board) {
             try 
             {
                 var position = board.FindPiece(move.Piece);
@@ -66,10 +67,10 @@ namespace Chess
                 (byte)(position.Column + distance4)));
         }
 
-        public static HashSet<Move> PossibleMovesStatic(Piece piece, Board board)
+        public static HashSet<IMove> PossibleMovesStatic(Piece piece, Board board)
         {
             var position = board.FindPiece(piece);
-            var result = new HashSet<Move>();
+            var result = new HashSet<IMove>();
             var diagonalsEnds = new HashSet<Position>();
             AddDiagonalsEnds(position, diagonalsEnds);
             foreach (var diagonalEnd in diagonalsEnds) 
@@ -91,7 +92,7 @@ namespace Chess
             return result;
         }
 
-        public override HashSet<Move> PossibleMoves(Board board)
+        public override HashSet<IMove> PossibleMoves(Board board)
         {
             return PossibleMovesStatic(this,board);
         }

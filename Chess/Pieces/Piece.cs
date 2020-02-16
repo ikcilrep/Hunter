@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using Chess.Moves;
 
 namespace Chess
 
@@ -11,13 +12,13 @@ namespace Chess
         internal byte _weight; 
         internal bool _color; 
 
-        public abstract HashSet<Move> PossibleMoves(Board board);
+        public abstract HashSet<IMove> PossibleMoves(Board board);
 
-        public virtual HashSet<Move> PossibleCaptures(Board board) {
-            return PossibleMoves(board).Where(x => x.IsCapture).ToHashSet();
+        public virtual HashSet<IMove> PossibleCaptures(Board board) {
+            return PossibleMoves(board).Where(m => m is Move && ((Move)m).IsCapture).ToHashSet();
         }
 
-        public abstract bool IsMovePossible(Move move, Board board);
+        public abstract bool IsMovePossible(IMove move, Board board);
 
     }
 }
