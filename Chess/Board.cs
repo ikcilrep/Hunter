@@ -143,9 +143,9 @@ namespace Chess
             else
             {
                 Pieces.Remove(LastMove.To);
-                if (LastMove is Castling) 
+                if (LastMove is Castling)
                 {
-                    var castling = (Castling) LastMove;
+                    var castling = (Castling)LastMove;
                     Pieces[castling.RookPosition] = castling.Rook;
                     Pieces.Remove(castling.RookTo);
                 }
@@ -155,10 +155,13 @@ namespace Chess
             _moves = movesExceptLast.ToList();
         }
 
-        public void MakeMove(Move move)
-        {
-            Move(move); 
+        public void MakeMove(Move move) => Move(move);
 
+        public void MakeMove(Promotion promotion)
+        {
+           var from = FindPiece(promotion.Pawn);
+           _moves.Add(promotion);
+           Move(promotion.To, from, promotion.PromotedPawn);
         }
 
         public void MakeMove(EnPassant enPassant)
@@ -174,16 +177,24 @@ namespace Chess
             Move(castling);
         }
 
-        private void Move(IMove move) 
+        private void Move(Position to, Position from, Piece piece)
         {
-            Pieces[move.To] = move.Piece;
-            Pieces.Remove(FindPiece(move.Piece));
-            _moves.Add(move);
-            if (IsChecked(move.Piece.Color))
+            Pieces[to] = piece;
+            Pieces.Remove(from);
+            if (IsChecked(piece.Color))
             {
-               UndoLastMove();
+                UndoLastMove();
                 throw new ArgumentException();
             }
+        }
+
+        private void Move(Position to, Piece piece) {
+            var from = FindPiece(piece);
+            Move(to, from, piece);
+        }
+
+        private void Move(IMove move) {
+            Move(move.To, move.Piece);
         }
 
         public bool IsChecked(bool color)
