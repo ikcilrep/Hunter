@@ -16,14 +16,14 @@ namespace Chess.Moves
             Piece = piece;
             To = to;
             IsCapture = board.IsTherePieceOfColor(To, !Piece.Color);
-        } 
-        
+        }
+
         public Move(Piece piece, Position to, bool isCapture)
         {
             Piece = piece;
             To = to;
             IsCapture = isCapture;
-        } 
+        }
 
     }
 }

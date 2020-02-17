@@ -8,12 +8,13 @@ namespace Chess.Pieces
     {
         public byte Weight { get => _weight; }
         public bool Color { get => _color; }
-        internal byte _weight; 
-        internal bool _color; 
+        internal byte _weight;
+        internal bool _color;
 
         public abstract HashSet<IMove> PossibleMoves(Board board);
 
-        public virtual HashSet<IMove> PossibleCaptures(Board board) {
+        public virtual HashSet<IMove> PossibleCaptures(Board board)
+        {
             return PossibleMoves(board).Where(m => m is Move && ((Move)m).IsCapture).ToHashSet();
         }
 

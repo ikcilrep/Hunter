@@ -7,7 +7,8 @@ namespace Chess.Pieces
 {
     public class Rook : Piece
     {
-        public Rook(bool color) {
+        public Rook(bool color)
+        {
             _color = color;
             _weight = 5;
         }
@@ -23,12 +24,12 @@ namespace Chess.Pieces
                 return false;
             }
             var capturedPieces = 0;
-            if (board.IsTherePieceOfColor(move.To, !move.Piece.Color)) 
+            if (board.IsTherePieceOfColor(move.To, !move.Piece.Color))
             {
                 capturedPieces = 1;
             }
-           return board.PiecesInRange(move.To, position).Count -1 == capturedPieces;
- 
+            return board.PiecesInRange(move.To, position).Count - 1 == capturedPieces;
+
         }
 
         public override bool IsMovePossible(IMove move, Board board)
@@ -39,12 +40,12 @@ namespace Chess.Pieces
         private static void AddRange(HashSet<Position> range,
                                      Piece piece,
                                      Board board,
-                                     Position border, 
+                                     Position border,
                                      Func<Position, bool> predicate,
-                                     HashSet<IMove> moves) 
+                                     HashSet<IMove> moves)
         {
 
-            foreach (var beforeNotAllowedColumn in range.Where(predicate)) 
+            foreach (var beforeNotAllowedColumn in range.Where(predicate))
             {
                 moves.Add(new Move(piece, beforeNotAllowedColumn, false));
             }
@@ -54,7 +55,7 @@ namespace Chess.Pieces
             }
         }
 
-        public static HashSet<IMove> PossibleMovesStatic(Piece piece, Board board) 
+        public static HashSet<IMove> PossibleMovesStatic(Piece piece, Board board)
         {
             var position = board.FindPiece(piece);
             var maxPosition1 = new Position(position.Row, Position.MaxColumn);
@@ -82,7 +83,7 @@ namespace Chess.Pieces
                                         .First();
             var maxNotAllowedRow = board.PiecesInRange(range4)
                                         .OrderBy(c => c.Row)
-                                        .First(); 
+                                        .First();
 
             var result = new HashSet<IMove>();
 
@@ -112,7 +113,7 @@ namespace Chess.Pieces
                      result);
 
             return result;
- 
+
         }
 
         public override HashSet<IMove> PossibleMoves(Board board)

@@ -12,7 +12,8 @@
 
         public Position(byte row, byte column)
         {
-            if (row > MaxRow || column > MaxColumn) {
+            if (row > MaxRow || column > MaxColumn)
+            {
                 throw new System.ArgumentException("Coordinates out of range.");
             }
             Row = row;
@@ -21,7 +22,8 @@
 
         public override bool Equals(object obj)
         {
-            if (obj is Position) {
+            if (obj is Position)
+            {
                 return ((Position)obj) == this;
             }
             return false;
@@ -32,15 +34,18 @@
             return (Row << 3) + Column;
         }
 
-        public byte Forward(byte distance, bool color) {
+        public byte Forward(byte distance, bool color)
+        {
             return Positions.Forward(Row, distance, color);
         }
 
-        public Position Behind(bool color) {
+        public Position Behind(bool color)
+        {
             return Before(!color);
         }
 
-        public Position Before(bool color) {
+        public Position Before(bool color)
+        {
             return new Position(Forward(1, color), Column);
         }
 
@@ -51,9 +56,9 @@
         {
             if (column < Column)
             {
-                return new Position(Row, (byte) (column - distance));
+                return new Position(Row, (byte)(column - distance));
             }
-            return new Position(Row, (byte) (column + distance));
+            return new Position(Row, (byte)(column + distance));
         }
 
 

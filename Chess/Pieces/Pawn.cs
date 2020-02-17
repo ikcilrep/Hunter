@@ -6,7 +6,8 @@ namespace Chess.Pieces
 {
     public class Pawn : Piece
     {
-        public Pawn(bool color) {
+        public Pawn(bool color)
+        {
             _color = color;
             _weight = 1;
         }
@@ -15,20 +16,22 @@ namespace Chess.Pieces
         public override bool IsMovePossible(IMove move, Board board)
         {
 
-            if (move is EnPassant) 
+            if (move is EnPassant)
             {
                 return true;
             }
 
-            if (board.IsTherePieceOfColor(move.To, Color)) {
+            if (board.IsTherePieceOfColor(move.To, Color))
+            {
                 return false;
             }
 
             var position = board.FindPiece(this);
             var columnDistance = Math.Abs(move.To.Column - position.Column);
-            var columnIsTheSame = columnDistance == 0; 
+            var columnIsTheSame = columnDistance == 0;
             var movesOneForward = move.To.Row == position.Forward(1, Color);
-            if (columnIsTheSame) {
+            if (columnIsTheSame)
+            {
                 var movesTwoForward = move.To.Row == position.Forward(2, Color);
                 var pieceHasBeenMoved = board.HasPieceBeenMoved(this);
                 var thereIsPieceOnTheWay = board.IsTherePiece(position.Before(Color));
@@ -66,7 +69,7 @@ namespace Chess.Pieces
             {
                 AddMoveIfNotBlocked(before.Before(Color), board, result);
             }
-            void AddCapture(int columnDistance) 
+            void AddCapture(int columnDistance)
             {
                 try
                 {

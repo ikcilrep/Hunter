@@ -6,7 +6,8 @@ namespace Chess.Pieces
 {
     public class Knight : Piece
     {
-        public Knight(bool color) {
+        public Knight(bool color)
+        {
             _weight = 3;
             _color = color;
         }
@@ -27,7 +28,7 @@ namespace Chess.Pieces
 
             var result = new HashSet<IMove>();
 
-            void AddMove (int distance1, int distance2) 
+            void AddMove(int distance1, int distance2)
             {
                 try
                 {
@@ -40,17 +41,18 @@ namespace Chess.Pieces
                     }
                 }
                 catch { }
-            } 
+            }
 
-            foreach (var distance1 in new int[]{ -2, 2}) {
+            foreach (var distance1 in new int[] { -2, 2 })
+            {
                 foreach (var distance2 in new int[] { -1, 1 })
                 {
-                        AddMove(distance1, distance2);
-                        AddMove(distance2, distance1);
+                    AddMove(distance1, distance2);
+                    AddMove(distance2, distance1);
                 }
-            }                
+            }
 
-           return result;
+            return result;
         }
     }
 }

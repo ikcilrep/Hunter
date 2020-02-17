@@ -19,27 +19,30 @@ namespace Chess.Pieces
             return IsMovePossibleStatic(move, board);
         }
 
-        public static bool IsMovePossibleStatic(IMove move, Board board) {
-            try 
+        public static bool IsMovePossibleStatic(IMove move, Board board)
+        {
+            try
             {
                 var position = board.FindPiece(move.Piece);
                 var diagonal = Positions.Diagonal(position, move.To);
 
-                foreach (var diagonalPosition in diagonal) { 
-                    if (board.IsTherePiece(diagonalPosition)) 
+                foreach (var diagonalPosition in diagonal)
+                {
+                    if (board.IsTherePiece(diagonalPosition))
                     {
                         return false;
                     }
                 }
                 return true;
-            } 
-            catch 
+            }
+            catch
             {
                 return false;
             }
-         }
+        }
 
-        private static void AddDiagonalsEnds(Position position, HashSet<Position> diagonalsEnds) {
+        private static void AddDiagonalsEnds(Position position, HashSet<Position> diagonalsEnds)
+        {
             var distance1 = Math.Min(
                 Position.MaxRow - position.Row,
                 Position.MaxColumn - position.Column);
@@ -73,7 +76,7 @@ namespace Chess.Pieces
             var result = new HashSet<IMove>();
             var diagonalsEnds = new HashSet<Position>();
             AddDiagonalsEnds(position, diagonalsEnds);
-            foreach (var diagonalEnd in diagonalsEnds) 
+            foreach (var diagonalEnd in diagonalsEnds)
             {
                 var diagonal = Positions.Diagonal(position, diagonalEnd);
                 var diagonalFirstEmptyPositions = diagonal.TakeWhile(p => !board.IsTherePiece(p))
@@ -94,7 +97,7 @@ namespace Chess.Pieces
 
         public override HashSet<IMove> PossibleMoves(Board board)
         {
-            return PossibleMovesStatic(this,board);
+            return PossibleMovesStatic(this, board);
         }
     }
 }

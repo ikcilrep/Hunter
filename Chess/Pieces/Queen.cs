@@ -5,7 +5,7 @@ namespace Chess.Pieces
 {
     public class Queen : Piece
     {
-        public Queen(bool color) 
+        public Queen(bool color)
         {
             _color = color;
             _weight = 9;

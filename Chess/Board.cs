@@ -150,7 +150,7 @@ namespace Chess
                     Pieces.Remove(castling.RookTo);
                 }
             }
-            
+
             Position from;
             try
             {

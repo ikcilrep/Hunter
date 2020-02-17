@@ -26,7 +26,7 @@ namespace Chess.Pieces
             return distancesAreRight && move.To != position && !board.IsTherePieceOfColor(move.To, Color);
         }
 
-        
+
 
         public override HashSet<IMove> PossibleMoves(Board board)
         {
@@ -45,7 +45,7 @@ namespace Chess.Pieces
             var result = new HashSet<IMove>(range.Select(p => new Move(this, p, board)).ToHashSet());
             try
             {
-                var to = new Position(position.Row, (byte)(position.Column + 2)); 
+                var to = new Position(position.Row, (byte)(position.Column + 2));
                 if (Castling.IsCastling(this, to, board))
                 {
                     result.Add(new Castling(this, to, board));
@@ -56,7 +56,7 @@ namespace Chess.Pieces
             try
             {
                 var to = new Position(position.Row, (byte)(position.Column - 2));
-                if (Castling.IsCastling(this, to ,board))
+                if (Castling.IsCastling(this, to, board))
                 {
                     result.Add(new Castling(this, to, board));
                 }
