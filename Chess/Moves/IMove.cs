@@ -7,5 +7,8 @@ namespace Chess.Moves
     {
         public Piece Piece { get; }
         public Position To { get; }
+
+        public static bool isCapture(IMove move) => (move is Move && ((Move)move).IsCapture)
+                || move is EnPassant;
     }
 }

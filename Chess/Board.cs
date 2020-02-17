@@ -119,9 +119,8 @@ namespace Chess
 
         public void UndoLastMove()
         {
-            var movesWithoutLast = _moves.SkipLast(1);
-            if ((LastMove is Move && ((Move)LastMove).IsCapture)
-                || LastMove is EnPassant)
+            var movesExceptLast = _moves.SkipLast(1);
+            if (IMove.isCapture(LastMove))
             {
 
                 var capturedPiecePosition = LastMove.To;
@@ -133,7 +132,7 @@ namespace Chess
 
                 try
                 {
-                    capturedPiece = movesWithoutLast.Where(m => m.To == capturedPiecePosition).Last().Piece;
+                    capturedPiece = movesExceptLast.Where(m => m.To == capturedPiecePosition).Last().Piece;
                 }
                 catch (InvalidOperationException)
                 {
@@ -144,10 +143,16 @@ namespace Chess
             else
             {
                 Pieces.Remove(LastMove.To);
+                if (LastMove is Castling) 
+                {
+                    var castling = (Castling) LastMove;
+                    Pieces[castling.RookPosition] = castling.Rook;
+                    Pieces.Remove(castling.RookTo);
+                }
             }
-            var from = movesWithoutLast.Where(m => m.Piece == LastMove.Piece).Last().To;
+            var from = movesExceptLast.Where(m => m.Piece == LastMove.Piece).Last().To;
             Pieces[from] = LastMove.Piece;
-            _moves = movesWithoutLast.ToList();
+            _moves = movesExceptLast.ToList();
         }
 
         public void MakeMove(Move move)
@@ -164,15 +169,9 @@ namespace Chess
 
         public void MakeMove(Castling castling)
         {
+            Pieces[castling.RookTo] = castling.Rook;
+            Pieces.Remove(castling.RookPosition);
             Move(castling);
-            var rookToKingDistance = Math.Abs(castling.To.Column - castling.RookPosition.Column);
-            var rookMove = new Move(
-                castling.Rook,
-                castling.RookPosition.GoInDirectionOf(
-                    castling.To.Column,
-                    (byte)(rookToKingDistance + 1)),
-                false);
-            Move(rookMove);
         }
 
         private void Move(IMove move) 

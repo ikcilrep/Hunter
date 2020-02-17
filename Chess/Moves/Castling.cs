@@ -17,6 +17,16 @@ namespace Chess.Moves
 
         public Position RookPosition { get;  }
 
+        public Position RookTo {get {
+
+            var rookToKingDistance = Math.Abs(To.Column - RookPosition.Column);
+            return  RookPosition.GoInDirectionOf(
+                    To.Column,
+                    (byte)(rookToKingDistance + 1));
+ 
+        }
+        }
+
         public Castling(King king, Position to, Board board)
         {
             King = king;
