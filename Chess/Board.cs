@@ -11,13 +11,48 @@ namespace Chess
         public static bool White { get => true; }
         public static bool Black { get => false; }
 
-        private readonly Dictionary<Position, Piece> _startPieces;
+        private readonly Dictionary<Position, Piece> _startPositions = new Dictionary<Position, Piece> {
+            { new Position("a1"), new Rook(White)},
+            { new Position("b1"), new Knight(White)},
+            { new Position("c1"), new Bishop(White)},
+            { new Position("d1"), new Queen(White)},
+            { new Position("e1"), new King(White)},
+            { new Position("f1"), new Bishop(White)},
+            { new Position("g1"), new Knight(White)},
+            { new Position("h1"), new Rook(White)},
+            { new Position("a2"), new Pawn(White)},
+            { new Position("b2"), new Pawn(White)},
+            { new Position("c2"), new Pawn(White)},
+            { new Position("d2"), new Pawn(White)},
+            { new Position("e2"), new Pawn(White)},
+            { new Position("f2"), new Pawn(White)},
+            { new Position("g2"), new Pawn(White)},
+            { new Position("h2"), new Pawn(White)},
+            { new Position("a8"), new Rook(Black)},
+            { new Position("b8"), new Knight(Black)},
+            { new Position("c8"), new Bishop(Black)},
+            { new Position("d8"), new Queen(Black)},
+            { new Position("e8"), new King(Black)},
+            { new Position("f8"), new Bishop(Black)},
+            { new Position("g8"), new Knight(Black)},
+            { new Position("h8"), new Rook(Black)},
+            { new Position("a7"), new Pawn(Black)},
+            { new Position("b7"), new Pawn(Black)},
+            { new Position("c7"), new Pawn(Black)},
+            { new Position("d7"), new Pawn(Black)},
+            { new Position("e7"), new Pawn(Black)},
+            { new Position("f7"), new Pawn(Black)},
+            { new Position("g7"), new Pawn(Black)},
+            { new Position("h7"), new Pawn(Black)},
+        };
         private List<IMove> _moves = new List<IMove>();
-        private IEnumerable<IMove> PossibleMovesOfPiece(Piece piece) {
-            return piece.PossibleMoves(this).Where(m => !IsCheckedAfterMove(m)); 
+        private IEnumerable<IMove> PossibleMovesOfPiece(Piece piece)
+        {
+            return piece.PossibleMoves(this).Where(m => !IsCheckedAfterMove(m));
         }
-        private IEnumerable<IMove> PossibleCapturesOfPiece(Piece piece) {
-            return piece.PossibleCaptures(this).Where(m => !IsCheckedAfterMove(m)); 
+        private IEnumerable<IMove> PossibleCapturesOfPiece(Piece piece)
+        {
+            return piece.PossibleCaptures(this).Where(m => !IsCheckedAfterMove(m));
         }
 
         public HashSet<IMove> PossibleMoves
@@ -33,54 +68,11 @@ namespace Chess
         public IMove LastMove { get => _moves.Last(); }
         public Dictionary<Position, Piece> Pieces { get; } = new Dictionary<Position, Piece>();
 
+        public Dictionary<Position, Piece> StartPositions => _startPositions;
+
         public Board()
         {
-
-            var players = new Tuple<bool, byte>[2] {
-                new Tuple<bool, byte>(White, Position.MinRow),
-                new Tuple<bool, byte>(Black, Position.MaxRow) };
-            foreach (var player in players)
-            {
-                var pawnRow = Positions.GetPawnRow(player.Item1);
-                for (byte column = Position.MinColumn; column <= Position.MaxColumn; column++)
-                {
-                    var pawnPosition = new Position(pawnRow, column);
-                    Pieces.Add(pawnPosition, new Pawn(player.Item1));
-                }
-
-                var rookPosition1 = new Position(player.Item2, 0);
-                var rook1 = new Rook(player.Item1);
-                Pieces.Add(rookPosition1, rook1);
-
-                var rookPosition2 = new Position(player.Item2, 7);
-                var rook2 = new Rook(player.Item1);
-                Pieces.Add(rookPosition2, rook2);
-
-                var knightPosition1 = new Position(player.Item2, 1);
-                var knight1 = new Knight(player.Item1);
-                Pieces.Add(knightPosition1, knight1);
-
-                var knightPosition2 = new Position(player.Item2, 6);
-                var knight2 = new Knight(player.Item1);
-                Pieces.Add(knightPosition2, knight2);
-
-                var bishopPosition1 = new Position(player.Item2, 2);
-                var bishop1 = new Bishop(player.Item1);
-                Pieces.Add(bishopPosition1, bishop1);
-
-                var bishopPosition2 = new Position(player.Item2, 5);
-                var bishop2 = new Bishop(player.Item1);
-                Pieces.Add(bishopPosition2, bishop2);
-
-                var queenPosition = new Position(player.Item2, 3);
-                var queen = new Queen(player.Item1);
-                Pieces.Add(queenPosition, queen);
-
-                var kingPosition = new Position(player.Item2, 3);
-                var king = new King(player.Item1);
-                Pieces.Add(kingPosition, king);
-            }
-            _startPieces = new Dictionary<Position, Piece>(Pieces);
+            Pieces = new Dictionary<Position, Piece> (StartPositions);
         }
 
 
@@ -141,7 +133,7 @@ namespace Chess
                 }
                 catch (InvalidOperationException)
                 {
-                    capturedPiece = _startPieces[capturedPiecePosition];
+                    capturedPiece = StartPositions[capturedPiecePosition];
                 }
                 Pieces[LastMove.To] = capturedPiece;
             }
@@ -163,7 +155,7 @@ namespace Chess
             }
             catch (InvalidOperationException)
             {
-                from = _startPieces.Where(kvp => kvp.Value == LastMove.Piece).First().Key;
+                from = StartPositions.Where(kvp => kvp.Value == LastMove.Piece).First().Key;
             }
 
             Pieces[from] = LastMove.Piece;
