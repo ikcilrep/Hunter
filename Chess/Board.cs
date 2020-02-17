@@ -72,7 +72,7 @@ namespace Chess
 
         public Board()
         {
-            Pieces = new Dictionary<Position, Piece> (StartPositions);
+            Pieces = new Dictionary<Position, Piece>(StartPositions);
         }
 
 
