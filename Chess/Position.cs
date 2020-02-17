@@ -10,14 +10,29 @@
         public byte Row { get; }
         public byte Column { get; }
 
+        private bool IsPositionRight => Row <= MaxRow && Row >= MinRow && Column <= MaxColumn && Column >= MinColumn;
         public Position(byte row, byte column)
         {
-            if (row > MaxRow || column > MaxColumn)
-            {
-                throw new System.ArgumentException("Coordinates out of range.");
-            }
             Row = row;
             Column = column;
+            if (!IsPositionRight)
+            {
+                throw new System.ArgumentException();
+            }
+        }
+
+        public Position(string notation)
+        {
+            if (notation.Length != 2)
+            {
+                throw new System.FormatException();
+            }
+            Row = (byte)(notation[0] - 97);
+            Column = byte.Parse(notation[1].ToString());
+            if (!IsPositionRight)
+            {
+                throw new System.ArgumentException();
+            }
         }
 
         public override bool Equals(object obj)
@@ -38,6 +53,7 @@
         {
             return Positions.Forward(Row, distance, color);
         }
+
 
         public Position Behind(bool color)
         {
@@ -61,8 +77,9 @@
             return new Position(Row, (byte)(column + distance));
         }
 
-        public override string ToString() {
-            return (char)(97+Column) + (Row+1).ToString();
+        public override string ToString()
+        {
+            return (char)(97 + Column) + (Row + 1).ToString();
         }
 
 
