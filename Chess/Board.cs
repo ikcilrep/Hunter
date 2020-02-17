@@ -11,18 +11,23 @@ namespace Chess
         public static bool White { get => true; }
         public static bool Black { get => false; }
 
-
         private readonly Dictionary<Position, Piece> _startPieces;
         private List<IMove> _moves = new List<IMove>();
+        private IEnumerable<IMove> PossibleMovesOfPiece(Piece piece) {
+            return piece.PossibleMoves(this).Where(m => !IsCheckedAfterMove(m)); 
+        }
+        private IEnumerable<IMove> PossibleCapturesOfPiece(Piece piece) {
+            return piece.PossibleCaptures(this).Where(m => !IsCheckedAfterMove(m)); 
+        }
 
         public HashSet<IMove> PossibleMoves
         {
-            get => Pieces.Values.SelectMany(p => p.PossibleMoves(this)).ToHashSet();
+            get => Pieces.Values.SelectMany(PossibleMovesOfPiece).ToHashSet();
         }
 
         public HashSet<IMove> PossibleCaptures
         {
-            get => Pieces.Values.SelectMany(p => p.PossibleCaptures(this)).ToHashSet();
+            get => Pieces.Values.SelectMany(PossibleCapturesOfPiece).ToHashSet();
         }
 
         public IMove LastMove { get => _moves.Last(); }
@@ -165,6 +170,25 @@ namespace Chess
             _moves = movesExceptLast.ToList();
         }
 
+        private void MakeMove(IMove move)
+        {
+            if (move is Castling)
+            {
+                MakeMove((Castling)move);
+            }
+            else if (move is EnPassant)
+            {
+                MakeMove((EnPassant)move);
+            }
+            else if (move is Move)
+            {
+                MakeMove((Move)move);
+            }
+            else if (move is Promotion)
+            {
+                MakeMove((Promotion)move);
+            }
+        }
         public void MakeMove(Move move) => Move(move);
 
         public void MakeMove(Promotion promotion)
@@ -182,8 +206,7 @@ namespace Chess
 
         public void MakeMove(Castling castling)
         {
-            Pieces[castling.RookTo] = castling.Rook;
-            Pieces.Remove(castling.RookPosition);
+            Move(castling.RookTo, castling.RookPosition, castling.Rook);
             Move(castling);
         }
 
@@ -191,11 +214,6 @@ namespace Chess
         {
             Pieces[to] = piece;
             Pieces.Remove(from);
-            if (IsChecked(piece.Color))
-            {
-                UndoLastMove();
-                throw new ArgumentException();
-            }
         }
 
         private void Move(Position to, Piece piece)
@@ -206,7 +224,19 @@ namespace Chess
 
         private void Move(IMove move)
         {
+            _moves.Add(move);
             Move(move.To, move.Piece);
+        }
+
+        public bool IsCheckedAfterMove(IMove move)
+        {
+            MakeMove(move);
+            if (IsChecked(move.Piece.Color))
+            {
+                UndoLastMove();
+                return true;
+            }
+            return false;
         }
 
         public bool IsChecked(bool color)
