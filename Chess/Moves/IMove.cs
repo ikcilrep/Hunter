@@ -11,4 +11,5 @@ namespace Chess.Moves
         public static bool IsCapture(IMove move) => (move is Promotion && ((Promotion)move).IsCapture) || (move is Move && ((Move)move).IsCapture)
                 || move is EnPassant;
 
+    }
 }
