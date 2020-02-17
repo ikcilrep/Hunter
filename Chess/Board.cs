@@ -120,7 +120,7 @@ namespace Chess
         public void UndoLastMove()
         {
             var movesExceptLast = _moves.SkipLast(1);
-            if (IMove.isCapture(LastMove))
+            if (IMove.IsCapture(LastMove))
             {
 
                 var capturedPiecePosition = LastMove.To;
@@ -150,16 +150,17 @@ namespace Chess
                     Pieces.Remove(castling.RookTo);
                 }
             }
-            Func<IMove, bool> predicate;
-        
-            if (LastMove is Promotion) {
-                var promotion = (Promotion) LastMove;
-                predicate = m => m.Piece == promotion.Pawn;
-            } else  {
-                predicate = m => m.Piece == LastMove.Piece;
+            
+            Position from;
+            try
+            {
+                from = movesExceptLast.Where(m => m.Piece == LastMove.Piece).Last().To;
+            }
+            catch (InvalidOperationException)
+            {
+                from = _startPieces.Where(kvp => kvp.Value == LastMove.Piece).First().Key;
             }
 
-            var from = movesExceptLast.Where(predicate).Last().To;
             Pieces[from] = LastMove.Piece;
             _moves = movesExceptLast.ToList();
         }
@@ -168,9 +169,9 @@ namespace Chess
 
         public void MakeMove(Promotion promotion)
         {
-           var from = FindPiece(promotion.Pawn);
-           _moves.Add(promotion);
-           Move(promotion.To, from, promotion.PromotedPawn);
+            var from = FindPiece(promotion.Pawn);
+            _moves.Add(promotion);
+            Move(promotion.To, from, promotion.PromotedPawn);
         }
 
         public void MakeMove(EnPassant enPassant)
@@ -197,12 +198,14 @@ namespace Chess
             }
         }
 
-        private void Move(Position to, Piece piece) {
+        private void Move(Position to, Piece piece)
+        {
             var from = FindPiece(piece);
             Move(to, from, piece);
         }
 
-        private void Move(IMove move) {
+        private void Move(IMove move)
+        {
             Move(move.To, move.Piece);
         }
 
