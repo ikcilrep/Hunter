@@ -17,6 +17,8 @@ namespace Chess.Moves
 
         public Position RookPosition { get; }
 
+        private bool _isLong;
+
         public Position RookTo
         {
             get
@@ -35,6 +37,16 @@ namespace Chess.Moves
             King = king;
             (RookPosition, Rook) = CastlingRook(King, To, board);
             To = to;
+            _isLong = Math.Abs(To.Column - RookPosition.Column) == 2;
+        }
+
+        public override string ToString()
+        {
+            if (_isLong)
+            {
+                return "O-O-O";
+            }
+            return "O-O";
         }
 
 
