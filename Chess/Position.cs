@@ -61,6 +61,10 @@
             return new Position(Row, (byte)(column + distance));
         }
 
+        public override string ToString() {
+            return (char)(97+Column) + (Row+1).ToString();
+        }
+
 
     }
 }
