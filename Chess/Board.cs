@@ -150,7 +150,16 @@ namespace Chess
                     Pieces.Remove(castling.RookTo);
                 }
             }
-            var from = movesExceptLast.Where(m => m.Piece == LastMove.Piece).Last().To;
+            Func<IMove, bool> predicate;
+        
+            if (LastMove is Promotion) {
+                var promotion = (Promotion) LastMove;
+                predicate = m => m.Piece == promotion.Pawn;
+            } else  {
+                predicate = m => m.Piece == LastMove.Piece;
+            }
+
+            var from = movesExceptLast.Where(predicate).Last().To;
             Pieces[from] = LastMove.Piece;
             _moves = movesExceptLast.ToList();
         }
