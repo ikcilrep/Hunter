@@ -16,7 +16,7 @@ namespace Chess.Pieces
         public override bool IsMovePossible(IMove move, Board board)
         {
 
-            if (move is EnPassant)
+            if (move is EnPassant || move is Promotion)
             {
                 return true;
             }
@@ -48,12 +48,21 @@ namespace Chess.Pieces
             return movesDiagonally && board.IsTherePieceOfColor(move.To, !Color);
         }
 
-        private bool AddMoveIfNotBlocked(Position position, Board board, HashSet<IMove> moves)
+        private bool AddMoveIfNotBlocked(Position to, Board board, HashSet<IMove> moves)
         {
-
-            if (!board.IsTherePiece(position))
+            if (!board.IsTherePiece(to))
             {
-                moves.Add(new Move(this, position, board));
+                if (to.Row == Position.MaxRow || to.Row == Position.MinRow)
+                {
+                    moves.Add(new Promotion(this, new Bishop(Color), to, board));
+                    moves.Add(new Promotion(this, new Knight(Color), to, board));
+                    moves.Add(new Promotion(this, new Queen(Color), to, board));
+                    moves.Add(new Promotion(this, new Rook(Color), to, board));
+                }
+                else
+                {
+                    moves.Add(new Move(this, to, board));
+                }
                 return true;
             }
             return false;
