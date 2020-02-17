@@ -164,6 +164,7 @@ namespace Chess
 
         public void MakeMove(Castling castling)
         {
+            Move(castling);
             var rookToKingDistance = Math.Abs(castling.To.Column - castling.RookPosition.Column);
             var rookMove = new Move(
                 castling.Rook,
@@ -171,15 +172,7 @@ namespace Chess
                     castling.To.Column,
                     (byte)(rookToKingDistance + 1)),
                 false);
-            MakeMove(rookMove);
-
-            try
-            {
-                Move(castling);
-            } catch (ArgumentException e) {
-                UndoLastMove();
-                throw e;
-            }
+            Move(rookMove);
         }
 
         private void Move(IMove move) 
