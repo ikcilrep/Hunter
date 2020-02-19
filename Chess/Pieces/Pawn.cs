@@ -86,11 +86,11 @@ namespace Chess.Pieces
                                               (byte)(position.Column + columnDistance));
                     if (board.IsTherePieceOfColor(to, !Color))
                     {
-                        _ = result.Add(new Move(this, to, true));
+                        _ = result.Add(new Move(this, to, board, true));
                     }
                     else if (EnPassant.IsEnPassant(this, to, board))
                     {
-                        result.Add(new EnPassant(this, to));
+                        result.Add(new EnPassant(this, to, board));
                     }
                 }
                 catch { }

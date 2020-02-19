@@ -10,11 +10,13 @@ namespace Chess.Moves
         public Pawn Pawn { get; }
 
         public Position To { get; }
+        public Board Board { get; }
 
-        public EnPassant(Pawn pawn, Position to)
+        public EnPassant(Pawn pawn, Position to, Board board)
         {
             Pawn = pawn;
             To = to;
+            Board = board;
         }
 
         public static bool IsEnPassant(Pawn pawn, Position to, Board board)

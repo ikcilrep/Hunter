@@ -80,14 +80,14 @@ namespace Chess.Pieces
             {
                 var diagonal = Positions.Diagonal(position, diagonalEnd);
                 var diagonalFirstEmptyPositions = diagonal.TakeWhile(p => !board.IsTherePiece(p))
-                    .Select(p => new Move(piece, p, false));
+                    .Select(p => new Move(piece, p, board, false));
                 result.UnionWith(diagonalFirstEmptyPositions);
                 if (diagonal.Count > diagonalFirstEmptyPositions.Count())
                 {
                     var capturePosition = diagonal[diagonalFirstEmptyPositions.Count()];
                     if (board.IsTherePieceOfColor(capturePosition, !piece.Color))
                     {
-                        result.Add(new Move(piece, capturePosition, true));
+                        result.Add(new Move(piece, capturePosition, board, true));
                     }
                 }
             }

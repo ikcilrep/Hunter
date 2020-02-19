@@ -47,11 +47,11 @@ namespace Chess.Pieces
 
             foreach (var beforeNotAllowedColumn in range.Where(predicate))
             {
-                moves.Add(new Move(piece, beforeNotAllowedColumn, false));
+                moves.Add(new Move(piece, beforeNotAllowedColumn, board, false));
             }
             if (board.IsTherePieceOfColor(border, !piece.Color))
             {
-                moves.Add(new Move(piece, border, true));
+                moves.Add(new Move(piece, border, board, true));
             }
         }
 
