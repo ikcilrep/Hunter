@@ -4,7 +4,6 @@ namespace Chess.Tests
 {
     public class Position_ToStringTests 
     {
-        [Test]
         [TestCase("a4")]
         [TestCase("c7")]
         [TestCase("d5")]
