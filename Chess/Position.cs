@@ -27,8 +27,8 @@
             {
                 throw new System.FormatException();
             }
-            Row = (byte)(notation[0] - 97);
-            Column = byte.Parse(notation[1].ToString());
+            Column = (byte)(notation[0] - 97);
+            Row = (byte)(byte.Parse(notation[1].ToString()) -1);
             if (!IsPositionRight)
             {
                 throw new System.ArgumentException();
