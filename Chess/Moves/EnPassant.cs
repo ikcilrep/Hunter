@@ -43,5 +43,8 @@ namespace Chess.Moves
             return move.Piece is Pawn && move.To.Row == position.Forward(2, move.Piece.Color);
         }
 
+        public override string ToString() {
+            return Board.FindPiece(Pawn).ToString()[0]+"x"+To;
+        }
     }
 }
