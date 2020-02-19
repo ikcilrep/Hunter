@@ -2,7 +2,7 @@ using NUnit.Framework;
 using Chess;
 namespace Chess.Tests
 {
-    public class Position_ToStringTests 
+    public class PositionTests 
     {
         [TestCase("a4")]
         [TestCase("c7")]
