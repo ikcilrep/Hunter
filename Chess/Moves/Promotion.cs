@@ -34,7 +34,7 @@ namespace Chess.Moves
 
         public override string ToString() {
             if (IsCapture) {
-                return Board.FindPieceStartPosition(Pawn).ToString()[0]+"x"+To;
+                return Board.FindPiece(Pawn).ToString()[0]+"x"+To;
             }
             return To.ToString();
         }
