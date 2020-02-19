@@ -22,5 +22,11 @@ namespace Chess.Pieces
             moves.UnionWith(Rook.PossibleMovesStatic(this, board));
             return moves;
         }
+
+        public override string ToString()
+        {
+            return "Q";
+        }
     }
+
 }

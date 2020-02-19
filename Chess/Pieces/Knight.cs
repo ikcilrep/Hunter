@@ -54,5 +54,10 @@ namespace Chess.Pieces
 
             return result;
         }
+
+        public override string ToString()
+        {
+            return "N";
+        }
     }
 }

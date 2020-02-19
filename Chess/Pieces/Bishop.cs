@@ -99,5 +99,9 @@ namespace Chess.Pieces
         {
             return PossibleMovesStatic(this, board);
         }
+
+        public override string ToString() {
+            return "B";
+        }
     }
 }
