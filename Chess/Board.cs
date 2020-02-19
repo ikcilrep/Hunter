@@ -77,6 +77,9 @@ namespace Chess
 
 
         public Position FindPiece(Piece piece) => Pieces.First(kvp => kvp.Value == piece).Key;
+        public Position FindPieceStartPosition(Piece piece) {
+            return StartPositions.First(kvp => kvp.Value == piece).Key;
+        }
 
         public bool IsTherePieceOfColor(Position position, bool color)
         {

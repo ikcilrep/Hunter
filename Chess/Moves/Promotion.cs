@@ -31,5 +31,12 @@ namespace Chess.Moves
             IsCapture = isCapture;
             Board = board;
         }
+
+        public override string ToString() {
+            if (IsCapture) {
+                return Board.FindPieceStartPosition(Pawn).ToString()[0]+"x"+To;
+            }
+            return To.ToString();
+        }
     }
 }
