@@ -44,5 +44,15 @@ namespace Chess.Tests
             Assert.AreEqual(position.Column, (byte) column);
         }
 
+        [TestCase(0, 9)]
+        [TestCase(2, 27)]
+        [TestCase(44, 124)]
+        [TestCase(12, 3)]
+        [TestCase(8, 8)]
+        public void Constructor_IncorrectCoordinates_ThrowsArgumentException(int row, int column)
+        {
+            Assert.Throws<ArgumentException>(() => new Position((byte) row, (byte) column));
+        }
+
     }
 }
