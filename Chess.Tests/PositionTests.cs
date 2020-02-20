@@ -66,15 +66,15 @@ namespace Chess.Tests
             Assert.Throws<ArgumentException>(() => new Position((byte)row, (byte)column));
         }
 
-        [TestCase(0, 3)]
-        [TestCase(2, 6)]
-        [TestCase(3, 4)]
-        [TestCase(7, 7)]
-        [TestCase(0, 0)]
-        public void EqualsOperator_SameCoordinatesPositions_ReturnsTrue(int row, int column)
+        [TestCase("a4")]
+        [TestCase("c7")]
+        [TestCase("d5")]
+        [TestCase("h8")]
+        [TestCase("a1")]
+        public void EqualsOperator_SameCoordinatesPositions_ReturnsTrue(string notation)
         {
-            var position1 = new Position((byte)row, (byte)column);
-            var position2 = new Position((byte)row, (byte)column);
+            var position1 = new Position(notation);
+            var position2 = new Position(notation);
             Assert.IsTrue(position1 == position2);
         }
     }
