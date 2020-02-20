@@ -31,5 +31,18 @@ namespace Chess.Tests
         {
             Assert.Throws<FormatException>(() => new Position(notation));
         }
+
+        [TestCase(0, 3)]
+        [TestCase(2, 6)]
+        [TestCase(3, 4)]
+        [TestCase(7, 7)]
+        [TestCase(0, 0)]
+        public void Constructor_CorrectCoordinates_ReturnGivenCoordinates(int row, int column)
+        {
+            var position = new Position((byte) row, (byte) column);
+            Assert.AreEqual(position.Row, (byte) row);
+            Assert.AreEqual(position.Column, (byte) column);
+        }
+
     }
 }
