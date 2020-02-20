@@ -39,9 +39,9 @@ namespace Chess.Tests
         [TestCase(0, 0)]
         public void Constructor_CorrectCoordinates_ReturnGivenCoordinates(int row, int column)
         {
-            var position = new Position((byte) row, (byte) column);
-            Assert.AreEqual(position.Row, (byte) row);
-            Assert.AreEqual(position.Column, (byte) column);
+            var position = new Position((byte)row, (byte)column);
+            Assert.AreEqual(position.Row, (byte)row);
+            Assert.AreEqual(position.Column, (byte)column);
         }
 
         [TestCase(0, 9)]
@@ -51,8 +51,19 @@ namespace Chess.Tests
         [TestCase(8, 8)]
         public void Constructor_IncorrectCoordinates_ThrowsArgumentException(int row, int column)
         {
-            Assert.Throws<ArgumentException>(() => new Position((byte) row, (byte) column));
+            Assert.Throws<ArgumentException>(() => new Position((byte)row, (byte)column));
         }
 
+        [TestCase(0, 3)]
+        [TestCase(2, 6)]
+        [TestCase(3, 4)]
+        [TestCase(7, 7)]
+        [TestCase(0, 0)]
+        public void EqualsOperator_SameCoordinatesPositions_ReturnsTrue(int row, int column)
+        {
+            var position1 = new Position((byte)row, (byte)column);
+            var position2 = new Position((byte)row, (byte)column);
+            Assert.IsTrue(position1 == position2);
+        }
     }
 }
