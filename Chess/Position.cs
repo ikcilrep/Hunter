@@ -65,7 +65,7 @@
             return new Position(Forward(1, color), Column);
         }
 
-        public static bool operator ==(Position a, Position b) => a.Row == b.Row && a.Column == a.Column;
+        public static bool operator ==(Position a, Position b) => a.Row == b.Row && a.Column == b.Column;
         public static bool operator !=(Position a, Position b) => !(a == b);
 
         public Position GoInDirectionOf(byte column, byte distance)
