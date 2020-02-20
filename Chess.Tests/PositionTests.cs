@@ -15,6 +15,18 @@ namespace Chess.Tests
             Assert.AreEqual(new Position(notation).ToString(), notation);
         }
 
+        [TestCase("a4", 0, 3)]
+        [TestCase("c7", 2, 6)]
+        [TestCase("d5", 3, 4)]
+        [TestCase("h8", 7, 7)]
+        [TestCase("a1", 0, 0)]
+        public void ToString_CorrectNotation_ReturnCorrectCoordinates(string notation, int column, int row)
+        {
+            var position = new Position(notation);
+            Assert.AreEqual(position.Row, row);
+            Assert.AreEqual(position.Column, column);
+        }
+
         [TestCase("a9")]
         [TestCase("z3")]
         [TestCase("y9")]
