@@ -24,5 +24,13 @@ namespace Chess.Tests
         {
             Assert.Throws<ArgumentException>(() => new Position(notation));
         }
+
+        [TestCase("ab4")]
+        [TestCase("c71")]
+ 
+        public void Constructor_IncorrectNotation_ThrowsFormatException(string notation)
+        {
+            Assert.Throws<FormatException>(() => new Position(notation));
+        }
     }
 }
