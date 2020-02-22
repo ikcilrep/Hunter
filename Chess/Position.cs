@@ -72,9 +72,9 @@
         {
             if (column < Column)
             {
-                return new Position(Row, (byte)(column - distance));
+                return new Position(Row, (byte)(Column - distance));
             }
-            return new Position(Row, (byte)(column + distance));
+            return new Position(Row, (byte)(Column + distance));
         }
 
         public override string ToString()
