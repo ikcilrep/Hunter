@@ -3,6 +3,7 @@ using System;
 using Chess;
 namespace Chess.Tests
 {
+    [TestFixture]
     public partial class PositionTests
     {
         [TestCase("a4")]
