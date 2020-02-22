@@ -9,10 +9,10 @@ namespace Chess.Tests
         [TestCase("d5")]
         [TestCase("h8")]
         [TestCase("a1")]
-        public void EqualsOperator_SameCoordinatesPositions_ReturnsTrue(string notation)
+        public void EqualsOperator_SameCoordinatesPositions_ReturnsTrue(string positionString)
         {
-            var position1 = new Position(notation);
-            var position2 = new Position(notation);
+            var position1 = new Position(positionString);
+            var position2 = new Position(positionString);
             Assert.IsTrue(position1 == position2);
         }
 
@@ -20,10 +20,10 @@ namespace Chess.Tests
         [TestCase("c7", "d7")]
         [TestCase("d5", "b1")]
         [TestCase("h8", "c8")]
-        public void EqualsOperator_DifferentCoordinatesPositions_ReturnsFalse(string notation1, string notation2)
+        public void EqualsOperator_DifferentCoordinatesPositions_ReturnsFalse(string positionString1, string positionString2)
         {
-            var position1 = new Position(notation1);
-            var position2 = new Position(notation2);
+            var position1 = new Position(positionString1);
+            var position2 = new Position(positionString2);
             Assert.IsFalse(position1 == position2);
         }
     }

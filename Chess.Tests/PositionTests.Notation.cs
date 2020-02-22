@@ -10,9 +10,9 @@ namespace Chess.Tests
         [TestCase("d5")]
         [TestCase("h8")]
         [TestCase("a1")]
-        public void ToString_CorrectNotation_ReturnSameField(string notation)
+        public void ToString_CorrectNotation_ReturnSameField(string positionString)
         {
-            Assert.AreEqual(new Position(notation).ToString(), notation);
+            Assert.AreEqual(new Position(positionString).ToString(), positionString);
         }
 
         [TestCase("a4", 0, 3)]
@@ -20,9 +20,9 @@ namespace Chess.Tests
         [TestCase("d5", 3, 4)]
         [TestCase("h8", 7, 7)]
         [TestCase("a1", 0, 0)]
-        public void ToString_CorrectNotation_ReturnCorrectCoordinates(string notation, int column, int row)
+        public void ToString_CorrectNotation_ReturnCorrectCoordinates(string positionString, int column, int row)
         {
-            var position = new Position(notation);
+            var position = new Position(positionString);
             Assert.AreEqual(position.Row, row);
             Assert.AreEqual(position.Column, column);
         }
@@ -32,16 +32,16 @@ namespace Chess.Tests
         [TestCase("y9")]
         [TestCase("h0")]
         [TestCase(";1")]
-        public void Constructor_IncorrectNotation_ThrowsArgumentException(string notation)
+        public void Constructor_IncorrectNotation_ThrowsArgumentException(string positionString)
         {
-            Assert.Throws<ArgumentException>(() => new Position(notation));
+            Assert.Throws<ArgumentException>(() => new Position(positionString));
         }
 
         [TestCase("ab4")]
         [TestCase("c71")]
-        public void Constructor_IncorrectNotation_ThrowsFormatException(string notation)
+        public void Constructor_IncorrectNotation_ThrowsFormatException(string positionString)
         {
-            Assert.Throws<FormatException>(() => new Position(notation));
+            Assert.Throws<FormatException>(() => new Position(positionString));
         }
 
         [TestCase(0, 3)]
