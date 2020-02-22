@@ -1,4 +1,5 @@
 using System.Linq;
+using System;
 using NUnit.Framework;
 
 namespace Chess.Tests
@@ -38,6 +39,15 @@ namespace Chess.Tests
             var to = new Position(positionToString);
             var diagonalPositions = Positions.Diagonal(from, to);
             Assert.AreEqual(diagonalPositions.Select(p => p.ToString()).ToArray(), expectedPositionsStrings);
+        }
+
+        [TestCase("f2", "b2")]
+        [TestCase("d4", "b5")]
+        [TestCase("e3", "g6")]
+        public void Diagonal_IncorrectSituation_ThrowsArgumentException(string positionFromString, string positionToString) {
+            var from = new Position(positionFromString);
+            var to = new Position(positionToString);
+            Assert.Throws<ArgumentException>(() => Positions.Diagonal(from, to));
         }
     }
 }
