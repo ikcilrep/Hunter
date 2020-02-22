@@ -1,6 +1,4 @@
 using NUnit.Framework;
-using System;
-using Chess;
 namespace Chess.Tests
 {
     [TestFixture]
