@@ -1,5 +1,6 @@
 using System.Linq;
 using System;
+using System.Collections.Generic;
 using NUnit.Framework;
 
 namespace Chess.Tests
@@ -49,6 +50,18 @@ namespace Chess.Tests
             var from = new Position(positionFromString);
             var to = new Position(positionToString);
             Assert.Throws<ArgumentException>(() => Positions.Diagonal(from, to));
+        }
+
+        [TestCase("f2", "c4", new string[]{"f2", "e2", "d2", "c2", "f3", "e3", "d3", "c3", "f4", "e4", "d4", "c4"})]
+        [TestCase("d5", "c6", new string[]{"d5", "c5", "d6", "c6"})]
+        [TestCase("a1", "a1", new string[]{"a1"})]
+        public void Range_CorrectSituation_ReturnExpectedSetOfPositions(string corner1PositionString, string corner2PositionString, string[] expectedSetOfPositions) {
+            var corner1 = new Position(corner1PositionString);
+            var corner2 = new Position(corner2PositionString);
+            var range = Positions.Range(corner1, corner2).Select(p => p.ToString()).ToHashSet();
+            var expectedRange = new HashSet<String>(expectedSetOfPositions).ToHashSet();
+            Assert.That(range.SetEquals(expectedRange));
+
         }
 
 
