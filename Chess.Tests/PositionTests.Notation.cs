@@ -66,6 +66,6 @@ namespace Chess.Tests
             Assert.Throws<ArgumentException>(() => new Position((byte)row, (byte)column));
         }
 
-        
+
     }
 }

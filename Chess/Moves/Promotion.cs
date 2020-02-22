@@ -32,10 +32,12 @@ namespace Chess.Moves
             Board = board;
         }
 
-        public override string ToString() {
+        public override string ToString()
+        {
             var result = "";
-            if (IsCapture) {
-                result += Board.FindPiece(Pawn).ToString()[0]+"x";
+            if (IsCapture)
+            {
+                result += Board.FindPiece(Pawn).ToString()[0] + "x";
             }
             result += To + Piece.ToString();
             return result;

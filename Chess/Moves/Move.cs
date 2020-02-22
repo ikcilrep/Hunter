@@ -50,7 +50,8 @@ namespace Chess.Moves
                     result += piecePosition.ToString()[0];
                 }
             }
-            if (IsCapture) {
+            if (IsCapture)
+            {
                 result += "x";
             }
             result += To;
