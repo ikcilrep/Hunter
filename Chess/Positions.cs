@@ -33,17 +33,16 @@ namespace Chess
             }
 
             var rowDistanceSign = (byte)Math.Sign(position1.Row - position2.Row);
-            var columnDistanceSign = (byte)Math.Sign(position1.Row - position2.Row);
+            var columnDistanceSign = (byte)Math.Sign(position1.Column - position2.Column);
             var result = new List<Position>();
-            var row = (byte)(position1.Row - rowDistanceSign);
-            var column = (byte)(position1.Column - columnDistanceSign);
+            var row = (byte)(position1.Row);
+            var column = (byte)(position1.Column);
             while (row != position2.Row)
             {
-                result.Add(new Position(row, column));
                 row -= rowDistanceSign;
                 column -= columnDistanceSign;
+                result.Add(new Position(row, column));
             }
-            result.Add(position2);
             return result;
         }
 
