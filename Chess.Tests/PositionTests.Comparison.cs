@@ -9,7 +9,7 @@ namespace Chess.Tests
         [TestCase("d5")]
         [TestCase("h8")]
         [TestCase("a1")]
-        public void EqualsOperator_SameCoordinatesPositions_ReturnsTrue(string positionString)
+        public void EqualsOperator_SameCoordinatesPositions_ReturnTrue(string positionString)
         {
             var position1 = new Position(positionString);
             var position2 = new Position(positionString);
@@ -20,7 +20,7 @@ namespace Chess.Tests
         [TestCase("c7", "d7")]
         [TestCase("d5", "b1")]
         [TestCase("h8", "c8")]
-        public void EqualsOperator_DifferentCoordinatesPositions_ReturnsFalse(string positionString1, string positionString2)
+        public void EqualsOperator_DifferentCoordinatesPositions_ReturnFalse(string positionString1, string positionString2)
         {
             var position1 = new Position(positionString1);
             var position2 = new Position(positionString2);

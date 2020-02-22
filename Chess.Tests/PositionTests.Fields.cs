@@ -11,7 +11,7 @@ namespace Chess.Tests
         [TestCase("a1", Board.White, 7, 7)]
         [TestCase("h8", Board.Black, 3, 4)]
         [TestCase("a2", Board.Black, 1, 0)]
-        public void Forward_CorrectSituation_ReturnsExpectedRow(string positionString, bool color, int distance, int expectedRow)
+        public void Forward_CorrectSituation_ReturnExpectedRow(string positionString, bool color, int distance, int expectedRow)
         {
             var position = new Position(positionString);
             Assert.AreEqual((byte)expectedRow, position.Forward((byte)distance, color));
@@ -21,7 +21,7 @@ namespace Chess.Tests
         [TestCase("d6", 0, 3, "a6")]
         [TestCase("e2", 6, 0, "e2")]
         [TestCase("h6", 1, 7, "a6")]
-        public void GoInDirectionOf_CorrectSituation_ReturnsExpectedPosition(string positionString, int column, int distance, string expectedPositionString)
+        public void GoInDirectionOf_CorrectSituation_ReturnExpectedPosition(string positionString, int column, int distance, string expectedPositionString)
         {
             var position = new Position(positionString);
             var expectedPosition = new Position(expectedPositionString);
@@ -33,7 +33,7 @@ namespace Chess.Tests
         [TestCase("f1", "h3", new string[] { "g2", "h3" })]
         [TestCase("h3", "f1", new string[] { "g2", "f1" })]
         [TestCase("d4", "d4", new string[] { })]
-        public void Diagonal_CorrectSituation_ReturnsExpectedPositions(string positionFromString, string positionToString, string[] expectedPositionsStrings)
+        public void Diagonal_CorrectSituation_ReturnExpectedPositions(string positionFromString, string positionToString, string[] expectedPositionsStrings)
         {
             var from = new Position(positionFromString);
             var to = new Position(positionToString);
@@ -44,10 +44,13 @@ namespace Chess.Tests
         [TestCase("f2", "b2")]
         [TestCase("d4", "b5")]
         [TestCase("e3", "g6")]
-        public void Diagonal_IncorrectSituation_ThrowsArgumentException(string positionFromString, string positionToString) {
+        public void Diagonal_IncorrectSituation_ThrowsArgumentException(string positionFromString, string positionToString)
+        {
             var from = new Position(positionFromString);
             var to = new Position(positionToString);
             Assert.Throws<ArgumentException>(() => Positions.Diagonal(from, to));
         }
+
+
     }
 }
