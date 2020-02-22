@@ -95,7 +95,7 @@ namespace Chess
 
         public bool HasPieceBeenMoved(Piece piece)
         {
-            return _moves.Where(m => m.Piece == piece).Count() > 0;
+            return _moves.Count(m => m.Piece == piece) > 0;
         }
 
         public HashSet<Position> PiecesInRange(HashSet<Position> range)
