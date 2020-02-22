@@ -8,8 +8,8 @@ namespace Chess
 {
     public class Board
     {
-        public static bool White { get => true; }
-        public static bool Black { get => false; }
+        public const bool White = true; 
+        public const bool Black = false;
 
         private readonly Dictionary<Position, Piece> _startPositions = new Dictionary<Position, Piece> {
             { new Position("a1"), new Rook(White)},
