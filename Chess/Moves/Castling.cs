@@ -34,13 +34,13 @@ namespace Chess.Moves
             }
         }
 
-        public Castling(King king, Position to, Board board)
+        public Castling(King king, bool isLong, Board board)
         {
             King = king;
             (RookPosition, Rook) = CastlingRook(King, To, board);
-            To = to;
-            _isLong = Math.Abs(To.Column - RookPosition.Column) == 2;
+            _isLong = isLong;
             Board = board;
+            To = GetToPosition(Board.FindPiece(King), _isLong);
         }
 
         public override string ToString()
@@ -53,9 +53,18 @@ namespace Chess.Moves
         }
 
 
-        public static bool IsCastling(King king, Position to, Board board)
+        public static bool IsCastling(King king, bool isLongCastling, Board board)
         {
             var kingPosition = board.FindPiece(king);
+            Position to;
+            try
+            {
+                to = GetToPosition(kingPosition, isLongCastling);
+            }
+            catch (ArgumentException)
+            {
+                return false;
+            }
             if (board.HasPieceBeenMoved(king)
                 || to.Row != kingPosition.Row
                 || Math.Abs(to.Column - kingPosition.Column) != 2)
@@ -86,6 +95,15 @@ namespace Chess.Moves
                                                  && Math.Abs(to.Column - kvp.Key.Column) <= 2)
                                                  .First();
             return (kvp.Key, (Rook)kvp.Value);
+        }
+
+        public static Position GetToPosition(Position kingPosition, bool isLongCastling)
+        {
+            if (isLongCastling)
+            {
+                return new Position(kingPosition.Row, (byte)(kingPosition.Column - 2));
+            }
+            return new Position(kingPosition.Row, (byte)(kingPosition.Column + 2));
         }
     }
 }

@@ -43,25 +43,16 @@ namespace Chess.Pieces
             range.ExceptWith(board.PiecesInRange(range, Color));
 
             var result = new HashSet<IMove>(range.Select(p => new Move(this, p, board)).ToHashSet());
-            try
+            void AddCastling(bool isLong)
             {
-                var to = new Position(position.Row, (byte)(position.Column + 2));
-                if (Castling.IsCastling(this, to, board))
+                if (Castling.IsCastling(this, isLong, board))
                 {
-                    result.Add(new Castling(this, to, board));
+                    result.Add(new Castling(this, isLong, board));
                 }
             }
-            catch { }
 
-            try
-            {
-                var to = new Position(position.Row, (byte)(position.Column - 2));
-                if (Castling.IsCastling(this, to, board))
-                {
-                    result.Add(new Castling(this, to, board));
-                }
-            }
-            catch { }
+            AddCastling(false);
+            AddCastling(true);
 
             return result;
         }
