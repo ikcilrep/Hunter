@@ -15,6 +15,40 @@ namespace Chess.Moves
             || (move is Move && ((Move)move).IsCapture)
             || move is EnPassant;
 
+        private static Promotion ParsePromotion(string promotionString, bool color, Board board)
+        {
+            var isCapture = promotionString[1] == 'x';
+            var to = new Position(promotionString.Substring(promotionString.Length - 4, promotionString.Length - 2));
+            Position from;
+            from = to.Behind(color);
+            if (isCapture)
+            {
+                from = new Position(from.Row, Position.ParseColumn(promotionString[0]));
+            }
+            var piece = board.Pieces[from];
+            Pawn pawn;
+            if (piece is Pawn)
+            {
+                pawn = (Pawn)piece;
+            }
+            else
+            {
+                throw new ArgumentException();
+            }
+            var promotedPawn = Piece.ParsePiece(promotionString[promotionString.Length - 1], color);
+            var promotion = new Promotion(pawn, promotedPawn, to, board);
+            if (pawn.IsMovePossible(promotion, board))
+            {
+                return promotion;
+            }
+            else
+            {
+                throw new ArgumentException();
+            }
+
+
+        }
+
         public static IMove ParseMove(string moveString, Board board)
         {
             var isShortCastling = moveString.Equals("O-O");
@@ -28,38 +62,11 @@ namespace Chess.Moves
                     return new Castling(king, isLongCastling, board);
                 }
             }
+
             var pawnPromotionRegex = new Regex(@"^([a-h]x)?[a-h][1-8]=[QBNRK]$");
             if (pawnPromotionRegex.IsMatch(moveString))
             {
-                var isCapture = moveString[1] == 'x';
-                var to = new Position(moveString.Substring(moveString.Length - 4, moveString.Length - 2));
-                Position from;
-                from = to.Behind(color);
-                if (isCapture)
-                {
-                    from = new Position(from.Row, Position.ParseColumn(moveString[0]));
-                }
-                var piece = board.Pieces[from];
-                Pawn pawn;
-                if (piece is Pawn)
-                {
-                    pawn = (Pawn)piece;
-                }
-                else
-                {
-                    throw new ArgumentException();
-                }
-                var promotedPawn = Piece.ParsePiece(moveString[moveString.Length - 1], color);
-                var promotion = new Promotion(pawn, promotedPawn, to, board);
-                if (pawn.IsMovePossible(promotion, board))
-                {
-                    return promotion;
-                }
-                else
-                {
-                    throw new ArgumentException();
-                }
-
+                return ParsePromotion(moveString, color, board);
             }
             throw new NotImplementedException();
         }
