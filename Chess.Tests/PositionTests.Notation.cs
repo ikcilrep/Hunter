@@ -32,11 +32,6 @@ namespace Chess.Tests
         [TestCase("y9")]
         [TestCase("h0")]
         [TestCase(";1")]
-        public void Constructor_IncorrectNotation_ThrowsArgumentException(string positionString)
-        {
-            Assert.Throws<ArgumentException>(() => new Position(positionString));
-        }
-
         [TestCase("ab4")]
         [TestCase("c71")]
         public void Constructor_IncorrectNotation_ThrowsFormatException(string positionString)

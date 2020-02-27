@@ -27,12 +27,22 @@
             {
                 throw new System.FormatException();
             }
-            Column = (byte)(notation[0] - 97);
-            Row = (byte)(byte.Parse(notation[1].ToString()) - 1);
-            if (!IsPositionRight)
-            {
-                throw new System.ArgumentException();
+            Column = ParseColumn(notation[0]);
+            Row = ParseRow(notation[1]);
+        }
+
+        public static byte ParseColumn(char letter) {
+            if (letter >= 'a' && letter <= 'h') {
+                return (byte)(letter - 97); 
             }
+            throw new System.FormatException();
+        }
+
+        public static byte ParseRow(char digit) {
+            if (digit >= '1' && digit <= '8') {
+                return (byte)(byte.Parse(digit.ToString()) - 1);
+            }
+            throw new System.FormatException();
         }
 
         public override bool Equals(object obj)
