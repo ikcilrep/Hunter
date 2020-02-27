@@ -31,15 +31,19 @@
             Row = ParseRow(notation[1]);
         }
 
-        public static byte ParseColumn(char letter) {
-            if (letter >= 'a' && letter <= 'h') {
-                return (byte)(letter - 97); 
+        public static byte ParseColumn(char letter)
+        {
+            if (letter >= 'a' && letter <= 'h')
+            {
+                return (byte)(letter - 97);
             }
             throw new System.FormatException();
         }
 
-        public static byte ParseRow(char digit) {
-            if (digit >= '1' && digit <= '8') {
+        public static byte ParseRow(char digit)
+        {
+            if (digit >= '1' && digit <= '8')
+            {
                 return (byte)(byte.Parse(digit.ToString()) - 1);
             }
             throw new System.FormatException();
