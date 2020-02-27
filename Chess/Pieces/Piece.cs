@@ -20,5 +20,24 @@ namespace Chess.Pieces
 
         public abstract bool IsMovePossible(IMove move, Board board);
 
+        public static Piece ParsePiece(char symbol, bool color)
+        {
+            switch (symbol)
+            {
+                case 'B':
+                    return new Bishop(color);
+                case 'K':
+                    return new King(color);
+                case 'N':
+                    return new Knight(color);
+                case 'Q':
+                    return new Queen(color);
+                case 'R':
+                    return new Rook(color);
+                default:
+                    throw new System.FormatException();
+            }
+        }
+
     }
 }
