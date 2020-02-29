@@ -15,38 +15,34 @@ namespace Chess.Moves
             || (move is Move && ((Move)move).IsCapture)
             || move is EnPassant;
 
-        private static Promotion ParsePromotion(string promotionString, bool color, Board board)
+        private static (Pawn, Position) GetPawnAndToPosition(string pawnMoveString, bool color, Board board)
         {
-            var isCapture = promotionString[1] == 'x';
-            var to = new Position(promotionString.Substring(promotionString.Length - 4, promotionString.Length - 2));
+            var isCapture = pawnMoveString[1] == 'x';
+            var to = new Position(pawnMoveString.Substring(pawnMoveString.Length - 4, pawnMoveString.Length - 2));
             Position from;
             from = to.Behind(color);
             if (isCapture)
             {
-                from = new Position(from.Row, Position.ParseColumn(promotionString[0]));
+                from = new Position(from.Row, Position.ParseColumn(pawnMoveString[0]));
             }
             var piece = board.Pieces[from];
-            Pawn pawn;
-            if (piece is Pawn)
+            if (piece.Color != color || piece is Pawn)
             {
-                pawn = (Pawn)piece;
+                return ((Pawn)piece, to);
             }
-            else
-            {
-                throw new ArgumentException();
-            }
+            throw new ArgumentException();
+        }
+
+        private static Promotion ParsePromotion(string promotionString, bool color, Board board)
+        {
+            (Pawn pawn, Position to) = GetPawnAndToPosition(promotionString.Substring(0, promotionString.Length - 2), color, board);
             var promotedPawn = Piece.ParsePiece(promotionString[promotionString.Length - 1], color);
             var promotion = new Promotion(pawn, promotedPawn, to, board);
             if (pawn.IsMovePossible(promotion, board))
             {
                 return promotion;
             }
-            else
-            {
-                throw new ArgumentException();
-            }
-
-
+            throw new ArgumentException();
         }
 
         public static IMove ParseMove(string moveString, Board board)
