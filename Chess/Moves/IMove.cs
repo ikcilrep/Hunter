@@ -71,6 +71,15 @@ namespace Chess.Moves
             throw new ArgumentException();
         }
 
+        private static Castling ParseCastling(bool isLong, bool color, Board board)
+        {
+            var king = (King)board.Pieces.Values.Where(p => p.Color == color && p is King).First();
+            if (Castling.IsCastling(king, isLong, board))
+            {
+                return new Castling(king, isLong, board);
+            }
+            throw new ArgumentException();
+        }
 
         public static IMove ParseMove(string moveString, Board board)
         {
@@ -79,11 +88,7 @@ namespace Chess.Moves
             var color = !board.LastMove.Piece.Color;
             if (isShortCastling || isLongCastling)
             {
-                var king = (King)board.Pieces.Values.Where(p => p.Color == color && p is King).First();
-                if (Castling.IsCastling(king, isLongCastling, board))
-                {
-                    return new Castling(king, isLongCastling, board);
-                }
+                return ParseCastling(isLongCastling, color, board);
             }
 
             var pawnPromotionRegex = new Regex(@"^([a-h]x)?[a-h][1-8]=[QBNRK]$");
