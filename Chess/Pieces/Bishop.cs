@@ -104,5 +104,9 @@ namespace Chess.Pieces
         {
             return "B";
         }
+
+        public override bool Equals(object obj) {
+            return obj is Bishop bishop && bishop.Color == Color;
+        }
     }
 }
