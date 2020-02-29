@@ -2,6 +2,7 @@
 using Chess.Pieces;
 using System.Linq;
 using System.Text.RegularExpressions;
+using System.Collections.Generic;
 
 namespace Chess.Moves
 {
@@ -25,7 +26,16 @@ namespace Chess.Moves
             {
                 from = new Position(from.Row, Position.ParseColumn(pawnMoveString[0]));
             }
-            var piece = board.Pieces[from];
+            Piece piece;
+            try
+            {
+                piece = board.Pieces[from];
+            }
+            catch (KeyNotFoundException)
+            {
+                throw new ArgumentException();
+            }
+
             if (piece.Color != color || piece is Pawn)
             {
                 return ((Pawn)piece, to);
@@ -45,6 +55,18 @@ namespace Chess.Moves
             throw new ArgumentException();
         }
 
+        private static Move ParsePawnMove(string moveString, bool color, Board board)
+        {
+            (Pawn pawn, Position to) = GetPawnAndToPosition(moveString, color, board);
+            var move = new Move(pawn, to, board);
+            if (pawn.IsMovePossible(move, board))
+            {
+                return move;
+            }
+
+            throw new ArgumentException();
+        }
+
         public static IMove ParseMove(string moveString, Board board)
         {
             var isShortCastling = moveString.Equals("O-O");
@@ -61,6 +83,12 @@ namespace Chess.Moves
 
             var pawnPromotionRegex = new Regex(@"^([a-h]x)?[a-h][1-8]=[QBNRK]$");
             if (pawnPromotionRegex.IsMatch(moveString))
+            {
+                return ParsePromotion(moveString, color, board);
+            }
+
+            var pawnMoveRegex = new Regex(@"^([a-h]x)?[a-h][1-8]$");
+            if (pawnMoveRegex.IsMatch(moveString))
             {
                 return ParsePromotion(moveString, color, board);
             }
