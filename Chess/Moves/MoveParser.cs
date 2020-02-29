@@ -8,10 +8,15 @@ namespace Chess.Moves
 {
     public static class MoveParser
     {
+        private static Position GetToPosition(string moveString)
+        {
+            return new Position(moveString.Substring(moveString.Length - 2));
+        }
+
         private static (Pawn, Position) GetPawnAndToPosition(string pawnMoveString, bool color, Board board)
         {
             var isCapture = pawnMoveString[1] == 'x';
-            var to = new Position(pawnMoveString.Substring(pawnMoveString.Length - 2));
+            var to = GetToPosition(pawnMoveString);
             Position from;
             from = to.Behind(color);
             if (isCapture)
