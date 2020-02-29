@@ -29,7 +29,7 @@ namespace Chess.Moves
                               && columnDistance == 1;
             return movesDiagonally
                               && !board.IsTherePieceOfColor(to, pawn.Color)
-                              && DoesPawnMoveTwoForward(board.LastMove, board)
+                              && HasPawnJustMovedTwoForward(board)
                               && position.Row == Positions.Forward(startRow, 3, pawn.Color)
                               && board.IsTherePieceOfColor(to.Behind(pawn.Color),
                                                            !pawn.Color);
@@ -37,10 +37,17 @@ namespace Chess.Moves
 
         }
 
-        private static bool DoesPawnMoveTwoForward(IMove move, Board board)
+        private static bool HasPawnJustMovedTwoForward(Board board)
         {
-            var position = board.FindPiece(move.Piece);
-            return move.Piece is Pawn && move.To.Row == position.Forward(2, move.Piece.Color);
+            try
+            {
+                var position = board.FindPiece(board.LastMove.Piece);
+                return board.LastMove.Piece is Pawn && board.LastMove.To.Row == position.Forward(2, board.LastMove.Piece.Color);
+            }
+            catch (InvalidOperationException)
+            {
+                return false;
+            }
         }
 
         public override string ToString()
