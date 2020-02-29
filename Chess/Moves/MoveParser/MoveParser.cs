@@ -15,7 +15,7 @@ namespace Chess.Moves
         {
             var isShortCastling = moveString.Equals("O-O");
             var isLongCastling = moveString.Equals("O-O-O");
-            var color = !board.LastMove.Piece.Color;
+            var color = board.CurrentMoveColor;
             if (isShortCastling || isLongCastling)
             {
                 return ChessmenMoveParser.ParseCastling(isLongCastling, color, board);

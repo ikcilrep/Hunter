@@ -45,6 +45,18 @@ namespace Chess
             { new Position("g7"), new Pawn(Black)},
             { new Position("h7"), new Pawn(Black)},
         };
+
+        public bool CurrentMoveColor
+        {
+            get
+            {
+                if (_moves.Count > 0)
+                {
+                    return !LastMove.Piece.Color;
+                }
+                return White;
+            }
+        }
         private List<IMove> _moves = new List<IMove>();
         private IEnumerable<IMove> PossibleMovesOfPiece(Piece piece)
         {
