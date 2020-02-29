@@ -11,15 +11,15 @@ namespace Chess.Pieces
             _weight = 3;
             _color = color;
         }
-        public override bool IsMovePossible(IMove move, Board board)
+        public override bool IsMovePossible(IMove move)
         {
-            var position = board.FindPiece(this);
+            var position = move.Board.FindPiece(this);
             var columnDistance = Math.Abs(position.Column - move.To.Column);
             var rowDistance = Math.Abs(position.Row - move.To.Row);
             var distancesAreRight = (columnDistance == 2 && rowDistance == 1)
                || (columnDistance == 1 && rowDistance == 2);
 
-            return !board.IsTherePieceOfColor(move.To, Color) && distancesAreRight;
+            return !move.Board.IsTherePieceOfColor(move.To, Color) && distancesAreRight;
         }
 
         public override HashSet<IMove> PossibleMoves(Board board)

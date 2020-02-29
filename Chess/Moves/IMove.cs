@@ -48,7 +48,7 @@ namespace Chess.Moves
             (Pawn pawn, Position to) = GetPawnAndToPosition(promotionString.Substring(0, promotionString.Length - 2), color, board);
             var promotedPawn = Piece.ParsePiece(promotionString[promotionString.Length - 1], color);
             var promotion = new Promotion(pawn, promotedPawn, to, board);
-            if (pawn.IsMovePossible(promotion, board))
+            if (pawn.IsMovePossible(promotion))
             {
                 return promotion;
             }
@@ -63,7 +63,7 @@ namespace Chess.Moves
                 return new EnPassant(pawn, to, board);
             }
             var move = new Move(pawn, to, board);
-            if (pawn.IsMovePossible(move, board))
+            if (pawn.IsMovePossible(move))
             {
                 return move;
             }

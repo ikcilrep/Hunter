@@ -13,7 +13,7 @@ namespace Chess.Pieces
             _weight = 5;
         }
 
-        public static bool IsMovePossibleStatic(IMove move, Board board)
+        public static bool IsMovePossibleStatic(IMove move)
         {
             var position = board.FindPiece(move.Piece);
             var columnDistance = move.To.Column - position.Column;
@@ -32,9 +32,9 @@ namespace Chess.Pieces
 
         }
 
-        public override bool IsMovePossible(IMove move, Board board)
+        public override bool IsMovePossible(IMove move)
         {
-            return IsMovePossibleStatic(move, board);
+            return IsMovePossibleStatic(move);
         }
 
         private static void AddRange(HashSet<Position> range,

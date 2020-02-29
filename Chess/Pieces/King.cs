@@ -12,18 +12,18 @@ namespace Chess.Pieces
             _color = color;
             _weight = 40;
         }
-        public override bool IsMovePossible(IMove move, Board board)
+        public override bool IsMovePossible(IMove move)
         {
             if (move is Castling)
             {
                 return true;
             }
-            var position = board.FindPiece(this);
+            var position = move.Board.FindPiece(this);
             var rowDistance = Math.Abs(position.Row - move.To.Row);
             var columnDistance = Math.Abs(position.Column - move.To.Column);
             var distancesAreRight = rowDistance
                    < 2 && columnDistance < 2;
-            return distancesAreRight && move.To != position && !board.IsTherePieceOfColor(move.To, Color);
+            return distancesAreRight && move.To != position && !move.Board.IsTherePieceOfColor(move.To, Color);
         }
 
 

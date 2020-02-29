@@ -18,7 +18,7 @@ namespace Chess.Pieces
             return PossibleMoves(board).Where(m => m is Move && ((Move)m).IsCapture).ToHashSet();
         }
 
-        public abstract bool IsMovePossible(IMove move, Board board);
+        public abstract bool IsMovePossible(IMove move);
 
         public static Piece ParsePiece(char symbol, bool color)
         {

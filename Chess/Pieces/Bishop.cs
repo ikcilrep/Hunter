@@ -14,21 +14,21 @@ namespace Chess.Pieces
         }
 
 
-        public override bool IsMovePossible(IMove move, Board board)
+        public override bool IsMovePossible(IMove move)
         {
-            return IsMovePossibleStatic(move, board);
+            return IsMovePossibleStatic(move);
         }
 
-        public static bool IsMovePossibleStatic(IMove move, Board board)
+        public static bool IsMovePossibleStatic(IMove move)
         {
             try
             {
-                var position = board.FindPiece(move.Piece);
+                var position = move.Board.FindPiece(move.Piece);
                 var diagonal = Positions.Diagonal(position, move.To);
 
                 foreach (var diagonalPosition in diagonal)
                 {
-                    if (board.IsTherePiece(diagonalPosition))
+                    if (move.Board.IsTherePiece(diagonalPosition))
                     {
                         return false;
                     }

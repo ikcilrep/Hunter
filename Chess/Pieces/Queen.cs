@@ -11,9 +11,9 @@ namespace Chess.Pieces
             _weight = 9;
         }
 
-        public override bool IsMovePossible(IMove move, Board board)
+        public override bool IsMovePossible(IMove move)
         {
-            return Bishop.IsMovePossibleStatic(move, board) || Rook.IsMovePossibleStatic(move, board);
+            return Bishop.IsMovePossibleStatic(move) || Rook.IsMovePossibleStatic(move);
         }
 
         public override HashSet<IMove> PossibleMoves(Board board)
