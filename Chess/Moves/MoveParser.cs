@@ -115,7 +115,7 @@ namespace Chess.Moves
             {
                 return ParseChessmanMove(moveString, color, board);
             }
-            throw new NotImplementedException();
+            throw new FormatException();
         }
 
         private static IEnumerable<Piece> SelectPiecesByPosition(string moveString, IEnumerable<Piece> pieces, Board board)
