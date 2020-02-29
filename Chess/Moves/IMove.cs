@@ -8,9 +8,9 @@ namespace Chess.Moves
         public Position To { get; }
         public Board Board { get; }
 
-        public static bool IsCapture(IMove move) => (move is Promotion && ((Promotion)move).IsCapture)
-            || (move is Move && ((Move)move).IsCapture)
-            || move is EnPassant;
+        public static bool IsCapture(IMove imove) => (imove is Promotion promotion && promotion.IsCapture)
+            || (imove is Move move && move.IsCapture)
+            || imove is EnPassant;
 
     }
 }
