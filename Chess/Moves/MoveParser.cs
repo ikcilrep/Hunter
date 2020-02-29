@@ -25,20 +25,23 @@ namespace Chess.Moves
 
         }
 
-        private static (Pawn, Position) GetPawnAndToPosition(string pawnMoveString, bool color, Board board)
-        {
-            var to = GetToPosition(pawnMoveString);
-            var from = GetPawnPosition(pawnMoveString, to, color);
-            Piece piece;
+        private static Piece GetPieceAtPosition(Board board, Position position) {
             try
             {
-                piece = board.Pieces[from];
+                return board.Pieces[position];
             }
             catch (KeyNotFoundException)
             {
                 throw new ArgumentException();
             }
 
+        }
+
+        private static (Pawn, Position) GetPawnAndToPosition(string pawnMoveString, bool color, Board board)
+        {
+            var to = GetToPosition(pawnMoveString);
+            var from = GetPawnPosition(pawnMoveString, to, color);
+            var piece = GetPieceAtPosition(board, from);
             if (piece.Color != color || piece is Pawn)
             {
                 return ((Pawn)piece, to);
