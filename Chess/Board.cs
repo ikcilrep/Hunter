@@ -46,6 +46,13 @@ namespace Chess
             { new Position("h7"), new Pawn(Black)},
         };
 
+        public Piece this[string positionString] {
+            get 
+            {
+                return Pieces[new Position(positionString)];
+            }
+        }
+
         public bool CurrentMoveColor
         {
             get
