@@ -19,7 +19,7 @@ namespace Chess.Moves
         private static (Pawn, Position) GetPawnAndToPosition(string pawnMoveString, bool color, Board board)
         {
             var isCapture = pawnMoveString[1] == 'x';
-            var to = new Position(pawnMoveString.Substring(pawnMoveString.Length - 4, pawnMoveString.Length - 2));
+            var to = new Position(pawnMoveString.Substring(pawnMoveString.Length - 2));
             Position from;
             from = to.Behind(color);
             if (isCapture)
@@ -103,7 +103,7 @@ namespace Chess.Moves
                 return ParsePromotion(moveString, color, board);
             }
 
-            /* var chessmanMoveRegex = new Regex(@"^[QBRNK]x?[a-h][1-8]$");
+            /*var chessmanMoveRegex = new Regex(@"^[QBRNK]x?[a-h][1-8]$");
             if (chessmanMoveRegex.IsMatch(moveString))
             {
                 return ParseChessmanMove(moveString, color, board);
