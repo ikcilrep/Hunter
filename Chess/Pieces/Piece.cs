@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Chess.Moves;
 
@@ -37,6 +38,26 @@ namespace Chess.Pieces
                 default:
                     throw new System.FormatException();
             }
+        }
+
+        public static Func<Piece, bool> ParsePieceTypePredicate(char symbol)
+        {
+            switch (symbol)
+            {
+                case 'B':
+                    return p => p is Bishop;
+                case 'K':
+                    return p => p is King;
+                case 'N':
+                    return p => p is Knight;
+                case 'Q':
+                    return p => p is Queen;
+                case 'R':
+                    return p => p is Rook;
+                default:
+                    throw new System.FormatException();
+            }
+
         }
 
     }

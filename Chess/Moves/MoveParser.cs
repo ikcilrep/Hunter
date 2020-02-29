@@ -25,7 +25,8 @@ namespace Chess.Moves
 
         }
 
-        private static Piece GetPieceAtPosition(Board board, Position position) {
+        private static Piece GetPieceAtPosition(Board board, Position position)
+        {
             try
             {
                 return board.Pieces[position];
@@ -109,12 +110,53 @@ namespace Chess.Moves
                 return ParsePromotion(moveString, color, board);
             }
 
-            /*var chessmanMoveRegex = new Regex(@"^[QBRNK]x?[a-h][1-8]$");
+            var chessmanMoveRegex = new Regex(@"^[QBRNK]([a-h]|[0-9])?x?[a-h][1-8]$");
             if (chessmanMoveRegex.IsMatch(moveString))
             {
                 return ParseChessmanMove(moveString, color, board);
-            }*/
+            }
             throw new NotImplementedException();
+        }
+
+        private static IEnumerable<Piece> SelectPiecesByPosition(string moveString, IEnumerable<Piece> pieces, Board board)
+        {
+            Func<Piece, bool> selectPiece;
+            if (moveString[1] < 'a')
+            {
+                var row = Position.ParseRow(moveString[1]);
+                selectPiece = p => board.FindPiece(p).Row == row;
+            }
+            else
+            {
+                var column = Position.ParseColumn(moveString[1]);
+                selectPiece = p => board.FindPiece(p).Column == column;
+            }
+
+            return pieces.Where(selectPiece);
+        }
+
+        private static IMove ParseChessmanMove(string moveString, bool color, Board board)
+        {
+            var to = GetToPosition(moveString);
+            var isPieceType = Piece.ParsePieceTypePredicate(moveString[0]);
+            var pieces = board.Pieces.Values.Where(p => isPieceType(p) && p.Color == color && p.PossibleMoves(board).Count(m => m.To == to) > 0);
+            if (moveString.Length > 3 && moveString[1] != 'x')
+            {
+                pieces = SelectPiecesByPosition(moveString, pieces, board);
+            }
+
+            if (pieces.Count() != 1)
+            {
+                throw new ArgumentException();
+            }
+
+            var piece = pieces.First();
+            var move = new Move(piece, to, board);
+            if (piece.IsMovePossible(move))
+            {
+                return move;
+            }
+            throw new ArgumentException();
         }
     }
 }
