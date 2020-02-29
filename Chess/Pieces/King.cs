@@ -60,5 +60,9 @@ namespace Chess.Pieces
         {
             return "K";
         }
+
+        public override bool Equals(object obj) {
+            return obj is King king && king.Color == Color;
+        }
     }
 }
