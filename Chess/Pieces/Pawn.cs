@@ -13,7 +13,7 @@ namespace Chess.Pieces
         }
 
 
-        public override bool IsMovePossible(IMove move, Board board)
+        public override bool IsMovePossible(IMove move)
         {
 
             if (move is EnPassant || move is Promotion)
@@ -21,21 +21,21 @@ namespace Chess.Pieces
                 return true;
             }
 
-            if (board.IsTherePieceOfColor(move.To, Color))
+            if (move.Board.IsTherePieceOfColor(move.To, Color))
             {
                 return false;
             }
 
-            var position = board.FindPiece(this);
+            var position = move.Board.FindPiece(this);
             var columnDistance = Math.Abs(move.To.Column - position.Column);
             var columnIsTheSame = columnDistance == 0;
             var movesOneForward = move.To.Row == position.Forward(1, Color);
             if (columnIsTheSame)
             {
                 var movesTwoForward = move.To.Row == position.Forward(2, Color);
-                var pieceHasBeenMoved = board.HasPieceBeenMoved(this);
-                var thereIsPieceOnTheWay = board.IsTherePiece(position.Before(Color));
-                return !board.IsTherePieceOfColor(move.To, !Color)
+                var pieceHasBeenMoved = move.Board.HasPieceBeenMoved(this);
+                var thereIsPieceOnTheWay = move.Board.IsTherePiece(position.Before(Color));
+                return !move.Board.IsTherePieceOfColor(move.To, !Color)
                        && (movesOneForward || (!pieceHasBeenMoved
                                                && movesTwoForward
                                                && !thereIsPieceOnTheWay
@@ -45,7 +45,7 @@ namespace Chess.Pieces
             var movesDiagonally = movesOneForward
                                   && columnDistance == 1;
 
-            return movesDiagonally && board.IsTherePieceOfColor(move.To, !Color);
+            return movesDiagonally && move.Board.IsTherePieceOfColor(move.To, !Color);
         }
 
         private bool AddMoveIfNotBlocked(Position to, Board board, HashSet<IMove> moves)

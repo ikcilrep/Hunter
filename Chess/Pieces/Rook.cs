@@ -15,7 +15,7 @@ namespace Chess.Pieces
 
         public static bool IsMovePossibleStatic(IMove move)
         {
-            var position = board.FindPiece(move.Piece);
+            var position = move.Board.FindPiece(move.Piece);
             var columnDistance = move.To.Column - position.Column;
             var rowDistance = move.To.Row - position.Row;
             var movesStraight = columnDistance == 0 ^ rowDistance == 0;
@@ -24,11 +24,11 @@ namespace Chess.Pieces
                 return false;
             }
             var capturedPieces = 0;
-            if (board.IsTherePieceOfColor(move.To, !move.Piece.Color))
+            if (move.Board.IsTherePieceOfColor(move.To, !move.Piece.Color))
             {
                 capturedPieces = 1;
             }
-            return board.PiecesInRange(move.To, position).Count - 1 == capturedPieces;
+            return move.Board.PiecesInRange(move.To, position).Count - 1 == capturedPieces;
 
         }
 
