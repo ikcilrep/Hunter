@@ -46,7 +46,7 @@ namespace Chess.Moves
         internal static Promotion ParsePromotion(string promotionString, bool color, Board board)
         {
             (Pawn pawn, Position to) = GetPawnAndToPosition(promotionString.Substring(0, promotionString.Length - 2), color, board);
-            var promotedPawn = Piece.ParsePiece(promotionString[promotionString.Length - 1], color);
+            var promotedPawn = PieceParser.ParsePiece(promotionString[promotionString.Length - 1], color);
             var promotion = new Promotion(pawn, promotedPawn, to, board);
             if (pawn.IsMovePossible(promotion))
             {

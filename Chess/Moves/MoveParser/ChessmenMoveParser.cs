@@ -38,7 +38,7 @@ namespace Chess.Moves
         internal static IMove ParseChessmanMove(string moveString, bool color, Board board)
         {
             var to = MoveParser.GetToPosition(moveString);
-            var isPieceType = Piece.ParsePieceTypePredicate(moveString[0]);
+            var isPieceType = PieceParser.ParsePieceTypePredicate(moveString[0]);
             var pieces = board.Pieces.Values.Where(p => isPieceType(p) && p.Color == color && p.PossibleMoves(board).Count(m => m.To == to) > 0);
             if (moveString.Length > 3 && moveString[1] != 'x')
             {
