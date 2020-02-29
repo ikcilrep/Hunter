@@ -13,16 +13,22 @@ namespace Chess.Moves
             return new Position(moveString.Substring(moveString.Length - 2));
         }
 
-        private static (Pawn, Position) GetPawnAndToPosition(string pawnMoveString, bool color, Board board)
+        private static Position GetPawnPosition(string pawnMoveString, Position to, bool color)
         {
+            var from = to.Behind(color);
             var isCapture = pawnMoveString[1] == 'x';
-            var to = GetToPosition(pawnMoveString);
-            Position from;
-            from = to.Behind(color);
             if (isCapture)
             {
                 from = new Position(from.Row, Position.ParseColumn(pawnMoveString[0]));
             }
+            return from;
+
+        }
+
+        private static (Pawn, Position) GetPawnAndToPosition(string pawnMoveString, bool color, Board board)
+        {
+            var to = GetToPosition(pawnMoveString);
+            var from = GetPawnPosition(pawnMoveString, to, color);
             Piece piece;
             try
             {
