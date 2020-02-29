@@ -55,9 +55,13 @@ namespace Chess.Moves
             throw new ArgumentException();
         }
 
-        private static Move ParsePawnMove(string moveString, bool color, Board board)
+        private static IMove ParsePawnMove(string moveString, bool color, Board board)
         {
             (Pawn pawn, Position to) = GetPawnAndToPosition(moveString, color, board);
+            if (EnPassant.IsEnPassant(pawn, to, board))
+            {
+                return new EnPassant(pawn, to, board);
+            }
             var move = new Move(pawn, to, board);
             if (pawn.IsMovePossible(move, board))
             {
@@ -66,6 +70,7 @@ namespace Chess.Moves
 
             throw new ArgumentException();
         }
+
 
         public static IMove ParseMove(string moveString, Board board)
         {
@@ -92,6 +97,12 @@ namespace Chess.Moves
             {
                 return ParsePromotion(moveString, color, board);
             }
+
+            /* var chessmanMoveRegex = new Regex(@"^[QBRNK]x?[a-h][1-8]$");
+            if (chessmanMoveRegex.IsMatch(moveString))
+            {
+                return ParseChessmanMove(moveString, color, board);
+            }*/
             throw new NotImplementedException();
         }
 
