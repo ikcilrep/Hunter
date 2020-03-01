@@ -110,5 +110,9 @@ namespace Chess.Moves
         {
             return obj is Castling castling && castling._isLong == _isLong && castling.King == King && castling.Board == Board;
         }
+
+        public override int GetHashCode() {
+            return Tuple.Create(_isLong, King, Board).GetHashCode();
+        }
     }
 }
