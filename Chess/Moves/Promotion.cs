@@ -1,3 +1,4 @@
+using System;
 using Chess.Pieces;
 
 namespace Chess.Moves
@@ -41,6 +42,20 @@ namespace Chess.Moves
             }
             result += To + "=" + PromotedPawn.ToString();
             return result;
+        }
+
+        public override bool Equals(object obj)
+        {
+            return obj is Promotion promotion
+                   && promotion.Pawn == Pawn
+                   && promotion.To == To
+                   && promotion.PromotedPawn == promotion.PromotedPawn
+                   && promotion.Board == Board;
+        }
+
+        public override int GetHashCode()
+        {
+            return Tuple.Create(To, Piece, PromotedPawn, Board).GetHashCode();
         }
     }
 }
