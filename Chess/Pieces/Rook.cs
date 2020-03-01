@@ -72,45 +72,66 @@ namespace Chess.Pieces
             var range4 = Positions.Range(position, maxPosition4);
             range4.Remove(position);
 
-            var minNotAllowedColumn = board.PiecesInRange(range1)
-                                           .OrderBy(c => c.Column)
-                                           .First();
-            var maxNotAllowedColumn = board.PiecesInRange(range2)
-                                           .OrderBy(c => c.Column)
-                                           .Last();
-            var minNotAllowedRow = board.PiecesInRange(range3)
-                                        .OrderBy(c => c.Row)
-                                        .First();
-            var maxNotAllowedRow = board.PiecesInRange(range4)
-                                        .OrderBy(c => c.Row)
-                                        .First();
-
             var result = new HashSet<IMove>();
+            try
+            {
 
-            AddRange(range1,
-                     piece,
-                     board,
-                     minNotAllowedColumn,
-                     p => p.Column < minNotAllowedColumn.Column,
-                     result);
-            AddRange(range2,
-                     piece,
-                     board,
-                     maxNotAllowedColumn,
-                     p => p.Column > maxNotAllowedColumn.Column,
-                     result);
-            AddRange(range3,
-                     piece,
-                     board,
-                     minNotAllowedRow,
-                     p => p.Row < minNotAllowedColumn.Row,
-                     result);
-            AddRange(range4,
-                     piece,
-                     board,
-                     maxNotAllowedRow,
-                     p => p.Row > maxNotAllowedColumn.Row,
-                     result);
+                var minNotAllowedColumn = board.PiecesInRange(range1)
+                                               .OrderBy(c => c.Column)
+                                               .First();
+
+                AddRange(range1,
+                         piece,
+                         board,
+                         minNotAllowedColumn,
+                         p => p.Column < minNotAllowedColumn.Column,
+                         result);
+            }
+            catch (InvalidOperationException) { }
+
+            try
+            {
+
+                var maxNotAllowedColumn = board.PiecesInRange(range2)
+                                               .OrderBy(c => c.Column)
+                                               .Last();
+                AddRange(range2,
+                         piece,
+                         board,
+                         maxNotAllowedColumn,
+                         p => p.Column > maxNotAllowedColumn.Column,
+                         result);
+            }
+            catch (InvalidOperationException) { }
+
+            try
+            {
+                var minNotAllowedRow = board.PiecesInRange(range3)
+                                            .OrderBy(c => c.Row)
+                                            .First();
+                AddRange(range3,
+                          piece,
+                          board,
+                          minNotAllowedRow,
+                          p => p.Row < minNotAllowedRow.Row,
+                          result);
+            }
+            catch (InvalidOperationException) { }
+
+            try
+            {
+                var maxNotAllowedRow = board.PiecesInRange(range4)
+                                            .OrderBy(c => c.Row)
+                                            .First();
+
+                AddRange(range4,
+                         piece,
+                         board,
+                         maxNotAllowedRow,
+                         p => p.Row > maxNotAllowedRow.Row,
+                         result);
+            }
+            catch (InvalidOperationException) { }
 
             return result;
 
