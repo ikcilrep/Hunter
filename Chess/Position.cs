@@ -56,7 +56,7 @@
 
         public override int GetHashCode()
         {
-            return (Row << 3) + Column;
+            return (Row << 3) ^ Column;
         }
 
         public byte Forward(byte distance, bool color)
