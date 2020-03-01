@@ -1,4 +1,5 @@
 ﻿using Chess.Pieces;
+using System;
 using System.Linq;
 
 namespace Chess.Moves
@@ -58,5 +59,13 @@ namespace Chess.Moves
             return result;
         }
 
+        public override bool Equals(object obj)
+        {
+            return obj is Move move && move.Piece == Piece && move.To == To && move.Board == Board;
+        }
+
+        public override int GetHashCode() {
+            return Tuple.Create(To, Piece, Board).GetHashCode();
+        }
     }
 }
