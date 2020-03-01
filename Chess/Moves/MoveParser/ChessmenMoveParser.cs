@@ -35,11 +35,16 @@ namespace Chess.Moves
             return pieces.Where(selectPiece);
         }
 
+        private static IEnumerable<Piece> PiecesThatCanBeMovedTo(Position to, Func<Piece, bool> predicate, Board board)
+        {
+            return board.Pieces.Values.Where(p => predicate(p) && p.Color == board.CurrentMoveColor && p.PossibleMoves(board).Count(m => m.To == to) > 0);
+        }
+
         internal static IMove ParseChessmanMove(string moveString, bool color, Board board)
         {
             var to = MoveParser.GetToPosition(moveString);
             var isPieceType = PieceParser.ParsePieceTypePredicate(moveString[0]);
-            var pieces = board.Pieces.Values.Where(p => isPieceType(p) && p.Color == color && p.PossibleMoves(board).Count(m => m.To == to) > 0);
+            var pieces = PiecesThatCanBeMovedTo(to, isPieceType, board);
             if (moveString.Length > 3 && moveString[1] != 'x')
             {
                 pieces = SelectPiecesByPosition(moveString, pieces, board);
