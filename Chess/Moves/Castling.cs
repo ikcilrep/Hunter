@@ -90,7 +90,8 @@ namespace Chess.Moves
         public static (Position, Rook) CastlingRook(King king, Position to, Board board)
         {
             var kingPosition = board.FindPiece(king);
-            var kvp = board.Pieces.Where(kvp => !board.HasPieceBeenMoved(kvp.Value)
+            var kvp = board.Pieces.Where(kvp => kvp.Value is Rook 
+                                                 && !board.HasPieceBeenMoved(kvp.Value)
                                                  && kvp.Key.Row == kingPosition.Row
                                                  && Math.Abs(to.Column - kvp.Key.Column) <= 2)
                                                  .First();
