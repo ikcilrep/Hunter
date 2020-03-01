@@ -51,11 +51,7 @@
 
         public override bool Equals(object obj)
         {
-            if (obj is Position)
-            {
-                return ((Position)obj) == this;
-            }
-            return false;
+            return obj is Position position && position == this;
         }
 
         public override int GetHashCode()
