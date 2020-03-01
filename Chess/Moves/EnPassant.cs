@@ -54,5 +54,10 @@ namespace Chess.Moves
         {
             return Board.FindPiece(Pawn).ToString()[0] + "x" + To;
         }
+
+        public override bool Equals(object obj)
+        {
+            return obj is EnPassant enPassant && enPassant.Pawn == enPassant.Pawn && enPassant.To == enPassant.To && enPassant.Board == Board;
+        }
     }
 }
