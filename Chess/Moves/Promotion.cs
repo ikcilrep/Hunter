@@ -39,7 +39,7 @@ namespace Chess.Moves
             {
                 result += Board.FindPiece(Pawn).ToString()[0] + "x";
             }
-            result += To + Piece.ToString();
+            result += To + "=" + PromotedPawn.ToString();
             return result;
         }
     }
