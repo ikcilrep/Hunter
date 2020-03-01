@@ -57,7 +57,7 @@ namespace Chess.Moves
 
         public override bool Equals(object obj)
         {
-            return obj is EnPassant enPassant && enPassant.Pawn == enPassant.Pawn && enPassant.To == enPassant.To && enPassant.Board == Board;
+            return obj is EnPassant enPassant && enPassant.Pawn == Pawn && enPassant.To == To && enPassant.Board == Board;
         }
 
         public override int GetHashCode() {
