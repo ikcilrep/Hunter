@@ -105,5 +105,10 @@ namespace Chess.Moves
             }
             return new Position(kingPosition.Row, (byte)(kingPosition.Column + 2));
         }
+
+        public override bool Equals(object obj)
+        {
+            return obj is Castling castling && castling._isLong == _isLong && castling.King == King && castling.Board == Board;
+        }
     }
 }
