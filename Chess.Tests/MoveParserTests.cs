@@ -12,8 +12,17 @@ namespace Chess.Tests
         public void Init()
         {
             _whiteMoveBoard = new Board();
+            _whiteMoveBoard.MakeMove(new Move(_whiteMoveBoard["e2"], new Position("e4"), _whiteMoveBoard));
+            _whiteMoveBoard.MakeMove(new Move(_whiteMoveBoard["e7"], new Position("d5"), _whiteMoveBoard));
+            _whiteMoveBoard.MakeMove(new Move(_whiteMoveBoard["b1"], new Position("c3"), _whiteMoveBoard));
+            _whiteMoveBoard.MakeMove(new Move(_whiteMoveBoard["g8"], new Position("f6"), _whiteMoveBoard));
+
             _blackMoveBoard = new Board();
             _blackMoveBoard.MakeMove(new Move(_blackMoveBoard["e2"], new Position("e4"), _blackMoveBoard));
+            _blackMoveBoard.MakeMove(new Move(_blackMoveBoard["e7"], new Position("d5"), _blackMoveBoard));
+            _blackMoveBoard.MakeMove(new Move(_blackMoveBoard["b1"], new Position("c3"), _blackMoveBoard));
+            _blackMoveBoard.MakeMove(new Move(_blackMoveBoard["g8"], new Position("f6"), _blackMoveBoard));
+            _blackMoveBoard.MakeMove(new Move(_blackMoveBoard["f1"], new Position("d3"), _blackMoveBoard));
         }
 
         private static void ParseMove_CorrectNotation_ReturnExpectedMove(string moveString, string expectedFromPositionString, string expectedToPositionString, Board board)
@@ -25,18 +34,21 @@ namespace Chess.Tests
 
         }
 
-        [TestCase("Nf3", "g1", "f3")]
-        [TestCase("e4", "e2", "e4")]
-        [TestCase("e3", "e2", "e3")]
+        [TestCase("Nxe5", "c3", "e5")]
+        [TestCase("exd5", "e4", "d5")]
+        [TestCase("e5", "e4", "e5")]
+        [TestCase("Bb5", "f1", "b5")]
 
         public void ParseMove_CorrectNotationWhiteMoves_ReturnExpectedMove(string moveString, string expectedFromPositionString, string expectedToPositionString)
         {
             ParseMove_CorrectNotation_ReturnExpectedMove(moveString, expectedFromPositionString, expectedToPositionString, _whiteMoveBoard);
         }
 
-        [TestCase("Nf6", "g8", "f6")]
-        [TestCase("e5", "e7", "e5")]
-        [TestCase("e6", "e7", "e6")]
+        [TestCase("Nxe4", "f6", "e4")]
+        [TestCase("dxe4", "d5", "e4")]
+        [TestCase("d4", "d5", "d4")]
+        [TestCase("Bg4", "c8", "g4")]
+
 
         public void ParseMove_CorrectNotationBlackMoves_ReturnExpectedMove(string moveString, string expectedFromPositionString, string expectedToPositionString)
         {
