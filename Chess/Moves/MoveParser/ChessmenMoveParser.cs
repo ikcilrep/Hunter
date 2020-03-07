@@ -37,7 +37,7 @@ namespace Chess.Moves
 
         private static IEnumerable<Piece> PiecesThatCanBeMovedTo(Position to, Func<Piece, bool> predicate, Board board)
         {
-            return board.Pieces.Values.Where(p => predicate(p) && p.Color == board.CurrentMoveColor && p.PossibleMoves(board).Count(m => m.To == to) > 0);
+            return board.Pieces.Values.Where(p => predicate(p) && p.Color == board.CurrentMoveColor && p.PossibleMoves(board).Any(m => m.To == to));
         }
 
         internal static IMove ParseChessmanMove(string moveString, bool color, Board board)
