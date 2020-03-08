@@ -64,6 +64,7 @@ namespace Chess.Tests
             ParseMove_CorrectNotation_ReturnExpectedMove(moveString, expectedFromPositionString, expectedToPositionString, _whiteMoveBoard);
         }
 
+
         [TestCase("Nxe4", "f6", "e4")]
         [TestCase("dxe4", "d5", "e4")]
         [TestCase("d4", "d5", "d4")]
@@ -73,6 +74,13 @@ namespace Chess.Tests
         public void ParseMove_CorrectNotationBlackMoves_ReturnExpectedMove(string moveString, string expectedFromPositionString, string expectedToPositionString)
         {
             ParseMove_CorrectNotation_ReturnExpectedMove(moveString, expectedFromPositionString, expectedToPositionString, _blackMoveBoard);
+        }
+
+
+        public void ParseMove_CorrectNotation_ConvertsBackToSameStringRepresentation(string moveString)
+        {
+            var move = MoveParser.ParseMove(moveString, _whiteMoveBoard);
+            Assert.AreEqual(move.ToString(), moveString);
         }
     }
 }
