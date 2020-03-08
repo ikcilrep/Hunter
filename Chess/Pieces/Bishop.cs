@@ -26,16 +26,16 @@ namespace Chess.Pieces
                 var position = move.Board.FindPiece(move.Piece);
                 var diagonal = Positions.Diagonal(position, move.To);
 
-                foreach (var diagonalPosition in diagonal)
+                foreach (var diagonalPosition in diagonal.SkipLast(1))
                 {
                     if (move.Board.IsTherePiece(diagonalPosition))
                     {
                         return false;
                     }
                 }
-                return true;
+                return !move.Board.IsTherePieceOfColor(move.To, move.Piece.Color);
             }
-            catch
+            catch (ArgumentException)
             {
                 return false;
             }
