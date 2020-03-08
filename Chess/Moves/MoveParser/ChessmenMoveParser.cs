@@ -57,7 +57,7 @@ namespace Chess.Moves
 
             var piece = pieces.First();
             var move = new Move(piece, to, board);
-            if (piece.IsMovePossible(move))
+            if (move.IsCapture == (moveString[1] == 'x') && piece.IsMovePossible(move))
             {
                 return move;
             }

@@ -18,6 +18,8 @@ namespace Chess.Moves
             {
                 from = from.Behind(color);
             }
+
+
             return from;
 
         }
@@ -62,16 +64,19 @@ namespace Chess.Moves
         internal static IMove ParsePawnMove(string moveString, bool color, Board board)
         {
             (Pawn pawn, Position to) = GetPawnAndToPosition(moveString, color, board);
-            if (EnPassant.IsEnPassant(pawn, to, board))
+            var isCapture = moveString[1] == 'x';
+            if (isCapture == board.IsTherePieceOfColor(to, !board.CurrentMoveColor))
             {
-                return new EnPassant(pawn, to, board);
+                if (EnPassant.IsEnPassant(pawn, to, board))
+                {
+                    return new EnPassant(pawn, to, board);
+                }
+                var move = new Move(pawn, to, board, isCapture);
+                if (pawn.IsMovePossible(move))
+                {
+                    return move;
+                }
             }
-            var move = new Move(pawn, to, board);
-            if (pawn.IsMovePossible(move))
-            {
-                return move;
-            }
-
             throw new ArgumentException();
         }
 
