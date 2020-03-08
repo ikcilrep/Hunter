@@ -76,6 +76,11 @@ namespace Chess.Tests
             ParseMove_CorrectNotation_ReturnExpectedMove(moveString, expectedFromPositionString, expectedToPositionString, _blackMoveBoard);
         }
 
+        [TestCase("Nxd5")]
+        [TestCase("exd5")]
+        [TestCase("e5")]
+        [TestCase("Bb5")]
+
 
         public void ParseMove_CorrectNotation_ConvertsBackToSameStringRepresentation(string moveString)
         {
