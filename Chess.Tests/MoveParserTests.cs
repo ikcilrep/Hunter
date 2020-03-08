@@ -13,13 +13,13 @@ namespace Chess.Tests
         {
             _whiteMoveBoard = new Board();
             _whiteMoveBoard.MakeMove(new Move(_whiteMoveBoard["e2"], new Position("e4"), _whiteMoveBoard));
-            _whiteMoveBoard.MakeMove(new Move(_whiteMoveBoard["e7"], new Position("d5"), _whiteMoveBoard));
+            _whiteMoveBoard.MakeMove(new Move(_whiteMoveBoard["d7"], new Position("d5"), _whiteMoveBoard));
             _whiteMoveBoard.MakeMove(new Move(_whiteMoveBoard["b1"], new Position("c3"), _whiteMoveBoard));
             _whiteMoveBoard.MakeMove(new Move(_whiteMoveBoard["g8"], new Position("f6"), _whiteMoveBoard));
 
             _blackMoveBoard = new Board();
             _blackMoveBoard.MakeMove(new Move(_blackMoveBoard["e2"], new Position("e4"), _blackMoveBoard));
-            _blackMoveBoard.MakeMove(new Move(_blackMoveBoard["e7"], new Position("d5"), _blackMoveBoard));
+            _blackMoveBoard.MakeMove(new Move(_blackMoveBoard["d7"], new Position("d5"), _blackMoveBoard));
             _blackMoveBoard.MakeMove(new Move(_blackMoveBoard["b1"], new Position("c3"), _blackMoveBoard));
             _blackMoveBoard.MakeMove(new Move(_blackMoveBoard["g8"], new Position("f6"), _blackMoveBoard));
             _blackMoveBoard.MakeMove(new Move(_blackMoveBoard["f1"], new Position("d3"), _blackMoveBoard));
@@ -34,7 +34,7 @@ namespace Chess.Tests
 
         }
 
-        [TestCase("Nxe5", "c3", "e5")]
+        [TestCase("Nxd5", "c3", "d5")]
         [TestCase("exd5", "e4", "d5")]
         [TestCase("e5", "e4", "e5")]
         [TestCase("Bb5", "f1", "b5")]
