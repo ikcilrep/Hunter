@@ -1,3 +1,4 @@
+using System;
 using Chess.Moves;
 using NUnit.Framework;
 namespace Chess.Tests
@@ -31,7 +32,17 @@ namespace Chess.Tests
             var move = MoveParser.ParseMove(moveString, board);
 
             Assert.That(move.Equals(expectedMove));
+        }
 
+        [TestCase("Axd5")]
+        [TestCase("Nwd5")]
+        [TestCase("abcd")]
+        [TestCase("ee")]
+        [TestCase("e41")]
+        [TestCase("Bb53")]
+        public void ParseMove_IncorrectNotation_ThrowFormatException(string moveString)
+        {
+            Assert.Throws<FormatException>(() => MoveParser.ParseMove(moveString, _whiteMoveBoard));
         }
 
         [TestCase("Nxd5", "c3", "d5")]
