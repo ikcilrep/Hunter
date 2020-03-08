@@ -45,6 +45,15 @@ namespace Chess.Tests
             Assert.Throws<FormatException>(() => MoveParser.ParseMove(moveString, _whiteMoveBoard));
         }
 
+        [TestCase("Nd5")]
+        [TestCase("Nxb5")]
+        [TestCase("Na6")]
+        [TestCase("d5")]
+        public void ParseMove_IncorrectMove_ThrowArgumentException(string moveString)
+        {
+            Assert.Throws<ArgumentException>(() => MoveParser.ParseMove(moveString, _whiteMoveBoard));
+        }
+
         [TestCase("Nxd5", "c3", "d5")]
         [TestCase("exd5", "e4", "d5")]
         [TestCase("e5", "e4", "e5")]
