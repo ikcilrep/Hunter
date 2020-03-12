@@ -74,14 +74,14 @@ namespace Chess
             return piece.PossibleCaptures(this).Where(m => !IsCheckedAfterMove(m));
         }
 
-        public HashSet<IMove> PossibleMoves
+        public IEnumerable<IMove> PossibleMoves
         {
-            get => Pieces.Values.SelectMany(PossibleMovesOfPiece).ToHashSet();
+            get => Pieces.Values.Where(p => p.Color == CurrentMoveColor).SelectMany(PossibleMovesOfPiece);
         }
 
-        public HashSet<IMove> PossibleCaptures
+        public IEnumerable<IMove> PossibleCaptures
         {
-            get => Pieces.Values.SelectMany(PossibleCapturesOfPiece).ToHashSet();
+            get => Pieces.Values.Where(p => p.Color == CurrentMoveColor).SelectMany(PossibleCapturesOfPiece);
         }
 
         public IMove LastMove { get => _moves.Last(); }
