@@ -78,10 +78,10 @@ namespace Chess.Pieces
             Console.WriteLine(range4.Count);
 
             var result = new HashSet<IMove>();
-            try
+            var piecesInRange1 = board.PiecesInRange(range1);
+            if (piecesInRange1.Count > 0)
             {
-
-                var minNotAllowedColumn = board.PiecesInRange(range1)
+                var minNotAllowedColumn = piecesInRange1
                                                .OrderBy(c => c.Column)
                                                .First();
 
@@ -92,8 +92,9 @@ namespace Chess.Pieces
                                          p => p.Column < minNotAllowedColumn.Column,
                                          result);
 
+
             }
-            catch (InvalidOperationException)
+            else
             {
                 foreach (var to in range1)
                 {
@@ -101,10 +102,10 @@ namespace Chess.Pieces
                 }
             }
 
-            try
+            var piecesInRange2 = board.PiecesInRange(range2);
+            if (piecesInRange2.Count > 0)
             {
-
-                var maxNotAllowedColumn = board.PiecesInRange(range2)
+                var maxNotAllowedColumn = piecesInRange2
                                                .OrderBy(c => c.Column)
                                                .Last();
                 AddBoundedRange(range2,
@@ -114,17 +115,18 @@ namespace Chess.Pieces
                          p => p.Column > maxNotAllowedColumn.Column,
                          result);
             }
-            catch (InvalidOperationException)
+            else
             {
                 foreach (var to in range2)
                 {
-                    result.Add(new Move(piece, position, board, false));
+                    result.Add(new Move(piece, to, board, false));
                 }
             }
 
-            try
+            var piecesInRange3 = board.PiecesInRange(range3);
+            if (piecesInRange3.Count > 0)
             {
-                var minNotAllowedRow = board.PiecesInRange(range3)
+                var minNotAllowedRow = piecesInRange3
                                             .OrderBy(c => c.Row)
                                             .First();
                 AddBoundedRange(range3,
@@ -134,7 +136,7 @@ namespace Chess.Pieces
                           p => p.Row < minNotAllowedRow.Row,
                           result);
             }
-            catch (InvalidOperationException)
+            else
             {
                 foreach (var to in range3)
                 {
@@ -142,9 +144,10 @@ namespace Chess.Pieces
                 }
             }
 
-            try
+            var piecesInRange4 = board.PiecesInRange(range4);
+            if (piecesInRange4.Count > 0)
             {
-                var maxNotAllowedRow = board.PiecesInRange(range4)
+                var maxNotAllowedRow = piecesInRange4
                                             .OrderBy(c => c.Row)
                                             .First();
 
@@ -155,7 +158,7 @@ namespace Chess.Pieces
                          p => p.Row > maxNotAllowedRow.Row,
                          result);
             }
-            catch (InvalidOperationException)
+            else
             {
                 foreach (var to in range4)
                 {
