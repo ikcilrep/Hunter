@@ -37,7 +37,7 @@ namespace Chess.Pieces
             return IsMovePossibleStatic(move);
         }
 
-        private static void AddRange(HashSet<Position> range,
+        private static void AddBoundedRange(HashSet<Position> range,
                                      Piece piece,
                                      Board board,
                                      Position border,
@@ -72,6 +72,11 @@ namespace Chess.Pieces
             var range4 = Positions.Range(position, maxPosition4);
             range4.Remove(position);
 
+            Console.WriteLine(range1.Count);
+            Console.WriteLine(range2.Count);
+            Console.WriteLine(range3.Count);
+            Console.WriteLine(range4.Count);
+
             var result = new HashSet<IMove>();
             try
             {
@@ -80,14 +85,21 @@ namespace Chess.Pieces
                                                .OrderBy(c => c.Column)
                                                .First();
 
-                AddRange(range1,
-                         piece,
-                         board,
-                         minNotAllowedColumn,
-                         p => p.Column < minNotAllowedColumn.Column,
-                         result);
+                AddBoundedRange(range1,
+                                         piece,
+                                         board,
+                                         minNotAllowedColumn,
+                                         p => p.Column < minNotAllowedColumn.Column,
+                                         result);
+
             }
-            catch (InvalidOperationException) { }
+            catch (InvalidOperationException)
+            {
+                foreach (var to in range1)
+                {
+                    result.Add(new Move(piece, to, board, false));
+                }
+            }
 
             try
             {
@@ -95,28 +107,40 @@ namespace Chess.Pieces
                 var maxNotAllowedColumn = board.PiecesInRange(range2)
                                                .OrderBy(c => c.Column)
                                                .Last();
-                AddRange(range2,
+                AddBoundedRange(range2,
                          piece,
                          board,
                          maxNotAllowedColumn,
                          p => p.Column > maxNotAllowedColumn.Column,
                          result);
             }
-            catch (InvalidOperationException) { }
+            catch (InvalidOperationException)
+            {
+                foreach (var to in range2)
+                {
+                    result.Add(new Move(piece, position, board, false));
+                }
+            }
 
             try
             {
                 var minNotAllowedRow = board.PiecesInRange(range3)
                                             .OrderBy(c => c.Row)
                                             .First();
-                AddRange(range3,
+                AddBoundedRange(range3,
                           piece,
                           board,
                           minNotAllowedRow,
                           p => p.Row < minNotAllowedRow.Row,
                           result);
             }
-            catch (InvalidOperationException) { }
+            catch (InvalidOperationException)
+            {
+                foreach (var to in range3)
+                {
+                    result.Add(new Move(piece, to, board, false));
+                }
+            }
 
             try
             {
@@ -124,14 +148,20 @@ namespace Chess.Pieces
                                             .OrderBy(c => c.Row)
                                             .First();
 
-                AddRange(range4,
+                AddBoundedRange(range4,
                          piece,
                          board,
                          maxNotAllowedRow,
                          p => p.Row > maxNotAllowedRow.Row,
                          result);
             }
-            catch (InvalidOperationException) { }
+            catch (InvalidOperationException)
+            {
+                foreach (var to in range4)
+                {
+                    result.Add(new Move(piece, to, board, false));
+                }
+            }
 
             return result;
 
