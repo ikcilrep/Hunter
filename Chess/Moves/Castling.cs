@@ -77,9 +77,9 @@ namespace Chess.Moves
                 var (rookPosition, rook) = CastlingRook(king, to, board);
                 var range = Positions.Range(kingPosition, rookPosition);
                 var piecesInRange = board.Pieces.Count(kvp => range.Contains(kvp.Key));
-                var possibleMovesToRange = board.PossibleMoves.Count(m => m.To != rookPosition
+                var possibleMovesToRange = board.PossibleMoves(p => p != king && p.Color == board.CurrentMoveColor).Any(m => m.To != rookPosition
                                                          && range.Contains(m.To));
-                return piecesInRange == 2 && possibleMovesToRange == 0;
+                return piecesInRange == 2 && !possibleMovesToRange;
             }
             catch (InvalidOperationException)
             {
@@ -90,7 +90,7 @@ namespace Chess.Moves
         public static (Position, Rook) CastlingRook(King king, Position to, Board board)
         {
             var kingPosition = board.FindPiece(king);
-            var kvp = board.Pieces.Where(kvp => kvp.Value is Rook 
+            var kvp = board.Pieces.Where(kvp => kvp.Value is Rook
                                                  && !board.HasPieceBeenMoved(kvp.Value)
                                                  && kvp.Key.Row == kingPosition.Row
                                                  && Math.Abs(to.Column - kvp.Key.Column) <= 2)
@@ -112,7 +112,8 @@ namespace Chess.Moves
             return obj is Castling castling && castling._isLong == _isLong && castling.King == King && castling.Board == Board;
         }
 
-        public override int GetHashCode() {
+        public override int GetHashCode()
+        {
             return Tuple.Create(_isLong, King, Board).GetHashCode();
         }
     }

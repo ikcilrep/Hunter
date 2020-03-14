@@ -32,7 +32,7 @@ namespace Chess.Moves
         {
             var result = Piece.ToString();
             var piecePosition = Board.FindPiece(Piece);
-            var movesToTheSamePlace = Board.PossibleMoves.Where(m => m.To == To
+            var movesToTheSamePlace = Board.PossibleMoves().Where(m => m.To == To
                     && m.Piece.Color == Piece.Color
                     && m.Piece.GetType() == Piece.GetType()).ToList();
             if (movesToTheSamePlace.Count == 2)
@@ -64,7 +64,8 @@ namespace Chess.Moves
             return obj is Move move && move.Piece == Piece && move.To == To && move.Board == Board;
         }
 
-        public override int GetHashCode() {
+        public override int GetHashCode()
+        {
             return Tuple.Create(To, Piece, Board).GetHashCode();
         }
     }

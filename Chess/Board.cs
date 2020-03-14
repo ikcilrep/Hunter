@@ -43,11 +43,12 @@ namespace Chess
             { new Position("e7"), new Pawn(Black)},
             { new Position("f7"), new Pawn(Black)},
             { new Position("g7"), new Pawn(Black)},
-            { new Position("h7"), new Pawn(Black)},
-        };
+            { new Position("h7"), new Pawn(Black)}
+      };
 
-        public Piece this[string positionString] {
-            get 
+        public Piece this[string positionString]
+        {
+            get
             {
                 return Pieces[new Position(positionString)];
             }
@@ -74,9 +75,14 @@ namespace Chess
             return piece.PossibleCaptures(this).Where(m => !IsCheckedAfterMove(m));
         }
 
-        public IEnumerable<IMove> PossibleMoves
+        public IEnumerable<IMove> PossibleMoves(Func<Piece, bool> predicate)
         {
-            get => Pieces.Values.Where(p => p.Color == CurrentMoveColor).SelectMany(PossibleMovesOfPiece);
+            return Pieces.Values.Where(predicate).SelectMany(PossibleMovesOfPiece);
+        }
+
+        public IEnumerable<IMove> PossibleMoves()
+        {
+            return PossibleMoves(p => p.Color == CurrentMoveColor);
         }
 
         public IEnumerable<IMove> PossibleCaptures
@@ -254,7 +260,7 @@ namespace Chess
         {
             foreach (var move in PossibleCaptures)
             {
-                if (move.Piece.Color != color && Pieces[move.To] is King)
+                if (Pieces[move.To] is King)
                 {
                     return true;
                 }
