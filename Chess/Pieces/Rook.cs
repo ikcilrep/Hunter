@@ -72,11 +72,6 @@ namespace Chess.Pieces
             var range4 = Positions.Range(position, maxPosition4);
             range4.Remove(position);
 
-            Console.WriteLine(range1.Count);
-            Console.WriteLine(range2.Count);
-            Console.WriteLine(range3.Count);
-            Console.WriteLine(range4.Count);
-
             var result = new HashSet<IMove>();
             var piecesInRange1 = board.PiecesInRange(range1);
             if (piecesInRange1.Count > 0)
