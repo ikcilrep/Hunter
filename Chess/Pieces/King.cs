@@ -42,7 +42,7 @@ namespace Chess.Pieces
             var range = Positions.Range(topRightCorner, bottomLeftCorner);
             range.ExceptWith(board.PiecesInRange(range, Color));
 
-            var result = new HashSet<IMove>(range.Select(p => new Move(this, p, board)).ToHashSet());
+            var result = new HashSet<IMove>(range.Select(p => new Move(this, p, board)));
             void AddCastling(bool isLong)
             {
                 if (Castling.IsCastling(this, isLong, board))
