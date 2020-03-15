@@ -248,12 +248,9 @@ namespace Chess
         public bool IsCheckedAfterMove(IMove move)
         {
             MakeMove(move);
-            if (IsChecked(move.Piece.Color))
-            {
-                UndoLastMove();
-                return true;
-            }
-            return false;
+            var isChecked = IsChecked(move.Piece.Color);
+            UndoLastMove();
+            return isChecked;
         }
 
         public bool IsChecked(bool color)
