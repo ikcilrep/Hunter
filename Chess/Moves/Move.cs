@@ -36,17 +36,16 @@ namespace Chess.Moves
                 result += Board.FindPiece(Piece).ToString()[0];
             }
             var piecePosition = Board.FindPiece(Piece);
-            var movesToTheSamePlace = Board.PossibleMoves().Where(m => m.To == To
-                    && m.Piece.Color == Piece.Color
-                    && m.Piece.GetType() == Piece.GetType()).ToList();
-            if (movesToTheSamePlace.Count == 2)
+            var movesToTheSamePlace = Board.PossibleMoves(p => p != Piece && p.GetType() == Piece.GetType() && p.Color == Piece.Color).Where(m => m.To == To);
+            if (movesToTheSamePlace.Count() == 1)
             {
-                var otherPiecePosition = Board.FindPiece(movesToTheSamePlace[1].Piece);
-                if (movesToTheSamePlace[1].To.Row == To.Row)
+                var move = movesToTheSamePlace.First();
+                var otherPiecePosition = Board.FindPiece(move.Piece);
+                if (move.To.Row == To.Row)
                 {
                     result += piecePosition.ToString()[0];
                 }
-                else if (movesToTheSamePlace[1].To.Column == To.Column)
+                else if (move.To.Column == To.Column)
                 {
                     result += piecePosition.ToString()[1];
                 }
