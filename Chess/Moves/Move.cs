@@ -41,17 +41,13 @@ namespace Chess.Moves
             {
                 var move = movesToTheSamePlace.First();
                 var otherPiecePosition = Board.FindPiece(move.Piece);
-                if (move.To.Row == To.Row)
+                if (move.To.Row == To.Row || move.To.Column != To.Column)
                 {
                     result += piecePosition.ToString()[0];
                 }
-                else if (move.To.Column == To.Column)
+                else 
                 {
                     result += piecePosition.ToString()[1];
-                }
-                else
-                {
-                    result += piecePosition.ToString()[0];
                 }
             }
             if (IsCapture)
