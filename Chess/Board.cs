@@ -238,9 +238,17 @@ namespace Chess
 
         public bool IsCheckedAfterMove(IMove move)
         {
+            
             MakeMove(move);
             var isChecked = IsChecked();
             UndoLastMove();
+            if (move is Castling castling)
+            {
+                var middleOfCastling = new Move(castling.King, castling.To.GoInDirectionOf(castling.RookPosition.Column, 1), this);
+                MakeMove(middleOfCastling);
+                isChecked |= IsChecked();
+                UndoLastMove();
+            }
             return isChecked;
         }
 
