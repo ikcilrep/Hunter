@@ -77,9 +77,7 @@ namespace Chess.Moves
                 var (rookPosition, rook) = CastlingRook(king, to, board);
                 var range = Positions.Range(kingPosition, rookPosition);
                 var piecesInRange = board.Pieces.Count(kvp => range.Contains(kvp.Key));
-                var possibleMovesToRange = board.PossibleMoves(p => p != king && p.Color == board.CurrentMoveColor).Any(m => m.To != rookPosition
-                                                         && range.Contains(m.To));
-                return piecesInRange == 2 && !possibleMovesToRange;
+                return piecesInRange == 2;
             }
             catch (InvalidOperationException)
             {
