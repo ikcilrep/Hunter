@@ -56,16 +56,11 @@ namespace Chess
 
         public bool CurrentMoveColor
         {
-            get
-            {
-                if (_moves.Count > 0)
-                {
-                    return !LastMove.Piece.Color;
-                }
-                return White;
-            }
+            get => _currentMoveColor;
         }
         private List<IMove> _moves = new List<IMove>();
+        private bool _currentMoveColor = White;
+
         private IEnumerable<IMove> PossibleMovesOfPiece(Piece piece)
         {
             return piece.PossibleMoves(this).Where(m => !IsCheckedAfterMove(m));
@@ -132,6 +127,7 @@ namespace Chess
         public void UndoLastMove()
         {
             var movesExceptLast = _moves.SkipLast(1);
+            _currentMoveColor = !_currentMoveColor;
             if (IMove.IsCapture(LastMove))
             {
 
@@ -219,8 +215,13 @@ namespace Chess
 
         private void Move(Position to, Position from, Piece piece)
         {
+            if (piece.Color != _currentMoveColor)
+            {
+                throw new InvalidOperationException("It's not your turn!");
+            }
             Pieces[to] = piece;
             Pieces.Remove(from);
+            _currentMoveColor = !_currentMoveColor;
         }
 
         private void Move(Position to, Piece piece)
