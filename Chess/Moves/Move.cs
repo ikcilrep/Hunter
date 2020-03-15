@@ -31,6 +31,10 @@ namespace Chess.Moves
         public override string ToString()
         {
             var result = Piece.ToString();
+            if (Piece is Pawn && IsCapture)
+            {
+                result += Board.FindPiece(Piece).ToString()[0];
+            }
             var piecePosition = Board.FindPiece(Piece);
             var movesToTheSamePlace = Board.PossibleMoves().Where(m => m.To == To
                     && m.Piece.Color == Piece.Color
