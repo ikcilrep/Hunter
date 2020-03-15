@@ -86,7 +86,7 @@ namespace Chess.Tests
         public void ParseMove_CorrectNotation_ConvertsBackToSameStringRepresentation(string moveString)
         {
             var move = MoveParser.ParseMove(moveString, _whiteMoveBoard);
-            Assert.AreEqual(move.ToString(), moveString);
+            Assert.AreEqual(moveString, move.ToString());
         }
     }
 }
