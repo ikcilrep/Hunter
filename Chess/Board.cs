@@ -70,24 +70,14 @@ namespace Chess
         {
             return piece.PossibleMoves(this).Where(m => !IsCheckedAfterMove(m));
         }
-        private IEnumerable<IMove> PossibleCapturesOfPiece(Piece piece)
-        {
-            return piece.PossibleCaptures(this).Where(m => !IsCheckedAfterMove(m));
-        }
-
         public IEnumerable<IMove> PossibleMoves(Func<Piece, bool> predicate)
         {
-            return Pieces.Values.Where(predicate).SelectMany(PossibleMovesOfPiece);
+            return Pieces.Values.ToList().Where(predicate).SelectMany(PossibleMovesOfPiece);
         }
 
         public IEnumerable<IMove> PossibleMoves()
         {
             return PossibleMoves(p => p.Color == CurrentMoveColor);
-        }
-
-        public IEnumerable<IMove> PossibleCaptures
-        {
-            get => Pieces.Values.Where(p => p.Color == CurrentMoveColor).SelectMany(PossibleCapturesOfPiece);
         }
 
         public IMove LastMove { get => _moves.Last(); }
@@ -248,21 +238,14 @@ namespace Chess
         public bool IsCheckedAfterMove(IMove move)
         {
             MakeMove(move);
-            var isChecked = IsChecked(move.Piece.Color);
+            var isChecked = IsChecked();
             UndoLastMove();
             return isChecked;
         }
 
-        public bool IsChecked(bool color)
+        public bool IsChecked()
         {
-            foreach (var move in PossibleCaptures)
-            {
-                if (Pieces[move.To] is King)
-                {
-                    return true;
-                }
-            }
-            return false;
+            return Pieces.Values.Any(p => p.Color != CurrentMoveColor && p.PossibleCaptures(this).Any(m => Pieces[m.To] is King));
         }
     }
 }
