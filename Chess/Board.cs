@@ -123,6 +123,21 @@ namespace Chess
                            .Where(p => IsTherePiece(p))
                            .ToHashSet();
         }
+        public Position LastMoveFrom
+        {
+            get
+            {
+                var movesExceptLast = _moves.SkipLast(1);
+                try
+                {
+                    return movesExceptLast.Last(m => m.Piece == LastMove.Piece).To;
+                }
+                catch (InvalidOperationException)
+                {
+                    return StartPositions.First(kvp => kvp.Value == LastMove.Piece).Key;
+                }
+            }
+        }
 
         public void UndoLastMove()
         {
@@ -163,17 +178,7 @@ namespace Chess
                 }
             }
 
-            Position from;
-            try
-            {
-                from = movesExceptLast.Where(m => m.Piece == LastMove.Piece).Last().To;
-            }
-            catch (InvalidOperationException)
-            {
-                from = StartPositions.Where(kvp => kvp.Value == LastMove.Piece).First().Key;
-            }
-
-            Pieces[from] = LastMove.Piece;
+            Pieces[LastMoveFrom] = LastMove.Piece;
             _moves = movesExceptLast.ToList();
         }
 
