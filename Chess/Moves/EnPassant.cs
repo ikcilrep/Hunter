@@ -41,8 +41,8 @@ namespace Chess.Moves
         {
             try
             {
-                var position = board.FindPiece(board.LastMove.Piece);
-                return board.LastMove.Piece is Pawn && board.LastMove.To.Row == position.Forward(2, board.LastMove.Piece.Color);
+                Console.WriteLine(board.LastMoveFrom);
+                return board.LastMove.Piece is Pawn && board.LastMove.To.Row == board.LastMoveFrom.Forward(2, board.LastMove.Piece.Color);
             }
             catch (InvalidOperationException)
             {
