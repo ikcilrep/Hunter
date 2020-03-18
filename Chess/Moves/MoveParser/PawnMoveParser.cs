@@ -65,7 +65,7 @@ namespace Chess.Moves
         {
             (Pawn pawn, Position to) = GetPawnAndToPosition(moveString, color, board);
             var isCapture = moveString[1] == 'x';
-            if (isCapture == board.IsTherePieceOfColor(to, !board.CurrentMoveColor))
+            if (isCapture == (board.IsTherePieceOfColor(to, !board.CurrentMoveColor) || board.IsTherePieceOfColor(to.Behind(pawn.Color), !board.CurrentMoveColor)))
             {
                 if (EnPassant.IsEnPassant(pawn, to, board))
                 {
