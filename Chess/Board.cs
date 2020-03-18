@@ -126,6 +126,10 @@ namespace Chess
 
         public void UndoLastMove()
         {
+            if (_moves.Count == 0)
+            {
+                throw new InvalidOperationException("No move has been made yet!");
+            }
             var movesExceptLast = _moves.SkipLast(1);
             _currentMoveColor = !_currentMoveColor;
             if (IMove.IsCapture(LastMove))
@@ -238,7 +242,7 @@ namespace Chess
 
         public bool IsCheckedAfterMove(IMove move)
         {
-            
+
             MakeMove(move);
             var isChecked = IsChecked();
             UndoLastMove();
