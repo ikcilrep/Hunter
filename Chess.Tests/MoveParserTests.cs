@@ -62,7 +62,7 @@ namespace Chess.Tests
         }
 
         [TestCase("cxd8=Q", "c7", "d8", 'Q')]
-        [TestCase("cxb8=K", "c7", "b8", 'K')]
+        [TestCase("cxb8=N", "c7", "b8", 'N')]
         public static void ParseMove_CorrectNotation_ReturnExpectedPromotion(string moveString,
                                                                              string expectedFromPositionString,
                                                                              string expectedToPositionString,
