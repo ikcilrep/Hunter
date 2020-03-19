@@ -70,10 +70,7 @@ namespace Chess
             return Pieces.Values.ToList().Where(predicate).SelectMany(PossibleMovesOfPiece);
         }
 
-        public IEnumerable<IMove> PossibleMoves()
-        {
-            return PossibleMoves(p => p.Color == CurrentMoveColor);
-        }
+        public IEnumerable<IMove> PossibleMoves() => PossibleMoves(p => p.Color == CurrentMoveColor);
 
         public IMove LastMove { get => _moves.Last(); }
         public Dictionary<Position, Piece> Pieces { get; } = new Dictionary<Position, Piece>();
@@ -93,20 +90,14 @@ namespace Chess
             return Pieces.ContainsKey(position) && Pieces[position].Color == color;
         }
 
-        public bool IsTherePiece(Position position)
-        {
-            return Pieces.ContainsKey(position);
-        }
+        public bool IsTherePiece(Position position) => Pieces.ContainsKey(position);
 
         public HashSet<Position> PiecesInRange(HashSet<Position> range, bool color)
         {
             return range.Where(p => IsTherePieceOfColor(p, color)).ToHashSet();
         }
 
-        public bool HasPieceBeenMoved(Piece piece)
-        {
-            return _moves.Any(m => m.Piece == piece);
-        }
+        public bool HasPieceBeenMoved(Piece piece) => _moves.Any(m => m.Piece == piece);
 
         public HashSet<Position> PiecesInRange(HashSet<Position> range)
         {
