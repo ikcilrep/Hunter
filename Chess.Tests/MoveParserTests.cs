@@ -17,9 +17,17 @@ namespace Chess.Tests
             _board.MakeMove(new Move(_board["e2"], new Position("e4"), _board));
             _board.MakeMove(new Move(_board["d7"], new Position("d5"), _board));
             _board.MakeMove(new Move(_board["b1"], new Position("c3"), _board));
-            _board.MakeMove(new Move(_board["g8"], new Position("f6"), _board));
-            _board.MakeMove(new Move(_board["h2"], new Position("h4"), _board));
             _board.MakeMove(new Move(_board["a7"], new Position("a6"), _board));
+            _board.MakeMove(new Move(_board["h2"], new Position("h4"), _board));
+            _board.MakeMove(new Move(_board["a6"], new Position("a5"), _board));
+            _board.MakeMove(new Move(_board["b2"], new Position("b4"), _board));
+            _board.MakeMove(new Move(_board["a5"], new Position("a4"), _board));
+            _board.MakeMove(new Move(_board["b4"], new Position("b5"), _board));
+            _board.MakeMove(new Move(_board["a4"], new Position("a3"), _board));
+            _board.MakeMove(new Move(_board["b5"], new Position("b6"), _board));
+            _board.MakeMove(new Move(_board["b8"], new Position("c6"), _board));
+            _board.MakeMove(new Move(_board["b6"], new Position("c7"), _board));
+            _board.MakeMove(new Move(_board["a8"], new Position("b8"), _board));
             _board.MakeMove(new Move(_board["h4"], new Position("h5"), _board));
             _board.MakeMove(new Move(_board["g7"], new Position("g5"), _board));
         }
@@ -75,8 +83,6 @@ namespace Chess.Tests
         [TestCase("e5")]
         [TestCase("Bb5")]
         [TestCase("hxg6")]
-
-
         public void ParseMove_CorrectNotation_ConvertsBackToSameStringRepresentation(string moveString)
         {
             var move = MoveParser.ParseMove(moveString, _board);

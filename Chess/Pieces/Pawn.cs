@@ -72,33 +72,41 @@ namespace Chess.Pieces
         {
             var position = board.FindPiece(this);
             var result = new HashSet<IMove>();
-            var before = position.Before(Color);
-            if (AddMoveIfNotBlocked(before, board, result)
-                && !board.HasPieceBeenMoved(this))
+            try
             {
-                AddMoveIfNotBlocked(before.Before(Color), board, result);
-            }
-            void AddCapture(int columnDistance)
-            {
-                try
+                var before = position.Before(Color);
+                if (AddMoveIfNotBlocked(before, board, result)
+                    && !board.HasPieceBeenMoved(this))
                 {
-                    var to = new Position(before.Row,
-                                              (byte)(position.Column + columnDistance));
-                    if (board.IsTherePieceOfColor(to, !Color))
+                    try
                     {
-                        _ = result.Add(new Move(this, to, board, true));
+                        AddMoveIfNotBlocked(before.Before(Color), board, result);
                     }
-                    else if (EnPassant.IsEnPassant(this, to, board))
-                    {
-                        result.Add(new EnPassant(this, to, board));
-                    }
+                    catch (ArgumentException) { }
                 }
-                catch { }
+
+
+                void AddCapture(int columnDistance)
+                {
+                    try
+                    {
+                        var to = new Position(before.Row,
+                                                  (byte)(position.Column + columnDistance));
+                        if (board.IsTherePieceOfColor(to, !Color))
+                        {
+                            _ = result.Add(new Move(this, to, board, true));
+                        }
+                        else if (EnPassant.IsEnPassant(this, to, board))
+                        {
+                            result.Add(new EnPassant(this, to, board));
+                        }
+                    }
+                    catch (ArgumentException) { }
+                }
+                AddCapture(+1);
+                AddCapture(-1);
             }
-
-            AddCapture(+1);
-            AddCapture(-1);
-
+            catch (ArgumentException) { }
             return result;
         }
         public override string ToString()
