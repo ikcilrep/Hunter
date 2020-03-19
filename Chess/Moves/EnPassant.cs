@@ -59,7 +59,8 @@ namespace Chess.Moves
             return obj is EnPassant enPassant && enPassant.Pawn == Pawn && enPassant.To == To && enPassant.Board == Board;
         }
 
-        public override int GetHashCode() {
+        public override int GetHashCode()
+        {
             return Tuple.Create(To, Pawn, Board).GetHashCode();
         }
     }

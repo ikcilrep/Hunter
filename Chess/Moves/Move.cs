@@ -45,7 +45,7 @@ namespace Chess.Moves
                 {
                     result += piecePosition.ToString()[0];
                 }
-                else 
+                else
                 {
                     result += piecePosition.ToString()[1];
                 }

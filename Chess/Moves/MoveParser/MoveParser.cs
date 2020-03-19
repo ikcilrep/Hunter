@@ -41,6 +41,6 @@ namespace Chess.Moves
             throw new FormatException();
         }
 
-        
+
     }
 }
