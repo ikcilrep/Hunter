@@ -32,30 +32,54 @@ namespace Chess.Tests
             _board.MakeMove(new Move(_board["g7"], new Position("g5"), _board));
         }
 
-        [TestCase("Nxd5", "c3", "d5", false)]
-        [TestCase("exd5", "e4", "d5", false)]
-        [TestCase("e5", "e4", "e5", false)]
-        [TestCase("Bb5", "f1", "b5", false)]
-        [TestCase("hxg6", "h5", "g6", true)]
+        [TestCase("Nxd5", "c3", "d5")]
+        [TestCase("exd5", "e4", "d5")]
+        [TestCase("e5", "e4", "e5")]
+        [TestCase("Bb5", "f1", "b5")]
 
         public static void ParseMove_CorrectNotation_ReturnExpectedMove(string moveString,
-                                                                                 string expectedFromPositionString,
-                                                                                 string expectedToPositionString,
-                                                                                 bool isEnPassant)
+                                                                        string expectedFromPositionString,
+                                                                        string expectedToPositionString)
         {
 
-            IMove expectedMove;
-            if (isEnPassant)
-            {
-                expectedMove = new EnPassant((Pawn)_board[expectedFromPositionString], new Position(expectedToPositionString), _board);
-            }
-            else
-            {
-                expectedMove = new Move(_board[expectedFromPositionString], new Position(expectedToPositionString), _board);
-            }
+            var expectedMove = new Move(_board[expectedFromPositionString], new Position(expectedToPositionString), _board);
             var move = MoveParser.ParseMove(moveString, _board);
 
             Assert.That(move.Equals(expectedMove));
+        }
+
+
+        [TestCase("hxg6", "h5", "g6")]
+        public static void ParseMove_CorrectNotation_ReturnExpectedEnPassant(string moveString,
+                                                                             string expectedFromPositionString,
+                                                                             string expectedToPositionString)
+        {
+
+            var expectedMove = new EnPassant((Pawn)_board[expectedFromPositionString], new Position(expectedToPositionString), _board);
+            var move = MoveParser.ParseMove(moveString, _board);
+            Assert.That(move.Equals(expectedMove));
+
+        }
+
+        [TestCase("cxd8=Q", "c7", "d8", 'Q')]
+        [TestCase("cxb8=K", "c7", "b8", 'K')]
+        public static void ParseMove_CorrectNotation_ReturnExpectedPromotion(string moveString,
+                                                                             string expectedFromPositionString,
+                                                                             string expectedToPositionString,
+                                                                             char expectedPromotedPawn)
+        {
+            var pawn = _board[expectedFromPositionString];
+            Assert.That(pawn is Pawn);
+
+            var expectedMove = new Promotion((Pawn)_board[expectedFromPositionString], PieceParser.ParsePiece(expectedPromotedPawn, pawn.Color), new Position(expectedToPositionString), _board);
+            var move = MoveParser.ParseMove(moveString, _board);
+            Assert.That(move is Promotion);
+            var promotion = (Promotion)move;
+
+            Assert.That(expectedMove.To == promotion.To);
+            Assert.That(expectedMove.Piece == promotion.Piece);
+            Assert.That(expectedMove.Board == promotion.Board);
+            Assert.That(expectedMove.PromotedPawn.GetType() == promotion.PromotedPawn.GetType());
         }
 
         [TestCase("Axd5")]
