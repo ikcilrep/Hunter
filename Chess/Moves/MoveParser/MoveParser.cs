@@ -21,7 +21,7 @@ namespace Chess.Moves
                 return ChessmenMoveParser.ParseCastling(isLongCastling, color, board);
             }
 
-            var pawnPromotionRegex = new Regex(@"^([a-h]x)?[a-h][1-8]=[QBNRK]$");
+            var pawnPromotionRegex = new Regex(@"^([a-h]x)?[a-h][1-8]=[QBNR]$");
             if (pawnPromotionRegex.IsMatch(moveString))
             {
                 return PawnMoveParser.ParsePromotion(moveString, color, board);
