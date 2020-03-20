@@ -26,7 +26,7 @@ namespace Chess.Tests
 
         [TestCase("c4", new string[] { "Bb5", "Bxa6", "Bxd5", "Bb3", "Bd3", "Be2", "Bf1" })]
         [TestCase("g5", new string[] { "Bf6", "Be7", "Bxd8", "Bh4", "Bh6", "Bf4", "Be3", "Bd2", "Bc1" })]
-        public void PossibleMoves_ReturnsCorrectMoves(string bishopPositionString, string[] expectedPossibleMoves)
+        public void PossibleMoves_ReturnCorrectMoves(string bishopPositionString, string[] expectedPossibleMoves)
         {
             var bishop = (Bishop)_board[bishopPositionString];
             var possibleMoves = bishop.PossibleMoves(_board).Select(m => m.ToString()).ToHashSet();
@@ -40,7 +40,7 @@ namespace Chess.Tests
         [TestCase("g5", "Bxd8")]
         [TestCase("g5", "Bf6")]
 
-        public void IsMovePossible_PossibleMove_ReturnsTrue(string bishopPositionString, string moveString)
+        public void IsMovePossible_PossibleMove_ReturnTrue(string bishopPositionString, string moveString)
         {
             var bishop = (Bishop)_board[bishopPositionString];
             var move = MoveParser.ParseMove(moveString, _board);
