@@ -40,11 +40,12 @@ namespace Chess.Tests
         [TestCase("g5", "Bxd8")]
         [TestCase("g5", "Bf6")]
 
-        public void IsMovePossible_CorrectPossibleMove_ReturnTrue(string bishopPositionString, string moveString)
+        public void IsMovePossible_PossibleMove_ReturnTrue(string bishopPositionString, string moveString)
         {
             var bishop = (Bishop)_board[bishopPositionString];
             var move = MoveParser.ParseMove(moveString, _board);
             Assert.IsTrue(bishop.IsMovePossible(move));
         }
+
     }
 }
