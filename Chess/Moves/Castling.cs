@@ -37,10 +37,10 @@ namespace Chess.Moves
         public Castling(King king, bool isLong, Board board)
         {
             King = king;
-            (RookPosition, Rook) = CastlingRook(King, To, board);
             _isLong = isLong;
             Board = board;
             To = GetToPosition(Board.FindPiece(King), _isLong);
+            (RookPosition, Rook) = CastlingRook(King, To, board);
         }
 
         public override string ToString()
@@ -89,12 +89,13 @@ namespace Chess.Moves
         {
             var kingPosition = board.FindPiece(king);
             var kvp = board.Pieces.Where(kvp => kvp.Value is Rook
-                                                 && !board.HasPieceBeenMoved(kvp.Value)
-                                                 && kvp.Key.Row == kingPosition.Row
-                                                 && Math.Abs(to.Column - kvp.Key.Column) <= 2)
-                                                 .First();
+                                                    && !board.HasPieceBeenMoved(kvp.Value)
+                                                    && kvp.Key.Row == kingPosition.Row
+                                                    && Math.Abs(to.Column - kvp.Key.Column) <= 2)
+                                                    .First();
             return (kvp.Key, (Rook)kvp.Value);
         }
+
 
         public static Position GetToPosition(Position kingPosition, bool isLongCastling)
         {
