@@ -27,21 +27,25 @@ namespace Chess.Moves
             var movesOneForward = to.Row == position.Forward(1, pawn.Color);
             var movesDiagonally = movesOneForward
                               && columnDistance == 1;
+            var pawnToCapturePosition = to.Behind(pawn.Color);
             return movesDiagonally
                               && !board.IsTherePieceOfColor(to, pawn.Color)
-                              && HasPawnJustMovedTwoForward(board)
+                              && HasPawnJustMovedTwoForward(board, pawnToCapturePosition)
                               && position.Row == Positions.Forward(startRow, 3, pawn.Color)
-                              && board.IsTherePieceOfColor(to.Behind(pawn.Color),
+                              && board.IsTherePieceOfColor(pawnToCapturePosition,
                                                            !pawn.Color);
 
 
         }
 
-        private static bool HasPawnJustMovedTwoForward(Board board)
+        private static bool HasPawnJustMovedTwoForward(Board board, Position to)
         {
             try
             {
-                return board.LastMove.Piece is Pawn && board.LastMove.To.Row == board.LastMoveFrom.Forward(2, board.LastMove.Piece.Color);
+
+                return board.LastMove.Piece is Pawn 
+                    && board.LastMove.To == to
+                    && board.LastMove.To.Row == board.LastMoveFrom.Forward(2, board.LastMove.Piece.Color);
             }
             catch (InvalidOperationException)
             {
