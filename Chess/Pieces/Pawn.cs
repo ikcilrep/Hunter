@@ -52,20 +52,25 @@ namespace Chess.Pieces
         {
             if (!board.IsTherePiece(to))
             {
-                if (to.Row == Position.MaxRow || to.Row == Position.MinRow)
-                {
-                    moves.Add(new Promotion(this, new Bishop(Color), to, board));
-                    moves.Add(new Promotion(this, new Knight(Color), to, board));
-                    moves.Add(new Promotion(this, new Queen(Color), to, board));
-                    moves.Add(new Promotion(this, new Rook(Color), to, board));
-                }
-                else
-                {
-                    moves.Add(new Move(this, to, board));
-                }
+                AddMoveOrPromotions(to, board, moves);
                 return true;
             }
             return false;
+        }
+
+        private void AddMoveOrPromotions(Position to, Board board, HashSet<IMove> moves)
+        {
+            if (to.Row == Position.MaxRow || to.Row == Position.MinRow)
+            {
+                moves.Add(new Promotion(this, new Bishop(Color), to, board));
+                moves.Add(new Promotion(this, new Knight(Color), to, board));
+                moves.Add(new Promotion(this, new Queen(Color), to, board));
+                moves.Add(new Promotion(this, new Rook(Color), to, board));
+            }
+            else
+            {
+                moves.Add(new Move(this, to, board));
+            }
         }
 
         public override HashSet<IMove> PossibleMoves(Board board)
@@ -94,7 +99,7 @@ namespace Chess.Pieces
                                                   (byte)(position.Column + columnDistance));
                         if (board.IsTherePieceOfColor(to, !Color))
                         {
-                            _ = result.Add(new Move(this, to, board, true));
+                            AddMoveOrPromotions(to, board, result);
                         }
                         else if (EnPassant.IsEnPassant(this, to, board))
                         {
@@ -103,6 +108,7 @@ namespace Chess.Pieces
                     }
                     catch (ArgumentException) { }
                 }
+
                 AddCapture(+1);
                 AddCapture(-1);
             }
