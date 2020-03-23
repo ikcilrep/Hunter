@@ -156,7 +156,15 @@ namespace Chess
                 {
                     capturedPiece = StartPositions[capturedPiecePosition];
                 }
-                Pieces[LastMove.To] = capturedPiece;
+
+                if (LastMove is EnPassant)
+                {
+                    Pieces[LastMove.To.Behind(LastMove.Piece.Color)] = capturedPiece;
+                }
+                else
+                {
+                    Pieces[LastMove.To] = capturedPiece;
+                }
             }
             else
             {
@@ -238,7 +246,6 @@ namespace Chess
 
         public bool IsCheckedAfterMove(IMove move)
         {
-
             MakeMove(move);
             var isChecked = IsChecked();
             UndoLastMove();
