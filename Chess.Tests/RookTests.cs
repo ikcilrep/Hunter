@@ -28,7 +28,6 @@ namespace Chess.Tests
         {
             var rook = (Rook)_board[rookPositionString];
             var possibleMoves = rook.PossibleMoves(_board).Select(m => m.ToString()).ToHashSet();
-            Console.WriteLine(String.Join(",", possibleMoves));
             var expectedPossibleMovesSet = expectedPossibleMoves.ToHashSet();
             Assert.That(possibleMoves.SetEquals(expectedPossibleMovesSet));
         }
