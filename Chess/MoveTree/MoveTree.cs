@@ -1,6 +1,8 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Chess;
+using Chess.Moves;
 
 namespace Player
 {
@@ -62,9 +64,28 @@ namespace Player
             }
         }
 
-
-
-
-
+        public IMove BestMove
+        {
+            get
+            {
+                if (_nodes.Count == 0)
+                {
+                    throw new InvalidOperationException();
+                }
+                var firstNode = _nodes.First();
+                var bestMove = firstNode.Move;
+                var bestMaterialSituation = firstNode.Tree.MaterialSituation;
+                foreach (var node in _nodes.Skip(1))
+                {
+                    var materialSituation = node.Tree.MaterialSituation;
+                    if (materialSituation > bestMaterialSituation)
+                    {
+                        bestMaterialSituation = materialSituation;
+                        bestMove = node.Move;
+                    }
+                }
+                return bestMove;
+            }
+        }
     }
 }
