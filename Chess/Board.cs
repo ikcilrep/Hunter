@@ -182,7 +182,7 @@ namespace Chess
             _moves = movesExceptLast.ToList();
         }
 
-        private void MakeMove(IMove move)
+        public void MakeMove(IMove move)
         {
             if (move is Castling)
             {

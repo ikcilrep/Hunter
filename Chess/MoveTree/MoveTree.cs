@@ -1,13 +1,14 @@
+using System.Collections.Generic;
 using Chess;
 
 namespace Player
 {
     public class MoveTree
     {
-        private HashSet<Node> _nodes = new HashSet<>();
-        public byte Depth { get; set; } = 0;
+        private HashSet<Node> _nodes = new HashSet<Node>();
+        public int Depth { get; set; } = 0;
 
-        public MoveTree(byte depth, Board board)
+        public MoveTree(int depth, Board board)
         {
             Depth = depth << 1;
             if (Depth > 0)

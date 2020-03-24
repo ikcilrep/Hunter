@@ -1,3 +1,5 @@
+using Chess.Moves;
+
 namespace Player
 {
     public class Node
