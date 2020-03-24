@@ -4,8 +4,8 @@ namespace Player
 {
     public class Node
     {
-        IMove Move { get; }
-        MoveTree Tree { get; }
+        public IMove Move { get; }
+        public MoveTree Tree { get; }
 
         public Node(IMove move, MoveTree tree)
         {
