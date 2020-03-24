@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using Chess;
 
 namespace Player
@@ -6,12 +7,23 @@ namespace Player
     public class MoveTree
     {
         private HashSet<Node> _nodes = new HashSet<Node>();
-        public int Depth { get; set; } = 0;
 
+        private int _materialSituation;
+
+        public double MaterialSituation
+        {
+            get
+            {
+                if (_nodes.Count == 0)
+                {
+                    return _materialSituation;
+                }
+                return _nodes.Average(n => n.Tree.MaterialSituation);
+            }
+        }
         public MoveTree(int depth, Board board)
         {
-            Depth = depth << 1;
-            if (Depth > 0)
+            if (depth > 0)
             {
                 var possibleMoves = board.PossibleMoves();
                 foreach (var move in possibleMoves)
@@ -22,7 +34,36 @@ namespace Player
                     board.UndoLastMove();
                 }
             }
+            else
+            {
+                _materialSituation = board.MaterialSituation;
+            }
         }
+
+        public void Extend(Board board)
+        {
+            if (_nodes.Count == 0)
+            {
+                var possibleMoves = board.PossibleMoves();
+                foreach (var move in possibleMoves)
+                {
+                    var node = new Node(move, new MoveTree(0, board));
+                    _nodes.Add(node);
+                }
+            }
+            else
+            {
+                foreach (var node in _nodes)
+                {
+                    board.MakeMove(node.Move);
+                    node.Tree.Extend(board);
+                    board.UndoLastMove();
+                }
+            }
+        }
+
+
+
 
 
     }
