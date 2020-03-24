@@ -45,8 +45,12 @@ namespace Chess
             { new Position("g7"), new Pawn(Black)},
             { new Position("h7"), new Pawn(Black)}
       };
-        public int MaterialSituation(bool color) => Pieces.Values.Where(p => p.Color == color).Sum(p => p.Weight);
-
+        public int MaterialSituation()
+        {
+            var whites = Pieces.Values.Where(p => p.Color == White).Sum(p => p.Weight);
+            var blacks = Pieces.Values.Where(p => p.Color == Black).Sum(p => p.Weight);
+            return whites - blacks;
+        }
         public Piece this[string positionString]
         {
             get
