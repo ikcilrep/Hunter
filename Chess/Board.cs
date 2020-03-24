@@ -259,7 +259,7 @@ namespace Chess
             return isChecked;
         }
 
-        public bool IsChecked()
+        private bool IsChecked()
         {
             return Pieces.Values.Any(p => p.Color != CurrentMoveColor && p.PossibleCaptures(this).Any(m => Pieces[m.To] is King));
         }
