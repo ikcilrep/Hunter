@@ -45,9 +45,9 @@ namespace Chess.Tests
         [TestCase("g7", "gxf8=B")]
         public void IsMovePossible_PossibleMove_ReturnTrue(string pawnPositionsString, string moveString)
         {
-            var knight = (Pawn)_board[pawnPositionsString];
+            var pawn = (Pawn)_board[pawnPositionsString];
             var move = MoveParser.ParseMove(moveString, _board);
-            Assert.IsTrue(knight.IsMovePossible(move));
+            Assert.IsTrue(pawn.IsMovePossible(move));
         }
 
     }
