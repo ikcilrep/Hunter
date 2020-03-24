@@ -144,7 +144,7 @@ namespace Chess.Pieces
             {
                 var maxNotAllowedRow = piecesInRange4
                                             .OrderBy(c => c.Row)
-                                            .First();
+                                            .Last();
 
                 AddBoundedRange(range4,
                          piece,
