@@ -17,7 +17,8 @@ namespace Player
                 foreach (var move in possibleMoves)
                 {
                     board.MakeMove(move);
-                    _nodes.Add(new Node(move, new MoveTree(depth - 1, board)));
+                    var node = new Node(move, new MoveTree(depth - 1, board));
+                    _nodes.Add(node);
                     board.UndoLastMove();
                 }
             }
