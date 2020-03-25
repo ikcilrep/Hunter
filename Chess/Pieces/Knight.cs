@@ -40,7 +40,7 @@ namespace Chess.Pieces
                         result.Add(new Move(this, newPosition, board));
                     }
                 }
-                catch { }
+                catch (ArgumentException) { }
             }
 
             foreach (var distance1 in new int[] { -2, 2 })
