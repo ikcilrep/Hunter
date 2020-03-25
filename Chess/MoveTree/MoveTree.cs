@@ -49,7 +49,9 @@ namespace Player
                 var possibleMoves = board.PossibleMoves();
                 foreach (var move in possibleMoves)
                 {
+                    board.MakeMove(move);
                     var node = new Node(move, new MoveTree(0, board));
+                    board.UndoLastMove();
                     _nodes.Add(node);
                 }
             }
