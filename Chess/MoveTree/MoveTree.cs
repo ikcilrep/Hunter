@@ -87,5 +87,13 @@ namespace Player
                 return bestMove;
             }
         }
+
+        public MoveTree this[IMove move]
+        {
+            get
+            {
+                return _nodes.First(n => n.Move.Equals(move)).Tree;
+            }
+        }
     }
 }
