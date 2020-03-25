@@ -147,6 +147,7 @@ namespace Chess
             }
             var movesExceptLast = _moves.SkipLast(1);
             _currentMoveColor = !_currentMoveColor;
+            Pieces.Remove(LastMove.To);
             if (IMove.IsCapture(LastMove))
             {
 
@@ -188,7 +189,6 @@ namespace Chess
             }
             else
             {
-                Pieces.Remove(LastMove.To);
                 if (LastMove is Castling)
                 {
                     var castling = (Castling)LastMove;
