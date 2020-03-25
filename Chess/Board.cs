@@ -228,6 +228,7 @@ namespace Chess
         {
             Move(castling.RookTo, castling.RookPosition, castling.Rook);
             Move(castling);
+            _currentMoveColor = !_currentMoveColor;
         }
 
         private void Move(Position to, Position from, Piece piece)
