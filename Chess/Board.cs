@@ -227,8 +227,8 @@ namespace Chess
         public void MakeMove(Castling castling)
         {
             Move(castling.RookTo, castling.RookPosition, castling.Rook);
-            Move(castling);
             _currentMoveColor = !_currentMoveColor;
+            Move(castling);
         }
 
         private void Move(Position to, Position from, Piece piece)
