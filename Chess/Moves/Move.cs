@@ -36,18 +36,21 @@ namespace Chess.Moves
                 result += Board.FindPiece(Piece).ToString()[0];
             }
             var piecePosition = Board.FindPiece(Piece);
-            var movesToTheSamePlace = Board.PossibleMoves(p => p != Piece && p.GetType() == Piece.GetType() && p.Color == Piece.Color).Where(m => m.To == To);
-            if (movesToTheSamePlace.Count() == 1)
+            if (!(Piece is Pawn))
             {
-                var move = movesToTheSamePlace.First();
-                var otherPiecePosition = Board.FindPiece(move.Piece);
-                if (move.To.Row == To.Row || move.To.Column != To.Column)
+                var movesToTheSamePlace = Board.PossibleMoves(p => p != Piece && p.GetType() == Piece.GetType() && p.Color == Piece.Color).Where(m => m.To == To);
+                if (movesToTheSamePlace.Count() == 1)
                 {
-                    result += piecePosition.ToString()[0];
-                }
-                else
-                {
-                    result += piecePosition.ToString()[1];
+                    var move = movesToTheSamePlace.First();
+                    var otherPiecePosition = Board.FindPiece(move.Piece);
+                    if (move.To.Row == To.Row || move.To.Column != To.Column)
+                    {
+                        result += piecePosition.ToString()[0];
+                    }
+                    else
+                    {
+                        result += piecePosition.ToString()[1];
+                    }
                 }
             }
             if (IsCapture)
