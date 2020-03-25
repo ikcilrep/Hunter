@@ -163,7 +163,18 @@ namespace Chess
                 }
                 catch (InvalidOperationException)
                 {
-                    capturedPiece = StartPositions[capturedPiecePosition];
+                    try
+                    {
+                        capturedPiece = StartPositions[capturedPiecePosition];
+                    }
+                    catch (KeyNotFoundException)
+                    {
+                        Console.WriteLine(LastMove.To);
+                        Console.WriteLine(LastMoveFrom);
+                        Console.WriteLine(LastMove.GetType());
+                        Console.WriteLine(LastMove.Piece.GetType());
+                        throw;
+                    }
                 }
 
                 if (LastMove is EnPassant)
@@ -271,7 +282,7 @@ namespace Chess
 
         private bool IsChecked()
         {
-            return Pieces.Values.Any(p => p.Color != CurrentMoveColor && p.PossibleCaptures(this).Any(m => Pieces[m.To] is King));
+            return Pieces.Values.Any(p => p.Color == CurrentMoveColor && p.PossibleCaptures(this).Any(m => Pieces[m.To] is King));
         }
     }
 }
