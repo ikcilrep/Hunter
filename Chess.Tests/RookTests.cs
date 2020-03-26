@@ -24,6 +24,7 @@ namespace Chess.Tests
         }
 
         [TestCase("e3", new string[] { "Re4", "Rxe5", "Ra3", "Rb3", "Rc3", "Rd3", "Rf3", "Rg3", "Rh3" })]
+        [TestCase("h1", new string[] { })]
         public void PossibleMoves_ReturnCorrectMoves(string rookPositionString, string[] expectedPossibleMoves)
         {
             var rook = (Rook)_board[rookPositionString];
