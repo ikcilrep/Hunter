@@ -261,7 +261,7 @@ namespace Chess
             UndoLastMove();
             if (move is Castling castling)
             {
-                var middleOfCastling = new Move(castling.King, castling.To.GoInDirectionOf(castling.RookPosition.Column, 1), this);
+                var middleOfCastling = new Move(castling.King, FindPiece(castling.King).GoInDirectionOf(castling.RookPosition.Column, 1), this);
                 MakeMove(middleOfCastling);
                 isChecked |= IsChecked();
                 UndoLastMove();
