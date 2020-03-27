@@ -192,21 +192,21 @@ namespace Chess
 
         public void MakeMove(IMove move)
         {
-            if (move is Castling)
+            if (move is Castling castling)
             {
-                MakeMove((Castling)move);
+                MakeMove(castling);
             }
-            else if (move is EnPassant)
+            else if (move is EnPassant enPassant)
             {
-                MakeMove((EnPassant)move);
+                MakeMove(enPassant);
             }
             else if (move is Move)
             {
-                MakeMove((Move)move);
+                MakeMove((Move) move);
             }
-            else if (move is Promotion)
+            else if (move is Promotion promotion)
             {
-                MakeMove((Promotion)move);
+                MakeMove(promotion);
             }
         }
         public void MakeMove(Move move) => Move(move);
