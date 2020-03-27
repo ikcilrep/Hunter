@@ -164,18 +164,7 @@ namespace Chess
                 }
                 catch (InvalidOperationException)
                 {
-                    try
-                    {
-                        capturedPiece = StartPositions[capturedPiecePosition];
-                    }
-                    catch (KeyNotFoundException)
-                    {
-                        Console.WriteLine(LastMove.To);
-                        Console.WriteLine(LastMoveFrom);
-                        Console.WriteLine(LastMove.GetType());
-                        Console.WriteLine(LastMove.Piece.GetType());
-                        throw;
-                    }
+                    capturedPiece = StartPositions[capturedPiecePosition];
                 }
 
                 if (LastMove is EnPassant)

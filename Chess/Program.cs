@@ -29,7 +29,24 @@ namespace Chess
         static void Main(string[] args)
         {
             Board board = new Board();
-            MoveTree moveTree = new MoveTree(2, board);
+            board.MakeMove(MoveParser.ParseMove("e4", board));
+            board.MakeMove(MoveParser.ParseMove("d5", board));
+            board.MakeMove(MoveParser.ParseMove("exd5", board));
+            board.MakeMove(MoveParser.ParseMove("Qxd5", board));
+            board.MakeMove(MoveParser.ParseMove("Nc3", board));
+            board.MakeMove(MoveParser.ParseMove("Qd8", board));
+            board.MakeMove(MoveParser.ParseMove("Ke2", board));
+            board.MakeMove(MoveParser.ParseMove("Nc6", board));
+            board.MakeMove(MoveParser.ParseMove("Nb5", board));
+            board.MakeMove(MoveParser.ParseMove("Nf6", board));
+            board.MakeMove(MoveParser.ParseMove("Nxa7", board));
+            board.MakeMove(MoveParser.ParseMove("Rxa7", board));
+            board.MakeMove(MoveParser.ParseMove("Nf3", board));
+            board.MakeMove(MoveParser.ParseMove("e5", board));
+            board.MakeMove(MoveParser.ParseMove("Nxe5", board));
+
+
+            MoveTree moveTree = new MoveTree(3, board);
             var i = 1;
             while (true)
             {
