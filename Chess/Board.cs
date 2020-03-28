@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Numerics;
 using Chess.Moves;
 using Chess.Pieces;
 
@@ -11,40 +12,7 @@ namespace Chess
         public const bool White = true;
         public const bool Black = false;
 
-        private readonly Dictionary<Position, Piece> _startPositions = new Dictionary<Position, Piece> {
-            { new Position("a1"), new Rook(White)},
-            { new Position("b1"), new Knight(White)},
-            { new Position("c1"), new Bishop(White)},
-            { new Position("d1"), new Queen(White)},
-            { new Position("e1"), new King(White)},
-            { new Position("f1"), new Bishop(White)},
-            { new Position("g1"), new Knight(White)},
-            { new Position("h1"), new Rook(White)},
-            { new Position("a2"), new Pawn(White)},
-            { new Position("b2"), new Pawn(White)},
-            { new Position("c2"), new Pawn(White)},
-            { new Position("d2"), new Pawn(White)},
-            { new Position("e2"), new Pawn(White)},
-            { new Position("f2"), new Pawn(White)},
-            { new Position("g2"), new Pawn(White)},
-            { new Position("h2"), new Pawn(White)},
-            { new Position("a8"), new Rook(Black)},
-            { new Position("b8"), new Knight(Black)},
-            { new Position("c8"), new Bishop(Black)},
-            { new Position("d8"), new Queen(Black)},
-            { new Position("e8"), new King(Black)},
-            { new Position("f8"), new Bishop(Black)},
-            { new Position("g8"), new Knight(Black)},
-            { new Position("h8"), new Rook(Black)},
-            { new Position("a7"), new Pawn(Black)},
-            { new Position("b7"), new Pawn(Black)},
-            { new Position("c7"), new Pawn(Black)},
-            { new Position("d7"), new Pawn(Black)},
-            { new Position("e7"), new Pawn(Black)},
-            { new Position("f7"), new Pawn(Black)},
-            { new Position("g7"), new Pawn(Black)},
-            { new Position("h7"), new Pawn(Black)}
-      };
+        private readonly Dictionary<Position, Piece> _startPositions;
         public int MaterialSituation
         {
             get
@@ -88,6 +56,40 @@ namespace Chess
 
         public Board()
         {
+            _startPositions = new Dictionary<Position, Piece> {
+            { new Position("a1"), new Rook(White)},
+            { new Position("b1"), new Knight(White)},
+            { new Position("c1"), new Bishop(White)},
+            { new Position("d1"), new Queen(White)},
+            { new Position("e1"), new King(White)},
+            { new Position("f1"), new Bishop(White)},
+            { new Position("g1"), new Knight(White)},
+            { new Position("h1"), new Rook(White)},
+            { new Position("a2"), new Pawn(White)},
+            { new Position("b2"), new Pawn(White)},
+            { new Position("c2"), new Pawn(White)},
+            { new Position("d2"), new Pawn(White)},
+            { new Position("e2"), new Pawn(White)},
+            { new Position("f2"), new Pawn(White)},
+            { new Position("g2"), new Pawn(White)},
+            { new Position("h2"), new Pawn(White)},
+            { new Position("a8"), new Rook(Black)},
+            { new Position("b8"), new Knight(Black)},
+            { new Position("c8"), new Bishop(Black)},
+            { new Position("d8"), new Queen(Black)},
+            { new Position("e8"), new King(Black)},
+            { new Position("f8"), new Bishop(Black)},
+            { new Position("g8"), new Knight(Black)},
+            { new Position("h8"), new Rook(Black)},
+            { new Position("a7"), new Pawn(Black)},
+            { new Position("b7"), new Pawn(Black)},
+            { new Position("c7"), new Pawn(Black)},
+            { new Position("d7"), new Pawn(Black)},
+            { new Position("e7"), new Pawn(Black)},
+            { new Position("f7"), new Pawn(Black)},
+            { new Position("g7"), new Pawn(Black)},
+            { new Position("h7"), new Pawn(Black)}};
+
             Pieces = new Dictionary<Position, Piece>(StartPositions);
         }
 
@@ -202,7 +204,7 @@ namespace Chess
             }
             else if (move is Move)
             {
-                MakeMove((Move) move);
+                MakeMove((Move)move);
             }
             else if (move is Promotion promotion)
             {
@@ -272,6 +274,35 @@ namespace Chess
         private bool IsChecked()
         {
             return Pieces.Values.Any(p => p.Color == CurrentMoveColor && p.PossibleCaptures(this).Any(m => Pieces[m.To] is King));
+        }
+
+        public BigInteger SerialNumber
+        {
+            get
+            {
+                BigInteger serial = 0;
+                var index = 0;
+                for (byte column = 0; column <= Position.MaxColumn; column++)
+                {
+                    for (byte row = 0; row <= Position.MaxRow; row++)
+                    {
+                        var position = new Position(row, column);
+
+                        serial <<= 6;
+                        if (Pieces.ContainsKey(position))
+                        {
+                            serial += Pieces[position].PieceId;
+                        }
+                        index++;
+                    }
+                }
+                serial <<= 1;
+                if (CurrentMoveColor)
+                {
+                    serial++;
+                }
+                return serial;
+            }
         }
     }
 }

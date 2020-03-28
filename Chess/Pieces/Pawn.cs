@@ -10,6 +10,7 @@ namespace Chess.Pieces
         {
             _color = color;
             _weight = 1;
+            Init();
         }
 
 

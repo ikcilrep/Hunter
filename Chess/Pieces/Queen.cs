@@ -9,6 +9,7 @@ namespace Chess.Pieces
         {
             _color = color;
             _weight = 9;
+            Init();
         }
 
         public override bool IsMovePossible(IMove move)

@@ -7,6 +7,10 @@ namespace Chess.Pieces
 {
     public abstract class Piece
     {
+        private static int _id = 0;
+        public static int Id => _id & 31;
+        public int PieceId { get; set; }
+
         public byte Weight { get => _weight; }
         public bool Color { get => _color; }
         internal byte _weight;
@@ -20,6 +24,10 @@ namespace Chess.Pieces
         }
 
         public abstract bool IsMovePossible(IMove move);
-
+        protected void Init()
+        {
+            PieceId = Id + 1;
+            _id++;
+        }
     }
 }

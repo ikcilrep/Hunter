@@ -1,7 +1,10 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Numerics;
 using Chess.Moves;
 using Player;
+using System.Threading;
 
 namespace Chess
 
@@ -29,53 +32,61 @@ namespace Chess
         static void Main(string[] args)
         {
             Board board = new Board();
-            board.MakeMove(MoveParser.ParseMove("e4", board));
-            board.MakeMove(MoveParser.ParseMove("d5", board));
-            board.MakeMove(MoveParser.ParseMove("exd5", board));
-            board.MakeMove(MoveParser.ParseMove("Qxd5", board));
-            board.MakeMove(MoveParser.ParseMove("Nc3", board));
-            board.MakeMove(MoveParser.ParseMove("Qd8", board));
-            board.MakeMove(MoveParser.ParseMove("Ke2", board));
+            /* board.MakeMove(MoveParser.ParseMove("Na3", board));
             board.MakeMove(MoveParser.ParseMove("Nc6", board));
+            board.MakeMove(MoveParser.ParseMove("Rb1", board));
+            board.MakeMove(MoveParser.ParseMove("b6", board));
             board.MakeMove(MoveParser.ParseMove("Nb5", board));
-            board.MakeMove(MoveParser.ParseMove("Nf6", board));
+            board.MakeMove(MoveParser.ParseMove("Ba6", board));
             board.MakeMove(MoveParser.ParseMove("Nxa7", board));
-            board.MakeMove(MoveParser.ParseMove("Rxa7", board));
+            board.MakeMove(MoveParser.ParseMove("Nxa7", board));
             board.MakeMove(MoveParser.ParseMove("Nf3", board));
-            board.MakeMove(MoveParser.ParseMove("e5", board));
-            board.MakeMove(MoveParser.ParseMove("Nxe5", board));
+            board.MakeMove(MoveParser.ParseMove("d5", board));
+            board.MakeMove(MoveParser.ParseMove("Rg1", board));
+            board.MakeMove(MoveParser.ParseMove("Qd6", board));
+            board.MakeMove(MoveParser.ParseMove("h3", board));
+            board.MakeMove(MoveParser.ParseMove("O-O-O", board));
+            board.MakeMove(MoveParser.ParseMove("Nh4", board));
+            board.MakeMove(MoveParser.ParseMove("Re8", board));
 
-
-            MoveTree moveTree = new MoveTree(3, board);
-            var i = 1;
-            while (true)
+ */
+            Thread T = new Thread(() =>
             {
-                var bestMove = moveTree.BestMove;
-                Console.WriteLine($"{i}.\t{bestMove}");
-                board.MakeMove(bestMove);
-
-
-                moveTree = moveTree[bestMove];
-                moveTree.Extend(board);
-
-                IMove move = null;
-                while (move == null)
+                var calculated = new Dictionary<BigInteger, MoveTree>();
+                int depth = 4;
+                MoveTree moveTree = new MoveTree(depth, board, calculated);
+                var i = 1;
+                while (true)
                 {
-                    Console.Write("\t");
-                    move = ReadMove(board);
-                    if (move == null)
+                    var bestMove = moveTree.BestMove(depth);
+                    Console.WriteLine($"{i}.\t{bestMove}");
+                    board.MakeMove(bestMove);
+
+
+                    moveTree = moveTree[bestMove];
+                    moveTree.Extend(depth - 1, board);
+
+                    IMove move = null;
+                    while (move == null || board.IsCheckedAfterMove(move))
                     {
-                        Console.WriteLine("Incorrect move, enter correct one.");
+                        Console.Write("\t");
+                        move = ReadMove(board);
+                        if (move == null || board.IsCheckedAfterMove(move))
+                        {
+                            Console.WriteLine("Incorrect move, enter correct one.");
+                        }
                     }
+
+                    board.MakeMove(move);
+
+                    moveTree = moveTree[move];
+                    moveTree.Extend(depth - 1, board);
+
+                    i++;
                 }
 
-                board.MakeMove(move);
-
-                moveTree = moveTree[move];
-                moveTree.Extend(board);
-
-                i++;
-            }
+            }, 2097152);
+            T.Start();
         }
     }
 }
